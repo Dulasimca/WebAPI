@@ -50,6 +50,7 @@ namespace TNCSCAPI.Models.Documents
         public string DDate { get; set; }
         public string WCCode { get; set; }
         public string IssuingCode { get; set; }
+        public string RCode { get; set; }
         public string Receivorcode { get; set; }
         public string Issuetype { get; set; }
         public string IRelates { get; set; }
@@ -66,7 +67,9 @@ namespace TNCSCAPI.Models.Documents
         public int GunnyReleased { get; set; }
         public string Loadingslip { get; set; }
         public string IssueMemo { get; set; }
-        public List<DocumentStockIssuesItemEntity> itemEntities { get; set; }
+        public string ManualDocNo { get; set; }
+        public string IssueRegularAdvance { get; set; }
+        public List<DocumentStockIssuesItemEntity> IssueItemList { get; set; }
     }
 
     public class DocumentStockIssuesItemEntity
