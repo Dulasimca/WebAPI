@@ -1,0 +1,14 @@
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\bin\Release\netcoreapp2.1\TNCSCAPI.deps.json
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\bin\Release\netcoreapp2.1\TNCSCAPI.runtimeconfig.json
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\bin\Release\netcoreapp2.1\TNCSCAPI.runtimeconfig.dev.json
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\bin\Release\netcoreapp2.1\TNCSCAPI.dll
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\bin\Release\netcoreapp2.1\TNCSCAPI.pdb
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.csproj.CoreCompileInputs.cache
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.RazorAssemblyInfo.cache
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.RazorAssemblyInfo.cs
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.AssemblyInfoInputs.cache
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.AssemblyInfo.cs
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.RazorTargetAssemblyInfo.cache
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.dll
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.pdb
+C:\LocalRepository\TNCSCWebAPI\TNCSCAPI\TNCSCAPI\obj\Release\netcoreapp2.1\TNCSCAPI.csprojAssemblyReference.cache
