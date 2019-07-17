@@ -37,6 +37,16 @@ namespace TNCSCAPI.Controllers.Documents
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-
+        [HttpPut("{id}")]
+        public bool Put(string sValue)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+           
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@SRDate", sValue));
+                ds = manageSQLConnection.GetDataSetValues("GetSRDetailsByDate", sqlParameters);
+                return true;
+        }
     }
 }

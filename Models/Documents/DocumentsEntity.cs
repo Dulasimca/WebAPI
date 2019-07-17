@@ -24,6 +24,10 @@ namespace TNCSCAPI.Models.Documents
         public string RCode { get; set; }
         public string Remarks { get; set; }
 
+        public string GodownName { get; set; }
+        public string TransactionType { get; set; }
+        public string DepositorName { get; set; }
+
         public List<StockReceiptItemList> ItemList { get; set; }
     }
 
@@ -38,6 +42,10 @@ namespace TNCSCAPI.Models.Documents
         public double Nkgs { get; set; }
         public string WTCode { get; set; }
         public float Moisture { get; set; }
+
+        public string CommodityName { get; set; }
+        public string SchemeName { get; set; }
+        public string PackingName { get;set; }
     }
 
     public class DocumentStockIssuesEntity

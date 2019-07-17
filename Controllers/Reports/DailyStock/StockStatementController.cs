@@ -15,10 +15,10 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
     public class StockStatementController : ControllerBase
     {
        [HttpPost("{id}")]
-        public string Get(StockParameter stockParameter)
+        public string Post(StockParameter stockParameter)
         {
             StockStatementByDate statementByDate = new StockStatementByDate();
-           var result= statementByDate.ProcessStockStatement(stockParameter);
+            var result= statementByDate.ProcessStockStatement(stockParameter);
             return JsonConvert.SerializeObject(result);
         }
     }
