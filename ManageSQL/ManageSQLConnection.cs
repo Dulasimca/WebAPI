@@ -228,6 +228,8 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@SRNo", SRNo);
                     sqlCommand.Parameters.AddWithValue("@Remarks", receiptList.Remarks);
                     sqlCommand.Parameters.AddWithValue("@RCode", receiptList.RCode);
+                    sqlCommand.Parameters.AddWithValue("@LNo", receiptList.LNo);
+                    sqlCommand.Parameters.AddWithValue("@LFrom", receiptList.LFrom);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.ExecuteNonQuery();
                     objTrans.Commit();
