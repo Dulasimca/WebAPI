@@ -19,7 +19,7 @@ namespace TNCSCAPI
         public const string StockTruckMemoRegisterFileName = "TMREG";
         public const string StockReceiptRegisterFileName = "REREG";
         public const string StockIssueRegisterFileName = "ISREG";
-        public const string StockReceiptFileName = "REDOC";
+        public const string DocumentReceiptFileName = "REDOC";
 
     }  
 }
