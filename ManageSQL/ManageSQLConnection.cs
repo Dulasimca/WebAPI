@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using TNCSCAPI.Models.Documents;
+using TNCSCAPI.ManageAllReports.Document;
 
 namespace TNCSCAPI
 {
@@ -168,6 +169,10 @@ namespace TNCSCAPI
                     sqlCommand.Parameters["@SRNo"].Direction = ParameterDirection.Output;
                     sqlCommand.Parameters["@RowId"].Direction = ParameterDirection.Output;
                     sqlCommand.ExecuteNonQuery();
+
+                    //Generate the report file.
+                    ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
+                    documentReceipt.GenerateReceipt(receiptList, receiptList.SRNo);
 
                     RowID = (string)sqlCommand.Parameters["@RowId"].Value;
                     SRNo = (string)sqlCommand.Parameters["@SRNO"].Value;
