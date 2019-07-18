@@ -25,8 +25,10 @@ namespace TNCSCAPI.Models.Documents
         public string Remarks { get; set; }
 
         public string GodownName { get; set; }
+        public string RegionName { get; set; }
         public string TransactionType { get; set; }
         public string DepositorName { get; set; }
+        public string UnLoadingSlip { get; set; }
         public string UserID { get; set; }
 
         public List<StockReceiptItemList> ItemList { get; set; }
