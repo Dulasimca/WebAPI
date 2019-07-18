@@ -154,7 +154,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@RCode", receiptList.RCode);
                     sqlCommand.Parameters.AddWithValue("@IssuerType", receiptList.DepositorType);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                    sqlCommand.Parameters.AddWithValue("@Unloadingslip", "F");
+                    sqlCommand.Parameters.AddWithValue("@Unloadingslip", receiptList.UnLoadingSlip);
                     sqlCommand.Parameters.AddWithValue("@Acknowledgementslip", "F");
                     sqlCommand.Parameters.AddWithValue("@Suspnstack", "-");
                     sqlCommand.Parameters.AddWithValue("@Suspnseaccno", "-");
@@ -170,12 +170,13 @@ namespace TNCSCAPI
                     sqlCommand.Parameters["@RowId"].Direction = ParameterDirection.Output;
                     sqlCommand.ExecuteNonQuery();
 
-                    //Generate the report file.
-                    ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
-                    documentReceipt.GenerateReceipt(receiptList, receiptList.SRNo);
-
                     RowID = (string)sqlCommand.Parameters["@RowId"].Value;
                     SRNo = (string)sqlCommand.Parameters["@SRNO"].Value;
+
+                    //Generate the report file.
+                    receiptList.SRNo = SRNo;
+                    ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
+                    documentReceipt.GenerateReceipt(receiptList);
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
