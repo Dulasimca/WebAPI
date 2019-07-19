@@ -84,6 +84,44 @@ namespace TNCSCAPI
             }
         }
 
+        public bool UpdateValues(string procedureName, List<KeyValuePair<string, string>> parameterList)
+        {
+            sqlConnection = new SqlConnection(GlobalVariable.ConnectionString);
+            DataSet ds = new DataSet();
+            sqlCommand = new SqlCommand();
+            try
+            {
+                if (sqlConnection.State == 0)
+                {
+                    sqlConnection.Open();
+                }
+                sqlCommand.Connection = sqlConnection;
+                sqlCommand.CommandText = procedureName;
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                foreach (KeyValuePair<string, string> keyValuePair in parameterList)
+                {
+                    sqlCommand.Parameters.AddWithValue(keyValuePair.Key, keyValuePair.Value);
+                }
+
+                dataAdapter = new SqlDataAdapter(sqlCommand);
+                dataAdapter.Fill(ds);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
+                return false;
+
+            }
+            finally
+            {
+                sqlConnection.Close();
+                sqlCommand.Dispose();
+                ds.Dispose();
+                dataAdapter = null;
+            }
+        }
+
         public bool InsertData(string procedureName, List<KeyValuePair<string, string>> parameterList)
         {
             sqlConnection = new SqlConnection(GlobalVariable.ConnectionString);
