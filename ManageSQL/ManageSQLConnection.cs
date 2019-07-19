@@ -176,7 +176,7 @@ namespace TNCSCAPI
                     //Generate the report file.
                     receiptList.SRNo = SRNo;
                     ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
-                    documentReceipt.GenerateReceipt(receiptList);
+                    Task.Run(()=>documentReceipt.GenerateReceipt(receiptList));
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
