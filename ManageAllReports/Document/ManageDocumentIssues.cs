@@ -82,13 +82,14 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockIssuesEntity.SIDate.ToString()), 12, 2));
             streamWriter.Write("TIME:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.GetTime(DateTime.Now.ToString()), 14, 2));
-            streamWriter.Write("REGULAR MonthApril2019    |");
+            streamWriter.Write("REGULAR ");
+            streamWriter.Write(report.StringFormat(stockIssuesEntity.IRelates, 21, 2));
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|ISSUING GODOWN :   ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockIssuesEntity.GodownName, 21, 2));
             streamWriter.Write(report.StringFormatWithoutPipe("TO WHOM ISSUED:", 25, 1));
-            streamWriter.Write(report.StringFormatWithoutPipe(stockIssuesEntity.ReceiverName, 38, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockIssuesEntity.ReceiverName, 41, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
 
@@ -119,13 +120,13 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(report.StringFormat(item.PackingName, 13, 2));
                 streamWriter.Write(report.StringFormat(item.NoPacking.ToString(), 10, 1));
                 streamWriter.Write(report.StringFormat(item.Nkgs.ToString(), 13, 1));
-                streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 5, 1) + "|");
+                streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 5, 1));
                 streamWriter.WriteLine(" ");
                 units = units + item.NoPacking;
                 netKgs = netKgs + item.Nkgs;
             }
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
-            streamWriter.WriteLine("||                                                               |Total        |"+ report.StringFormatWithoutPipe(units.ToString(), 10, 1) + "|"+report.StringFormatWithoutPipe(netKgs.ToString(),13,1) +"|     |");
+            streamWriter.WriteLine("||                                                               |Total        |"+ report.StringFormatWithoutPipe(units.ToString(), 9, 1) + "|"+report.StringFormatWithoutPipe(netKgs.ToString(),12,1) +"|     |");
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
 
         }
@@ -148,7 +149,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write("||");
                 streamWriter.Write(report.StringFormat(item.DNo, 10, 2));
                 streamWriter.Write(report.StringFormat(report.FormatDate(item.DDate.ToString()), 10, 2));
-                streamWriter.Write(report.StringFormat(stockIssuesEntity.IssueMemo, 10, 2));
+                streamWriter.Write(report.StringFormat(stockIssuesEntity.SINo, 10, 2));
                 streamWriter.Write(report.StringFormat(report.FormatDate(stockIssuesEntity.SIDate.ToString()), 10, 2));
                 streamWriter.Write("          |          |                                          |");
                 streamWriter.WriteLine(" ");
@@ -166,7 +167,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockIssuesEntity"></param>
         private void AddFooter(StreamWriter streamWriter, DocumentStockIssuesEntity stockIssuesEntity)
         {
-            streamWriter.WriteLine("|LORRY NO      :"+ report.StringFormatWithoutPipe(stockIssuesEntity .LorryNo,17,2) + "TC NAME       : -                                                            |");
+            streamWriter.WriteLine("|LORRY NO      :"+ report.StringFormatWithoutPipe(stockIssuesEntity .LorryNo,17,2) + "TC NAME       : -                                                           |");
             streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account             |");
             streamWriter.WriteLine("|                                                                                                             |");

@@ -47,8 +47,7 @@ namespace TNCSCAPI.Controllers.Login
                 parameterList.Add(new KeyValuePair<string, string>("@UserName", userDetails.UserId));
                 parameterList.Add(new KeyValuePair<string, string>("@OldPassword", userDetails.OldPassword));
                 parameterList.Add(new KeyValuePair<string, string>("@NewPassword", userDetails.NewPassword));
-                return manageSQLConnection.UpdateValues("UpdatePassword", parameterList);
-                
+                return manageSQLConnection.UpdateValues("UpdatePassword", parameterList);                
             }
             finally
             {

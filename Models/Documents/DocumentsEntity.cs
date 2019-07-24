@@ -86,7 +86,7 @@ namespace TNCSCAPI.Models.Documents
         public string TransactionType { get; set; }
         public string ReceiverName { get; set; }
         public string UserID { get; set; }
-
+        
         public List<DocumentStockIssuesItemEntity> IssueItemList { get; set; }
         public List<DocumentStockIssueDetailsEntity> SIDetailsList { get; set; }
 
@@ -108,6 +108,7 @@ namespace TNCSCAPI.Models.Documents
         public string SchemeName { get; set; }
         public string PackingName { get; set; }
     }
+    
 
     public class DocumentStockIssueDetailsEntity
     {

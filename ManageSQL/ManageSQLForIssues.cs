@@ -70,7 +70,8 @@ namespace TNCSCAPI
 
                     issueList.SINo = SINo;
                     ManageDocumentIssues documentIssues = new ManageDocumentIssues();
-                    Task.Run(() => documentIssues.GenerateIssues(issueList));
+                    documentIssues.GenerateIssues(issueList);
+                   // Task.Run(() => documentIssues.GenerateIssues(issueList));
 
                     //Delete Stock issue Item Details
                     sqlCommand.Parameters.Clear();
