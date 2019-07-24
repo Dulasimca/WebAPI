@@ -41,7 +41,6 @@ namespace TNCSCAPI.Controllers.Documents
             listParameters.Add(new KeyValuePair<string, string>("@Rowid", RowId));
             listParameters.Add(new KeyValuePair<string, string>("@WriteOff", WriteOff.ToString()));
            return  manageSQLConnection.UpdateValues("UpdateOpeningBalanceMaster", listParameters);
-           
         }
     }
 }

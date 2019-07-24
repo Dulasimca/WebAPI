@@ -121,14 +121,14 @@ namespace TNCSCAPI.ManageAllReports.Document
                 i = i + 1;
                 streamWriter.Write("||");
                 streamWriter.Write(report.StringFormat(i.ToString(), 4, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 11, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 20, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 14, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 13, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 6, 1));
-                streamWriter.Write(report.StringFormat(i.ToString(), 10, 1));
-                streamWriter.Write(report.StringFormat(i.ToString(), 10, 1));
-                streamWriter.Write(report.StringFormat(i.ToString(), 8, 1) +"|");
+                streamWriter.Write(report.StringFormat(item.TStockNo, 11, 2));
+                streamWriter.Write(report.StringFormat(item.CommodityName, 20, 2));
+                streamWriter.Write(report.StringFormat(item.SchemeName, 14, 2));
+                streamWriter.Write(report.StringFormat(item.PackingName, 13, 2));
+                streamWriter.Write(report.StringFormat(item.NoPacking.ToString(), 6, 1));
+                streamWriter.Write(report.StringFormat(item.GKgs.ToString(), 10, 1));
+                streamWriter.Write(report.StringFormat(item.Nkgs.ToString(), 10, 1));
+                streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 8, 1) +"|");
                 streamWriter.WriteLine(" ");
             }
            
