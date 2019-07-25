@@ -38,7 +38,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@DNo", issueList.DNo);
                     sqlCommand.Parameters.AddWithValue("@DDate", issueList.DDate);
                     sqlCommand.Parameters.AddWithValue("@WCCode", issueList.WCCode);
-                    sqlCommand.Parameters.AddWithValue("@IssuingCode", "001");
+                    sqlCommand.Parameters.AddWithValue("@IssuingCode", issueList.IssuingCode);
                     sqlCommand.Parameters.AddWithValue("@Receivorcode", issueList.Receivorcode);
                     sqlCommand.Parameters.AddWithValue("@issuetype1", issueList.Issuetype);
                     sqlCommand.Parameters.AddWithValue("@SoundServiceable", issueList.SoundServiceable);
