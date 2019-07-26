@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using TNCSCAPI.Models.Documents;
 
@@ -14,7 +13,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockIssuesEntity"></param>
         public void GenerateIssues(DocumentStockIssuesEntity stockIssuesEntity)
         {
-           // AuditLog.WriteError("GeneratestockIssuesEntityRegister");
+            // AuditLog.WriteError("GeneratestockIssuesEntityRegister");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             bool isDuplicate = false;
@@ -82,7 +81,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockIssuesEntity.SIDate.ToString()), 12, 2));
             streamWriter.Write("TIME:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.GetTime(DateTime.Now.ToString()), 14, 2));
-            streamWriter.Write("REGULAR ");
+            streamWriter.Write(report.StringFormatWithoutPipe((stockIssuesEntity.IssueRegularAdvance.ToUpper() == "R" ? "REGULAR" : "ADVANCE"), 8, 2));
             streamWriter.Write(report.StringFormat(stockIssuesEntity.IRelates, 21, 2));
             streamWriter.WriteLine(" ");
 
@@ -126,7 +125,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 netKgs = netKgs + item.Nkgs;
             }
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
-            streamWriter.WriteLine("||                                                               |Total        |"+ report.StringFormatWithoutPipe(units.ToString(), 9, 1) + "|"+report.StringFormatWithoutPipe(netKgs.ToString(),12,1) +"|     |");
+            streamWriter.WriteLine("||                                                               |Total        |" + report.StringFormatWithoutPipe(units.ToString(), 9, 1) + "|" + report.StringFormatWithoutPipe(netKgs.ToString(), 12, 1) + "|     |");
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
 
         }
@@ -167,7 +166,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockIssuesEntity"></param>
         private void AddFooter(StreamWriter streamWriter, DocumentStockIssuesEntity stockIssuesEntity)
         {
-            streamWriter.WriteLine("|LORRY NO      :"+ report.StringFormatWithoutPipe(stockIssuesEntity .LorryNo,17,2) + "TC NAME       : -                                                           |");
+            streamWriter.WriteLine("|LORRY NO      :" + report.StringFormatWithoutPipe(stockIssuesEntity.LorryNo, 17, 2) + "TC NAME       : -                                                           |");
             streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account             |");
             streamWriter.WriteLine("|                                                                                                             |");
