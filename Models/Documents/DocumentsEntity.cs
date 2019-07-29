@@ -128,6 +128,13 @@ namespace TNCSCAPI.Models.Documents
         public string Flag1 { get; set; }
         public string Flag2 { get; set; }
         public DateTime dotime { get; set; }
+
+        public string GodownName { get; set; }
+        public string TransactionName { get; set; }
+        public string RegionName { get; set; }
+        public string UnLoadingSlip { get; set; }
+        public string UserID { get; set; }
+        
         public List<DocumentDeliveryItemDetails> documentDeliveryItems { get; set; }
         public List<DocumentDeliveryAdjustmentDetails> deliveryAdjustmentDetails { get; set; }
         public List<DocumentDeliveryPaymentDetails> deliveryPaymentDetails { get; set; }
@@ -196,6 +203,7 @@ namespace TNCSCAPI.Models.Documents
         public DateTime MDate { get; set; }
         public string RNo { get; set; }
         public DateTime RDate { get; set; }
+        public string LorryNo { get; set; }
         public string ReceivingCode { get; set; }
         public string IssuingCode { get; set; }
         public string RCode { get; set; }
@@ -206,6 +214,14 @@ namespace TNCSCAPI.Models.Documents
         public string ExportFlag { get; set; }
         public string Flag1 { get; set; }
         public string Flag2 { get; set; }
+
+        public string GodownName { get; set; }
+        public string TransactionName { get; set; }
+        public string ReceivingName { get; set; }
+        public string RegionName { get; set; }
+       // public string UnLoadingSlip { get; set; }
+        public string UserID { get; set; }
+
         public List<DocumentSTItemDetails> documentSTItemDetails { get; set; }
         public List<DocumentSTTDetails> documentSTTDetails { get; set; }
     }
