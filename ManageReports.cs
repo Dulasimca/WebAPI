@@ -299,6 +299,27 @@ namespace TNCSCAPI
 
         }
 
+
+        /// <summary>
+        /// Change the Date Format dd-MM-yyyy
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>Format dd-MM-yyyy</returns>
+        public string GetTime(string date)
+        {
+            try
+            {
+                return Convert.ToDateTime(date).ToString("hh:mm:ss");
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("FormatDate : " + ex.Message);
+                return null;
+            }
+
+        }
+
+
         /// <summary>
         /// Check the Data availability
         /// </summary>

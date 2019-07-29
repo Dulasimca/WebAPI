@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
+using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
 
 namespace TNCSCAPI
@@ -14,7 +14,7 @@ namespace TNCSCAPI
         SqlCommand sqlCommand = new SqlCommand();
         public bool InsertIssuesEntry(DocumentStockIssuesEntity issueList)
         {
-          //  SqlTransaction objTrans = null;
+            //  SqlTransaction objTrans = null;
             string RowID = string.Empty, SINo = string.Empty;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
@@ -27,8 +27,8 @@ namespace TNCSCAPI
                     {
                         sqlConnection.Open();
                     }
-                  //  objTrans = sqlConnection.BeginTransaction();
-                   // sqlCommand.Transaction = objTrans;
+                    //  objTrans = sqlConnection.BeginTransaction();
+                    // sqlCommand.Transaction = objTrans;
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "InsertStockIssueDetails";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -38,7 +38,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@DNo", issueList.DNo);
                     sqlCommand.Parameters.AddWithValue("@DDate", issueList.DDate);
                     sqlCommand.Parameters.AddWithValue("@WCCode", issueList.WCCode);
-                    sqlCommand.Parameters.AddWithValue("@IssuingCode","001");
+                    sqlCommand.Parameters.AddWithValue("@IssuingCode", issueList.IssuingCode);
                     sqlCommand.Parameters.AddWithValue("@Receivorcode", issueList.Receivorcode);
                     sqlCommand.Parameters.AddWithValue("@issuetype1", issueList.Issuetype);
                     sqlCommand.Parameters.AddWithValue("@SoundServiceable", issueList.SoundServiceable);
@@ -53,11 +53,11 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@RCode", issueList.RCode);
                     sqlCommand.Parameters.AddWithValue("@IssueType", "-");
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                    sqlCommand.Parameters.AddWithValue("@Loadingslip", "F");
+                    sqlCommand.Parameters.AddWithValue("@Loadingslip", issueList.Loadingslip);
                     sqlCommand.Parameters.AddWithValue("@IssueMemo", "-");
                     sqlCommand.Parameters.AddWithValue("@Flag1", issueList.ManualDocNo);
                     sqlCommand.Parameters.AddWithValue("@Flag2", issueList.IssueRegularAdvance);
-                    sqlCommand.Parameters.AddWithValue("@SINo1",  issueList.SINo!=null ? issueList.SINo : "");
+                    sqlCommand.Parameters.AddWithValue("@SINo1", issueList.SINo != null ? issueList.SINo : "");
                     sqlCommand.Parameters.AddWithValue("@RowId1", issueList.RowId != null ? issueList.RowId : "");
                     sqlCommand.Parameters.Add("@SINo", SqlDbType.NVarChar, 13);
                     sqlCommand.Parameters.Add("@RowId", SqlDbType.NVarChar, 30);
@@ -65,14 +65,20 @@ namespace TNCSCAPI
                     sqlCommand.Parameters["@RowId"].Direction = ParameterDirection.Output;
                     sqlCommand.ExecuteNonQuery();
 
-                     RowID = Convert.ToString(sqlCommand.Parameters["@RowId"].Value);
-                     SINo = Convert.ToString(sqlCommand.Parameters["@SINo"].Value);
+                    RowID = Convert.ToString(sqlCommand.Parameters["@RowId"].Value);
+                    SINo = Convert.ToString(sqlCommand.Parameters["@SINo"].Value);
+
+                    issueList.SINo = SINo;
+                    ManageDocumentIssues documentIssues = new ManageDocumentIssues();
+                    documentIssues.GenerateIssues(issueList);
+                   // Task.Run(() => documentIssues.GenerateIssues(issueList));
+
                     //Delete Stock issue Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
 
                     sqlCommand = new SqlCommand();
-                  //  sqlCommand.Transaction = objTrans;
+                    //  sqlCommand.Transaction = objTrans;
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "DeleteSIItemDetails";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -89,7 +95,7 @@ namespace TNCSCAPI
                         sqlCommand.Dispose();
 
                         sqlCommand = new SqlCommand();
-                      //  sqlCommand.Transaction = objTrans;
+                        //  sqlCommand.Transaction = objTrans;
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertSIItemDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -121,7 +127,7 @@ namespace TNCSCAPI
                         sqlCommand.Dispose();
 
                         sqlCommand = new SqlCommand();
-                      //  sqlCommand.Transaction = objTrans;
+                        //  sqlCommand.Transaction = objTrans;
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertIssuememodono";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -139,7 +145,7 @@ namespace TNCSCAPI
 
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
-                  //  objTrans.Commit();
+                    //  objTrans.Commit();
                     return true;
 
                 }

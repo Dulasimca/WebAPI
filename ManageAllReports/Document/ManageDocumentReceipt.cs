@@ -25,7 +25,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 filePath = subF_Path + "//" + fileName + ".txt";
                 report.DeleteFileIfExists(filePath);
               //  isDuplicate = ReceiptId == "0" ? false : true;
-                isDuplicate = stockReceipt.UnLoadingSlip == "Y" ? true : false;
+                isDuplicate = stockReceipt.UnLoadingSlip==null ? false: stockReceipt.UnLoadingSlip.ToUpper() == "Y" ? true : false;
                 streamWriter = new StreamWriter(filePath, true);
                 AddDocHeaderForReceipt(streamWriter, stockReceipt, isDuplicate);
                 AddDetails(streamWriter, stockReceipt);
@@ -56,19 +56,19 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|                                       TAMILNADU CIVIL SUPPLIES CORPORATION                               |");
-            streamWriter.WriteLine("|                                           ");
+            streamWriter.Write("|                                           ");
             streamWriter.Write(report.StringFormatWithoutPipe("REGION : ", 9, 1));
-            streamWriter.Write(report.StringFormat(stockReceipt.RegionName, 55, 2));
+            streamWriter.Write(report.StringFormat(stockReceipt.RegionName, 53, 2));
             streamWriter.WriteLine("");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|                                                                                                          |");
-            if(!isDuplicate)
+            if(isDuplicate)
             {
-                streamWriter.WriteLine("|                                      STOCK RECEIPT ACKNOWLEDGMENT            DUPLICATE COPY          |");
+            streamWriter.WriteLine("|                                      STOCK RECEIPT ACKNOWLEDGMENT            DUPLICATE COPY              |");
             }
             else
             {
-                streamWriter.WriteLine("|                                      STOCK RECEIPT ACKNOWLEDGMENT                                    |");
+                streamWriter.WriteLine("|                                      STOCK RECEIPT ACKNOWLEDGMENT                                        |");
             }
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             streamWriter.Write("|ACKNOWLEDGEMENT NO:");
@@ -76,36 +76,36 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("ALLOTMENT/RELEASE ORDER: ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.PAllotment, 12, 2));
             streamWriter.Write("GATE PASS : ");
-            streamWriter.Write(report.StringFormatWithoutPipe("", 16, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe("", 14, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|              DATE:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockReceipt.SRDate.ToString()), 21, 2));
             streamWriter.Write(report.StringFormatWithoutPipe("DATE: ",25,1));
-            streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockReceipt.OrderDate.ToString()), 41, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockReceipt.OrderDate.ToString()), 38, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|PERIOD OF ALLOTMENT:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockReceipt.SRDate.ToString()), 30, 2));
             streamWriter.Write("Transaction Type: ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TransactionType, 41, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TransactionType, 36, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|RECEIVING GODOWN   :");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.GodownName, 30, 2));
             streamWriter.Write("DEPOSITOR'S NAME: ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.DepositorName, 41, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.DepositorName, 36, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
 
-            streamWriter.WriteLine("|-----------------------------------------------------------------------------------------------------------|");
-            streamWriter.WriteLine("||---------------------------------------------------------------------------------------------------------||");
-            streamWriter.WriteLine("||SNo |STACK NO   |COMMODITY           | SCHEME       |UNIT WEIGHT  |NO.OF |  Gross        NET   |% OF     ||");
-            streamWriter.WriteLine("||    |           |                    |              |             |  UNIT|   WEIGHT in Kgs/NOs |MOISTURE ||");
-            streamWriter.WriteLine("||---------------------------------------------------------------------------------------------------------||");
+            streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
+            streamWriter.WriteLine("||--------------------------------------------------------------------------------------------------------||");
+            streamWriter.WriteLine("||SNo |STACK NO   |COMMODITY           | SCHEME       |UNIT WEIGHT  |NO.OF |  Gross        NET   |% OF    ||");
+            streamWriter.WriteLine("||    |           |                    |              |             |  UNIT|   WEIGHT in Kgs/NOs |MOISTURE||");
+            streamWriter.WriteLine("||--------------------------------------------------------------------------------------------------------||");
         }
 
         /// <summary>
@@ -121,16 +121,17 @@ namespace TNCSCAPI.ManageAllReports.Document
                 i = i + 1;
                 streamWriter.Write("||");
                 streamWriter.Write(report.StringFormat(i.ToString(), 4, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 11, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 20, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 14, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 13, 2));
-                streamWriter.Write(report.StringFormat(i.ToString(), 6, 1));
-                streamWriter.Write(report.StringFormat(i.ToString(), 10, 1));
-                streamWriter.Write(report.StringFormat(i.ToString(), 10, 1));
-                streamWriter.Write(report.StringFormat(i.ToString(), 8, 1));
+                streamWriter.Write(report.StringFormat(item.TStockNo, 11, 2));
+                streamWriter.Write(report.StringFormat(item.CommodityName, 20, 2));
+                streamWriter.Write(report.StringFormat(item.SchemeName, 14, 2));
+                streamWriter.Write(report.StringFormat(item.PackingName, 13, 2));
+                streamWriter.Write(report.StringFormat(item.NoPacking.ToString(), 6, 1));
+                streamWriter.Write(report.StringFormat(item.GKgs.ToString(), 10, 1));
+                streamWriter.Write(report.StringFormat(item.Nkgs.ToString(), 10, 1));
+                streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 8, 1) +"|");
                 streamWriter.WriteLine(" ");
             }
+           
         }
 
         /// <summary>
@@ -140,40 +141,41 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockReceipt"></param>
         public void AddFooter(StreamWriter streamWriter, DocumentStockReceiptList stockReceipt)
         {
-            streamWriter.WriteLine("|-----------------------------------------------------------------------------------------------------------|");
+            streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             streamWriter.Write("|T.MEMO/INVOICE NO: ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TruckMemoNo, 13, 2));
             streamWriter.Write("LORRY NO      : ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.LNo, 14, 2));
             streamWriter.Write("TC NAME       : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(" ", 28, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(" ", 25, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
             streamWriter.Write("|T.MEMO/INVOICE DT: ");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockReceipt.TruckMemoDate.ToString()), 13, 2));
             streamWriter.Write("LORRY FROM    : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.LFrom, 59, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.LFrom, 56, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
-            streamWriter.WriteLine("|                                                                                                           |");
+            streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.Write("|MODE OF WEIGHMENT: ");
             streamWriter.Write(report.StringFormatWithoutPipe(" ", 13, 2));
             streamWriter.Write("WAGON NO      : ");
             streamWriter.Write(report.StringFormatWithoutPipe(" ", 14, 2));
             streamWriter.Write("RR NO         : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.MTransport, 28, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.MTransport, 25, 2));
             streamWriter.Write("|");
-            streamWriter.Write(" ");
-            streamWriter.WriteLine("|                                                                                                           |");
-            streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account           |");
-            streamWriter.WriteLine("|                                                                                                           |");
-            streamWriter.WriteLine("|                                                                                                           |");
-            streamWriter.WriteLine("|DEPOSITOR OR HIS REPRESENTATIVE                                               GODOWN INCHARGE              |");
-            streamWriter.WriteLine("|                                                                                                           |");
-            streamWriter.WriteLine("|REMARKS                                                                                                    |");
-            streamWriter.WriteLine("|                                                                                                           |");
-            streamWriter.WriteLine("|-----------------------------------------------------------------------------------------------------------|");
+            streamWriter.WriteLine(" ");
+            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account          |");
+            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|DEPOSITOR OR HIS REPRESENTATIVE                                               GODOWN INCHARGE             |");
+            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|REMARKS                                                                                                   |");
+            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine(" Prepared DateTime:"+ stockReceipt.SRDate+ "             Printing DateTime:"+DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss"));
+            streamWriter.WriteLine((char)12);
         }
     }
 }

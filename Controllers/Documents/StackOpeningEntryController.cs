@@ -33,5 +33,21 @@ namespace TNCSCAPI.Controllers.Documents
             ds = manageSQLConnection.GetDataSetValues("GetStackDetailsByDate", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
+
+        [HttpPut("{id}")]
+        public bool Put(StackCardEntity stackCardEntity)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@RowId", stackCardEntity.RowId));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ClosedDate", Convert.ToString(stackCardEntity.ClosedDate)));              
+            return manageSQLConnection.UpdateValues("UpdateStackDetails", sqlParameters);
+        }
+    }
+    public class StackCardEntity
+    {
+        public string RowId { get; set; }
+        public DateTime ClosedDate { get; set; }
     }
 }

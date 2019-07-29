@@ -80,8 +80,16 @@ namespace TNCSCAPI.Models.Documents
         public string IssueMemo { get; set; }
         public string ManualDocNo { get; set; }
         public string IssueRegularAdvance { get; set; }
+
+        public string GodownName { get; set; }
+        public string RegionName { get; set; }
+        public string TransactionType { get; set; }
+        public string ReceiverName { get; set; }
+        public string UserID { get; set; }
+        
         public List<DocumentStockIssuesItemEntity> IssueItemList { get; set; }
         public List<DocumentStockIssueDetailsEntity> SIDetailsList { get; set; }
+
     }
 
     public class DocumentStockIssuesItemEntity
@@ -95,7 +103,12 @@ namespace TNCSCAPI.Models.Documents
         public double Nkgs { get; set; }
         public double Moisture { get; set; }
         public string Scheme { get; set; }
+
+        public string CommodityName { get; set; }
+        public string SchemeName { get; set; }
+        public string PackingName { get; set; }
     }
+    
 
     public class DocumentStockIssueDetailsEntity
     {

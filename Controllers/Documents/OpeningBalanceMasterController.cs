@@ -31,8 +31,22 @@ namespace TNCSCAPI.Controllers.Documents
                 listParameters.Add(new KeyValuePair<string, string>("@ObDate", ObDate));
             listParameters.Add(new KeyValuePair<string, string>("@GodownCode", GCode));
             ds = manageSQLConnection.GetDataSetValues("GetOpeningBalanceMaster", listParameters);
-
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
+        [HttpPut("{id}")]
+        public bool Put(WriteOffEntity writeOffEntity)
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> listParameters = new List<KeyValuePair<string, string>>();
+            listParameters.Add(new KeyValuePair<string, string>("@Rowid", writeOffEntity.Rowid));
+            listParameters.Add(new KeyValuePair<string, string>("@WriteOff", writeOffEntity.WriteOff));
+            return manageSQLConnection.UpdateValues("UpdateOpeningBalanceMaster", listParameters);
+
+        }
+    }
+    public class WriteOffEntity
+    {
+        public string Rowid { get; set; }
+        public string WriteOff { get; set; }
     }
 }

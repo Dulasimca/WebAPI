@@ -84,6 +84,44 @@ namespace TNCSCAPI
             }
         }
 
+        public bool UpdateValues(string procedureName, List<KeyValuePair<string, string>> parameterList)
+        {
+            sqlConnection = new SqlConnection(GlobalVariable.ConnectionString);
+            DataSet ds = new DataSet();
+            sqlCommand = new SqlCommand();
+            try
+            {
+                if (sqlConnection.State == 0)
+                {
+                    sqlConnection.Open();
+                }
+                sqlCommand.Connection = sqlConnection;
+                sqlCommand.CommandText = procedureName;
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                foreach (KeyValuePair<string, string> keyValuePair in parameterList)
+                {
+                    sqlCommand.Parameters.AddWithValue(keyValuePair.Key, keyValuePair.Value);
+                }
+
+                dataAdapter = new SqlDataAdapter(sqlCommand);
+                dataAdapter.Fill(ds);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
+                return false;
+
+            }
+            finally
+            {
+                sqlConnection.Close();
+                sqlCommand.Dispose();
+                ds.Dispose();
+                dataAdapter = null;
+            }
+        }
+
         public bool InsertData(string procedureName, List<KeyValuePair<string, string>> parameterList)
         {
             sqlConnection = new SqlConnection(GlobalVariable.ConnectionString);
@@ -176,7 +214,7 @@ namespace TNCSCAPI
                     //Generate the report file.
                     receiptList.SRNo = SRNo;
                     ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
-                    documentReceipt.GenerateReceipt(receiptList);
+                    Task.Run(()=>documentReceipt.GenerateReceipt(receiptList));
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
@@ -356,7 +394,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@RegionCode", stackOpeningEntity.RegionCode);
                     sqlCommand.Parameters.AddWithValue("@Flag1", "A");
                     sqlCommand.Parameters.AddWithValue("@Flag2", "0");
-                    sqlCommand.Parameters.AddWithValue("@clstackdate", stackOpeningEntity.clstackdate);
+                    //sqlCommand.Parameters.AddWithValue("@clstackdate", stackOpeningEntity.clstackdate);
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
