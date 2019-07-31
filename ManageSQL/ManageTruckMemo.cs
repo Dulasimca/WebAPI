@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
+using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
 
 
@@ -21,7 +23,7 @@ namespace TNCSCAPI.ManageSQL
         public bool InsertTruckMemoEntry(DocumentStockTransferDetails documentStockTransferDetails)
         {
             SqlTransaction objTrans = null;
-            string RowID = string.Empty, SRNo = string.Empty;
+            string RowID = string.Empty, STNo = string.Empty;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
                 DataSet ds = new DataSet();
@@ -63,7 +65,13 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.ExecuteNonQuery();
 
                     RowID = (string)sqlCommand.Parameters["@RowId"].Value;
-                    SRNo = (string)sqlCommand.Parameters["@STNo"].Value;
+                    STNo = (string)sqlCommand.Parameters["@STNo"].Value;
+
+                    documentStockTransferDetails.STNo = STNo;
+                    ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
+                    documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails);
+                    Task.Run(() => documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails));
+
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
@@ -73,7 +81,7 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "DeleteStockTransferDetails";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@STNo", SRNo);
+                    sqlCommand.Parameters.AddWithValue("@STNo", STNo);
                     sqlCommand.ExecuteNonQuery();
 
                     //Insert data into documentSTItemDetails
@@ -86,7 +94,7 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertSTItemDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.AddWithValue("@STNo", SRNo);
+                        sqlCommand.Parameters.AddWithValue("@STNo", STNo);
                         sqlCommand.Parameters.AddWithValue("@RowId", RowID);
                         sqlCommand.Parameters.AddWithValue("@TStockNo", item.TStockNo);
                         sqlCommand.Parameters.AddWithValue("@ICode", item.ICode);
@@ -114,7 +122,7 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertSTTDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.AddWithValue("@STNo", SRNo);
+                        sqlCommand.Parameters.AddWithValue("@STNo", STNo);
                         sqlCommand.Parameters.AddWithValue("@RowId", RowID);
                         sqlCommand.Parameters.AddWithValue("@TransportMode", item.TransportMode);
                         sqlCommand.Parameters.AddWithValue("@TransporterName", item.TransporterName);

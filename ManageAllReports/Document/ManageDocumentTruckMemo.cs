@@ -10,9 +10,9 @@ namespace TNCSCAPI.ManageAllReports.Document
     public class ManageDocumentTruckMemo
     {
         ManageReport report = new ManageReport();
-        public void GenerateReceipt(DocumentStockTransferDetails truckMemoList)
+        public void GenerateTruckMemo(DocumentStockTransferDetails truckMemoList)
         {
-            AuditLog.WriteError("GenerateStockReceiptRegister");
+            AuditLog.WriteError("GenerateTruckMemoRegister");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             bool isDuplicate = false;
