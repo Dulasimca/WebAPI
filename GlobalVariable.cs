@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TNCSCAPI
+﻿namespace TNCSCAPI
 {
     public class GlobalVariable
     {
@@ -23,6 +18,5 @@ namespace TNCSCAPI
         public const string DocumentIssueFileName = "ISDOC";
         public const string DocumentDOFileName = "DODOC";
         public const string DocumentTruckMemoFileName = "TMDOC";
-
-    }  
+    }
 }

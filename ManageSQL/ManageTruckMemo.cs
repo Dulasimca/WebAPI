@@ -52,17 +52,10 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.AddWithValue("@GunnyUtilised", documentStockTransferDetails.GunnyUtilised);
                     sqlCommand.Parameters.AddWithValue("@GunnyReleased", documentStockTransferDetails.GunnyReleased);
                     sqlCommand.Parameters.AddWithValue("@IssueSlip", documentStockTransferDetails.IssueSlip);
-<<<<<<< HEAD
-                    //sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                    //sqlCommand.Parameters.AddWithValue("@Flag1", documentStockTransferDetails.Flag1);
-                    //sqlCommand.Parameters.AddWithValue("@Flag2", documentStockTransferDetails.Flag2);
-                    //sqlCommand.Parameters.AddWithValue("@TruckMemo", documentStockTransferDetails.TruckMemo);
-=======
                     sqlCommand.Parameters.AddWithValue("@ExportFlag","N");
                     sqlCommand.Parameters.AddWithValue("@Flag1", documentStockTransferDetails.ManualDocNo);
                     sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                     sqlCommand.Parameters.AddWithValue("@TruckMemo", "F");
->>>>>>> 7add4ff8dc96ce02c05578e662c8d7c95a6a59e2
                     sqlCommand.Parameters.AddWithValue("@STNo1", documentStockTransferDetails.STNo);
                     sqlCommand.Parameters.AddWithValue("@RowId1", documentStockTransferDetails.RowId);
                     sqlCommand.Parameters.Add("@STNo", SqlDbType.NVarChar, 10);
@@ -75,9 +68,15 @@ namespace TNCSCAPI.ManageSQL
                     STNo = (string)sqlCommand.Parameters["@STNo"].Value;
 
                     documentStockTransferDetails.STNo = STNo;
+
+            #if (!DEBUG)
+                     ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
+                    Task.Run(() => documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails));
+            #else
                     ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
                     documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails);
-                    Task.Run(() => documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails));
+            #endif
+
 
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();

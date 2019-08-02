@@ -145,7 +145,6 @@ namespace TNCSCAPI.Models.Documents
         public string GodownName { get; set; }
         public string TransactionName { get; set; }
         public string RegionName { get; set; }
-        public string UnLoadingSlip { get; set; }
         public string UserID { get; set; }
         
         public List<DocumentDeliveryItemDetails> documentDeliveryItems { get; set; }
@@ -165,6 +164,8 @@ namespace TNCSCAPI.Models.Documents
         public string ExportFlag { get; set; }
         public string Flag1 { get; set; }
         public string Flag2 { get; set; }
+        public string ITDescription { get; set; }
+        public string SchemeName { get; set; }
     }
     public class DocumentDeliveryAdjustmentDetails
     {
@@ -204,6 +205,8 @@ namespace TNCSCAPI.Models.Documents
         public string ExportFlag { get; set; }
         public string Flag1 { get; set; }
         public string Flag2 { get; set; }
+        public string ITDescription { get; set; }
+        public string SchemeName { get; set; }
     }
 
     public class DocumentStockTransferDetails
@@ -234,7 +237,8 @@ namespace TNCSCAPI.Models.Documents
         public string RegionName { get; set; }
        // public string UnLoadingSlip { get; set; }
         public string UserID { get; set; }
-
+        public string ManualDocNo { get; set; }
+        public string RailHeadName { get; set; }
         public List<DocumentSTItemDetails> documentSTItemDetails { get; set; }
         public List<DocumentSTTDetails> documentSTTDetails { get; set; }
     }
@@ -254,6 +258,9 @@ namespace TNCSCAPI.Models.Documents
         public string ExportFlag { get; set; }
         public string flag1 { get; set; }
         public string Flag2 { get; set; }
+        public string ITDescription { get; set; }
+        public string PackingType { get; set; }
+        public string SchemeName { get; set; }
     }
 
     public class DocumentSTTDetails

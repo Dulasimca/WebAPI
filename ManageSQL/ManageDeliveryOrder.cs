@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
 
 namespace TNCSCAPI.ManageSQL
@@ -48,10 +49,9 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.AddWithValue("@Regioncode", deliveryOrderEntity.Regioncode);
                     sqlCommand.Parameters.AddWithValue("@Remarks", deliveryOrderEntity.Remarks);
                     sqlCommand.Parameters.AddWithValue("@deliverytype", deliveryOrderEntity.deliverytype);
-                    sqlCommand.Parameters.AddWithValue("@ExportFlag", deliveryOrderEntity.ExportFlag);
-                    sqlCommand.Parameters.AddWithValue("@Flag1", deliveryOrderEntity.Flag1);
-                    sqlCommand.Parameters.AddWithValue("@Flag2", deliveryOrderEntity.Flag2);
-                    sqlCommand.Parameters.AddWithValue("@dotime", deliveryOrderEntity.dotime);
+                    sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
+                    sqlCommand.Parameters.AddWithValue("@Flag1", "-");
+                    sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                     sqlCommand.Parameters.AddWithValue("@Dono1", deliveryOrderEntity.Dono);
                     sqlCommand.Parameters.AddWithValue("@RowId1", deliveryOrderEntity.RowId);
                     sqlCommand.Parameters.Add("@Dono", SqlDbType.NVarChar, 10);
@@ -62,6 +62,18 @@ namespace TNCSCAPI.ManageSQL
 
                     RowID = (string)sqlCommand.Parameters["@RowId"].Value;
                     SRNo = (string)sqlCommand.Parameters["@Dono"].Value;
+                    deliveryOrderEntity.Dono = SRNo;
+                    deliveryOrderEntity.RowId = RowID;
+
+                    #if (!DEBUG)
+                        ManageDocumentDeliveryOrder documentDO = new ManageDocumentDeliveryOrder();
+                        Task.Run(() => documentDO.GenerateDeliveryOrderText(deliveryOrderEntity));
+                    #else
+                        ManageDocumentDeliveryOrder documentDO = new ManageDocumentDeliveryOrder();
+                        documentDO.GenerateDeliveryOrderText(deliveryOrderEntity);
+                    #endif
+
+
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
@@ -110,7 +122,7 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.CommandText = "InsertDeliveryPaymentDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
                         sqlCommand.Parameters.AddWithValue("@Dono", SRNo);
-                        sqlCommand.Parameters.AddWithValue("@RowId", RowID);            
+                        sqlCommand.Parameters.AddWithValue("@RowId", RowID);
                         sqlCommand.Parameters.AddWithValue("@PaymentMode", item.PaymentMode);
                         sqlCommand.Parameters.AddWithValue("@PaymentAmount", item.PaymentAmount);
                         sqlCommand.Parameters.AddWithValue("@ChequeNo", item.ChequeNo);

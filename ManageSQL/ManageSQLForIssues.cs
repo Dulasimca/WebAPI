@@ -14,7 +14,7 @@ namespace TNCSCAPI
         SqlCommand sqlCommand = new SqlCommand();
         public bool InsertIssuesEntry(DocumentStockIssuesEntity issueList)
         {
-            //  SqlTransaction objTrans = null;
+              SqlTransaction objTrans = null;
             string RowID = string.Empty, SINo = string.Empty;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
@@ -27,8 +27,8 @@ namespace TNCSCAPI
                     {
                         sqlConnection.Open();
                     }
-                    //  objTrans = sqlConnection.BeginTransaction();
-                    // sqlCommand.Transaction = objTrans;
+                   objTrans = sqlConnection.BeginTransaction();
+                     sqlCommand.Transaction = objTrans;
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "InsertStockIssueDetails";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -67,11 +67,16 @@ namespace TNCSCAPI
 
                     RowID = Convert.ToString(sqlCommand.Parameters["@RowId"].Value);
                     SINo = Convert.ToString(sqlCommand.Parameters["@SINo"].Value);
-
                     issueList.SINo = SINo;
+
+                   #if (!DEBUG)
+                      ManageDocumentIssues documentIssues = new ManageDocumentIssues();
+                      Task.Run(() => documentIssues.GenerateIssues(issueList));
+                  #else
                     ManageDocumentIssues documentIssues = new ManageDocumentIssues();
                     documentIssues.GenerateIssues(issueList);
-                   // Task.Run(() => documentIssues.GenerateIssues(issueList));
+                  #endif
+
 
                     //Delete Stock issue Item Details
                     sqlCommand.Parameters.Clear();
@@ -145,14 +150,14 @@ namespace TNCSCAPI
 
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
-                    //  objTrans.Commit();
+                    objTrans.Commit();
                     return true;
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
-                    // objTrans.Rollback();
+                   objTrans.Rollback();
                     return false;
                 }
                 finally

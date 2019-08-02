@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
-using TNCSCAPI.Models.Documents;
 using TNCSCAPI.ManageAllReports.Document;
+using TNCSCAPI.Models.Documents;
 
 namespace TNCSCAPI
 {
@@ -213,8 +211,14 @@ namespace TNCSCAPI
 
                     //Generate the report file.
                     receiptList.SRNo = SRNo;
-                    ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
-                    Task.Run(()=>documentReceipt.GenerateReceipt(receiptList));
+                    #if (!DEBUG)
+                        ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
+                        Task.Run(()=>documentReceipt.GenerateReceipt(receiptList));
+                    #else
+                        ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
+                        documentReceipt.GenerateReceipt(receiptList);
+                    #endif
+
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
@@ -370,7 +374,7 @@ namespace TNCSCAPI
 
         public bool InsertStackOpening(StackOpeningEntity stackOpeningEntity)
         {
-              // string Rowid = string.Empty;
+            // string Rowid = string.Empty;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
                 DataSet ds = new DataSet();
@@ -383,7 +387,7 @@ namespace TNCSCAPI
                     }
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "InsertStackDetails";
-                    sqlCommand.CommandType = CommandType.StoredProcedure;                    
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("@GodownCode", stackOpeningEntity.GodownCode);
                     sqlCommand.Parameters.AddWithValue("@CommodityCode", stackOpeningEntity.CommodityCode);
                     sqlCommand.Parameters.AddWithValue("@StackNo", stackOpeningEntity.StackNo);
@@ -392,7 +396,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@ObStackDate", stackOpeningEntity.ObStackDate);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.Parameters.AddWithValue("@RegionCode", stackOpeningEntity.RegionCode);
-                    sqlCommand.Parameters.AddWithValue("@Flag1", "A");
+                    sqlCommand.Parameters.AddWithValue("@Flag1", "R");
                     sqlCommand.Parameters.AddWithValue("@Flag2", "0");
                     //sqlCommand.Parameters.AddWithValue("@clstackdate", stackOpeningEntity.clstackdate);
                     sqlCommand.ExecuteNonQuery();
