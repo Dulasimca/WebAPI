@@ -19,7 +19,7 @@ namespace TNCSCAPI.Controllers.Documents
         }
 
         [HttpGet("{id}")]
-        public string Get(string sValue, int Type)
+        public string Get(string sValue, int Type,string GCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -27,6 +27,7 @@ namespace TNCSCAPI.Controllers.Documents
             {               
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@SRDate", sValue));
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
                 ds = manageSQLConnection.GetDataSetValues("GetSRDetailsByDate", sqlParameters);
             }
             else

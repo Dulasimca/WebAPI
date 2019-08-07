@@ -142,7 +142,7 @@ namespace TNCSCAPI
                 return true;
 
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }
@@ -391,8 +391,8 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@GodownCode", stackOpeningEntity.GodownCode);
                     sqlCommand.Parameters.AddWithValue("@CommodityCode", stackOpeningEntity.CommodityCode);
                     sqlCommand.Parameters.AddWithValue("@StackNo", stackOpeningEntity.StackNo);
-                    sqlCommand.Parameters.AddWithValue("@StackBalanceBags", stackOpeningEntity.StackBalanceBags);
-                    sqlCommand.Parameters.AddWithValue("@StackBalanceWeight", stackOpeningEntity.StackBalanceWeight);
+                    sqlCommand.Parameters.AddWithValue("@StackBalanceBags", stackOpeningEntity.Bags);
+                    sqlCommand.Parameters.AddWithValue("@StackBalanceWeight", stackOpeningEntity.Weights);
                     sqlCommand.Parameters.AddWithValue("@ObStackDate", stackOpeningEntity.ObStackDate);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.Parameters.AddWithValue("@RegionCode", stackOpeningEntity.RegionCode);

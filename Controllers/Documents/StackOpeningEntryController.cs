@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using TNCSCAPI.Models.Documents;
-
+using TNCSCAPI.ManageAllReports.Stack;
 
 namespace TNCSCAPI.Controllers.Documents
 {
@@ -16,10 +13,33 @@ namespace TNCSCAPI.Controllers.Documents
     public class StackOpeningEntryController : ControllerBase
     {
         [HttpPost("{id}")]
-        public bool Post(StackOpeningEntity stackOpeningEntity)
+        public Tuple<bool,bool> Post(StackOpeningEntity stackOpeningEntity)
         {
             ManageSQLConnection manageSQL = new ManageSQLConnection();
-            return manageSQL.InsertStackOpening(stackOpeningEntity);
+            ManageStackCard manageStack = new ManageStackCard();
+
+            if (!string.IsNullOrEmpty(stackOpeningEntity.StackNo))
+            {
+                bool isInserted = false;
+                DataSet ds = new DataSet();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@OBDate", Convert.ToString(stackOpeningEntity.ObStackDate)));
+                sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stackOpeningEntity.GodownCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@StackNo", stackOpeningEntity.StackNo));
+                ds = manageSQL.GetDataSetValues("FetchStackCard", sqlParameters);
+                var result = manageStack.CheckStackCard(ds);
+                //Check stack nu
+                if(!result)
+                {
+                    isInserted = manageSQL.InsertStackOpening(stackOpeningEntity);
+                }
+                return new Tuple<bool, bool>(result, isInserted);
+            }
+            else
+            {
+                return new Tuple<bool, bool> (false,false);
+            }
+
         }
 
         [HttpGet("{id}")]
@@ -41,7 +61,7 @@ namespace TNCSCAPI.Controllers.Documents
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@RowId", stackCardEntity.RowId));
-            sqlParameters.Add(new KeyValuePair<string, string>("@ClosedDate", Convert.ToString(stackCardEntity.ClosedDate)));              
+            sqlParameters.Add(new KeyValuePair<string, string>("@ClosedDate", Convert.ToString(stackCardEntity.ClosedDate)));
             return manageSQLConnection.UpdateValues("UpdateStackDetails", sqlParameters);
         }
     }

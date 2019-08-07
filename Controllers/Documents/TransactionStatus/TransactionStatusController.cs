@@ -24,25 +24,46 @@ namespace TNCSCAPI.Controllers.Documents.TransactionStatus
             listParameters.Add(new KeyValuePair<string, string>("@issues", transactionStatus.Issues.ToString().ToLower() == "false" ? "0" : "1"));
             listParameters.Add(new KeyValuePair<string, string>("@transfer", transactionStatus.Transfer.ToString().ToLower() == "false" ? "0" : "1"));
             listParameters.Add(new KeyValuePair<string, string>("@Cb", transactionStatus.CB.ToString().ToLower() == "false" ? "0" : "1"));
-            //listParameters.Add(new KeyValuePair<string, string>("@approvaldate", DateTime.Now.ToString()));
-            //listParameters.Add(new KeyValuePair<string, string>("@LastUpdated", DateTime.Now.ToString()));
             listParameters.Add(new KeyValuePair<string, string>("@Remarks", transactionStatus.remarks));
             listParameters.Add(new KeyValuePair<string, string>("@Flag1", "1"));
             listParameters.Add(new KeyValuePair<string, string>("@userid", transactionStatus.userid));
+            listParameters.Add(new KeyValuePair<string, string>("@RoleId", Convert.ToString(transactionStatus.RoleId)));
             return manageSQLConnection.InsertData("InsertTransactionstatus", listParameters);
         }
 
         [HttpGet("{id}")]
-        public string Get(string Docdate, string Gcode)
+        public string Get(TransactionEntity entity)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> listParameters = new List<KeyValuePair<string, string>>();
-            listParameters.Add(new KeyValuePair<string, string>("@docdate", Docdate));
-            listParameters.Add(new KeyValuePair<string, string>("@gCode", Gcode));
-            ds = manageSQLConnection.GetDataSetValues("GetTransactionstatus", listParameters);
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            if (entity.Type == 1)
+            {
+                listParameters.Add(new KeyValuePair<string, string>("@Docdate", entity.Docdate));
+                listParameters.Add(new KeyValuePair<string, string>("@Gcode", entity.Gcode));
+                listParameters.Add(new KeyValuePair<string, string>("@RoleId", entity.RoleId));
+                ds = manageSQLConnection.GetDataSetValues("GetTransactionstatus", listParameters);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            else
+            {
+                listParameters.Add(new KeyValuePair<string, string>("@Docdate", entity.Docdate));
+                listParameters.Add(new KeyValuePair<string, string>("@RCode", entity.RCode));
+                listParameters.Add(new KeyValuePair<string, string>("@RoleId", entity.RoleId));
+                ds = manageSQLConnection.GetDataSetValues("GetTransactionStatusByDate", listParameters);
+                //Manage Transactionstatus
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
         }
+    }
+    public class TransactionEntity
+    {
+       public string Docdate { get; set; }
+       public string Gcode { get; set; }
+       public string RoleId { get; set; }
+       public string RCode { get; set; }
+        public int Type { get; set; }
+
     }
     public class TransactionStatusEntity
     {
@@ -58,5 +79,6 @@ namespace TNCSCAPI.Controllers.Documents.TransactionStatus
         public DateTime lastupdated { get; set; }
         public string remarks { get; set; }
         public string userid { get; set; }
+        public int RoleId { get; set; }
     }
 }
