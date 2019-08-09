@@ -14,7 +14,7 @@ namespace TNCSCAPI.Controllers.Masters
     public class DepositorDetailsController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string TyCode, string TRType,string GCode)
+        public string Get(string TyCode, string TRType,string GCode,string TRCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -22,6 +22,7 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@TyCode", TyCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@TRType", TRType));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodCode", GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@TRCode", TRCode));
             ds = manageSQLConnection.GetDataSetValues("GetDepositorDetails", sqlParameters);
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))
