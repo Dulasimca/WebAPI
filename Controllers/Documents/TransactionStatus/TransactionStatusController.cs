@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using TNCSCAPI.ManageAllReports.Stack;
 
 namespace TNCSCAPI.Controllers.Documents.TransactionStatus
 {
@@ -47,23 +48,24 @@ namespace TNCSCAPI.Controllers.Documents.TransactionStatus
             }
             else
             {
+                ManageStackCard manageStack = new ManageStackCard();
                 listParameters.Add(new KeyValuePair<string, string>("@Docdate", entity.Docdate));
                 listParameters.Add(new KeyValuePair<string, string>("@RCode", entity.RCode));
                 listParameters.Add(new KeyValuePair<string, string>("@RoleId", entity.RoleId));
                 ds = manageSQLConnection.GetDataSetValues("GetTransactionStatusByDate", listParameters);
                 //Manage Transactionstatus
-                return JsonConvert.SerializeObject(ds.Tables[0]);
+                var result = manageStack.ManageApprovalStatus(ds, entity.Docdate);
+                return JsonConvert.SerializeObject(result);
             }
         }
     }
     public class TransactionEntity
     {
-       public string Docdate { get; set; }
-       public string Gcode { get; set; }
-       public string RoleId { get; set; }
-       public string RCode { get; set; }
+        public string Docdate { get; set; }
+        public string Gcode { get; set; }
+        public string RoleId { get; set; }
+        public string RCode { get; set; }
         public int Type { get; set; }
-
     }
     public class TransactionStatusEntity
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
 
@@ -211,7 +212,7 @@ namespace TNCSCAPI
 
                     //Generate the report file.
                     receiptList.SRNo = SRNo;
-                    #if (!DEBUG)
+                    #if (Debug)
                         ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
                         Task.Run(()=>documentReceipt.GenerateReceipt(receiptList));
                     #else
@@ -277,6 +278,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@Remarks", receiptList.Remarks);
                     sqlCommand.Parameters.AddWithValue("@RCode", receiptList.RCode);
                     sqlCommand.Parameters.AddWithValue("@LNo", receiptList.LNo);
+                    sqlCommand.Parameters.AddWithValue("@TransportMode", receiptList.MTransport);
                     sqlCommand.Parameters.AddWithValue("@LFrom", receiptList.LFrom);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.ExecuteNonQuery();
