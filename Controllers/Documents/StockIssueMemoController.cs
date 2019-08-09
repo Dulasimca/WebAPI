@@ -16,10 +16,23 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockIssueMemoController : ControllerBase
     {
         [HttpPost("{id}")]
-        public bool Post(DocumentStockIssuesEntity documentStockIssuesEntity)
+        public Tuple<bool,string> Post(DocumentStockIssuesEntity documentStockIssuesEntity)
         {
-            StockIssueMemo stockIssueMemo = new StockIssueMemo();
-            return stockIssueMemo.InsertStockIssueData(documentStockIssuesEntity);
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", documentStockIssuesEntity.IssuingCode));
+            var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(result))
+            {
+                StockIssueMemo stockIssueMemo = new StockIssueMemo();
+                return stockIssueMemo.InsertStockIssueData(documentStockIssuesEntity);
+            }
+            else
+            {
+                return new Tuple<bool, string>(false, "Permission not Granted");
+            }
+           
         }
 
         [HttpGet("{id}")]

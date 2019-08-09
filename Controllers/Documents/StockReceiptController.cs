@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using TNCSCAPI.ManageDocuments;
@@ -12,10 +13,22 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockReceiptController : ControllerBase
     {
         [HttpPost("{id}")]
-        public bool Post(DocumentStockReceiptList stockReceipt)
+        public Tuple<bool,string> Post(DocumentStockReceiptList stockReceipt)
         {
-            StockReceipt receipt = new StockReceipt();
-            return receipt.InsertReceiptData(stockReceipt);
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", stockReceipt.ReceivingCode));
+            var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(result))
+            {
+                StockReceipt receipt = new StockReceipt();
+                return receipt.InsertReceiptData(stockReceipt);
+            }
+            else
+            {
+                return new Tuple<bool, string>(false, "Permission not Granted");
+            }
         }
 
         [HttpGet("{id}")]

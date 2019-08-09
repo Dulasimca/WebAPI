@@ -12,7 +12,7 @@ namespace TNCSCAPI
     {
         SqlConnection sqlConnection = new SqlConnection();
         SqlCommand sqlCommand = new SqlCommand();
-        public bool InsertIssuesEntry(DocumentStockIssuesEntity issueList)
+        public Tuple<bool,string> InsertIssuesEntry(DocumentStockIssuesEntity issueList)
         {
               SqlTransaction objTrans = null;
             string RowID = string.Empty, SINo = string.Empty;
@@ -151,14 +151,14 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
                     objTrans.Commit();
-                    return true;
+                    return new Tuple<bool, string>(true,SINo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                    objTrans.Rollback();
-                    return false;
+                    return new Tuple<bool, string> (false,"");
                 }
                 finally
                 {

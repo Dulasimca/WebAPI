@@ -156,7 +156,7 @@ namespace TNCSCAPI
             }
         }
 
-        public bool InsertReceiptSrDetailEntry(DocumentStockReceiptList receiptList)
+        public Tuple<bool,string> InsertReceiptSrDetailEntry(DocumentStockReceiptList receiptList)
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, SRNo = string.Empty;
@@ -283,14 +283,14 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.ExecuteNonQuery();
                     objTrans.Commit();
-                    return true;
+                    return new Tuple<bool, string> (true, SRNo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return false;
+                    return new Tuple<bool, string>(false, "");
                 }
                 finally
                 {

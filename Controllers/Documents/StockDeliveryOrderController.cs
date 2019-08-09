@@ -16,10 +16,23 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockDeliveryOrderController : ControllerBase
     {
         [HttpPost("{id}")]
-        public bool Post (DocumentDeliveryOrderEntity deliveryOrderEntity)
+        public Tuple<bool,string> Post (DocumentDeliveryOrderEntity deliveryOrderEntity)
         {
-            ManageDeliveryOrder manageDelivery = new ManageDeliveryOrder();
-            return manageDelivery.InsertDeliveryOrderEntry(deliveryOrderEntity);
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", deliveryOrderEntity.IssuerCode));
+            var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(result))
+            {
+                ManageDeliveryOrder manageDelivery = new ManageDeliveryOrder();
+                return manageDelivery.InsertDeliveryOrderEntry(deliveryOrderEntity);
+            }
+            else
+            {
+                return new Tuple<bool, string>(false, "Permission not Granted");
+            }
+           
         }
 
         [HttpGet("{id}")]

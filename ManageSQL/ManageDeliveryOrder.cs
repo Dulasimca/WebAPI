@@ -17,7 +17,7 @@ namespace TNCSCAPI.ManageSQL
         /// </summary>
         /// <param name="deliveryOrderEntity">Delivery order details entity</param>
         /// <returns></returns>
-        public bool InsertDeliveryOrderEntry(DocumentDeliveryOrderEntity deliveryOrderEntity)
+        public Tuple<bool,string> InsertDeliveryOrderEntry(DocumentDeliveryOrderEntity deliveryOrderEntity)
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, SRNo = string.Empty;
@@ -191,14 +191,14 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
                     objTrans.Commit();
-                    return true;
+                    return new Tuple<bool, string> (true,SRNo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return false;
+                    return new Tuple<bool, string> (false,"");
                 }
                 finally
                 {
