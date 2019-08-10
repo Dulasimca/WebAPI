@@ -8,6 +8,7 @@ using TNCSCAPI.Models.Documents;
 using TNCSCAPI.ManageSQL;
 using System.Data;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports.Document;
 
 namespace TNCSCAPI.Controllers.Documents
 {
@@ -18,19 +19,28 @@ namespace TNCSCAPI.Controllers.Documents
         [HttpPost("{id}")]
         public Tuple<bool,string> Post (DocumentDeliveryOrderEntity deliveryOrderEntity)
         {
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", deliveryOrderEntity.IssuerCode));
-            var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
-            ManageReport manageReport = new ManageReport();
-            if (manageReport.CheckDataAvailable(result))
+            if (deliveryOrderEntity.Type == 2)
             {
-                ManageDeliveryOrder manageDelivery = new ManageDeliveryOrder();
-                return manageDelivery.InsertDeliveryOrderEntry(deliveryOrderEntity);
+                ManageDocumentDeliveryOrder documentDO = new ManageDocumentDeliveryOrder();
+                documentDO.GenerateDeliveryOrderText(deliveryOrderEntity);
+                return new Tuple<bool, string>(true,"Print Generated Successfully");
             }
             else
             {
-                return new Tuple<bool, string>(false, "Permission not Granted");
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", deliveryOrderEntity.IssuerCode));
+                var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+                ManageReport manageReport = new ManageReport();
+                if (manageReport.CheckDataAvailable(result))
+                {
+                    ManageDeliveryOrder manageDelivery = new ManageDeliveryOrder();
+                    return manageDelivery.InsertDeliveryOrderEntry(deliveryOrderEntity);
+                }
+                else
+                {
+                    return new Tuple<bool, string>(false, "Permission not Granted");
+                }
             }
            
         }

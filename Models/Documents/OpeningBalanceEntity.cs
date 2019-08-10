@@ -12,11 +12,11 @@ namespace TNCSCAPI.Models.Documents
         public string ObDate { get; set; }
         public string RegionCode { get; set; }
         public string CommodityCode { get; set; }
-        public float BookBalanceBags { get; set; }
-        public float BookBalanceWeight { get; set; }
-        public float PhysicalBalanceBags { get; set; }
-        public float PhysicalBalanceWeight { get; set; }
-        public float CumulitiveShortage { get; set; }
+        public string BookBalanceBags { get; set; }
+        public string BookBalanceWeight { get; set; }
+        public string PhysicalBalanceBags { get; set; }
+        public string PhysicalBalanceWeight { get; set; }
+        public string CumulitiveShortage { get; set; }
     }
 
     public class StackOpeningEntity

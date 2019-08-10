@@ -122,7 +122,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 5, 1));
                 streamWriter.WriteLine(" ");
                 units = units + item.NoPacking;
-                netKgs = netKgs + item.Nkgs;
+                netKgs = netKgs +Convert.ToDouble(item.Nkgs);
             }
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
             streamWriter.WriteLine("||                                                               |Total        |" + report.StringFormatWithoutPipe(units.ToString(), 9, 1) + "|" + report.StringFormatWithoutPipe(netKgs.ToString(), 12, 1) + "|     |");

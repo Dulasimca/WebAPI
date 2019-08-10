@@ -118,7 +118,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(manageReport.StringFormat(item.PaymentAmount.ToString(), 11, 2));
                 streamWriter.Write("                                                  |");
                 streamWriter.WriteLine(" ");
-                dTotal = dTotal + item.PaymentAmount;
+                dTotal = dTotal + Convert.ToDouble(item.PaymentAmount);
             }
             streamWriter.Write("||                                  TOTAL   |");
             streamWriter.Write(manageReport.StringFormat(dTotal.ToString(), 11, 2));
@@ -156,7 +156,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(manageReport.StringFormat(item.Total.ToString(), 13, 11));
                 streamWriter.Write("    |");
                 streamWriter.WriteLine(" ");
-                dTotal = dTotal + item.Total;
+                dTotal = dTotal + Convert.ToDouble(item.Total);
             }
             streamWriter.WriteLine("||------|-------------------------|-------------------|---------------------|-----------|-------------|    |");
             streamWriter.Write("|                                                                            TOTAL      |");
@@ -193,7 +193,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(manageReport.StringFormat(item.MarginAmount.ToString(), 13, 11));
                 streamWriter.Write("    |");
                 streamWriter.WriteLine(" ");
-                dTotal = dTotal + item.MarginAmount;
+                dTotal = dTotal + Convert.ToDouble(item.MarginAmount);
             }
             streamWriter.WriteLine("||------|-------------------------|-------------------|---------------------|-----------|-------------|    |");
             streamWriter.Write("|                                                                            TOTAL      |");

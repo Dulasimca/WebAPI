@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.ManageDocuments;
 using TNCSCAPI.Models.Documents;
 
@@ -13,31 +14,40 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockReceiptController : ControllerBase
     {
         [HttpPost("{id}")]
-        public Tuple<bool,string> Post(DocumentStockReceiptList stockReceipt)
+        public Tuple<bool, string> Post(DocumentStockReceiptList stockReceipt)
         {
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", stockReceipt.ReceivingCode));
-            var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
-            ManageReport manageReport = new ManageReport();
-            if (manageReport.CheckDataAvailable(result))
+            if (stockReceipt.Type == 2)
             {
-                StockReceipt receipt = new StockReceipt();
-                return receipt.InsertReceiptData(stockReceipt);
+                ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
+                documentReceipt.GenerateReceipt(stockReceipt);
+                return new Tuple<bool, string>(true, "Print Generated Sucessfully");
             }
             else
             {
-                return new Tuple<bool, string>(false, "Permission not Granted");
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", stockReceipt.ReceivingCode));
+                var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+                ManageReport manageReport = new ManageReport();
+                if (manageReport.CheckDataAvailable(result))
+                {
+                    StockReceipt receipt = new StockReceipt();
+                    return receipt.InsertReceiptData(stockReceipt);
+                }
+                else
+                {
+                    return new Tuple<bool, string>(false, "Permission not Granted");
+                }
             }
         }
 
         [HttpGet("{id}")]
-        public string Get(string sValue, int Type,string GCode)
+        public string Get(string sValue, int Type, string GCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             if (Type == 1)
-            {               
+            {
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@SRDate", sValue));
                 sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
@@ -56,11 +66,11 @@ namespace TNCSCAPI.Controllers.Documents
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-           
-                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                sqlParameters.Add(new KeyValuePair<string, string>("@SRDate", sValue));
-                ds = manageSQLConnection.GetDataSetValues("GetSRDetailsByDate", sqlParameters);
-                return true;
+
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@SRDate", sValue));
+            ds = manageSQLConnection.GetDataSetValues("GetSRDetailsByDate", sqlParameters);
+            return true;
         }
     }
 }

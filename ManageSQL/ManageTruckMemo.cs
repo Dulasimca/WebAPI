@@ -167,7 +167,7 @@ namespace TNCSCAPI.ManageSQL
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return new Tuple<bool, string> (false,"");
+                    return new Tuple<bool, string> (false, "Please Contact Administrator");
                 }
                 finally
                 {

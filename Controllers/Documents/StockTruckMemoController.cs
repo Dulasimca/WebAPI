@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.ManageSQL;
 using TNCSCAPI.Models.Documents;
 
@@ -18,19 +19,28 @@ namespace TNCSCAPI.Controllers.Documents
         [HttpPost("{id}")]
         public Tuple<bool,string> Post(DocumentStockTransferDetails documentStockTransfer)
         {
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", documentStockTransfer.IssuingCode));
-            var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
-            ManageReport manageReport = new ManageReport();
-            if (manageReport.CheckDataAvailable(result))
+            if (documentStockTransfer.Type == 2)
             {
-                ManageTruckMemo manageTruck = new ManageTruckMemo();
-                return manageTruck.InsertTruckMemoEntry(documentStockTransfer);
+                ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
+                documentTruckMemo.GenerateTruckMemo(documentStockTransfer);
+                return new Tuple<bool, string>(true, "Print Generated Successfully");
             }
             else
             {
-                return new Tuple<bool, string>(false, "Permission not Granted");
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", documentStockTransfer.IssuingCode));
+                var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+                ManageReport manageReport = new ManageReport();
+                if (manageReport.CheckDataAvailable(result))
+                {
+                    ManageTruckMemo manageTruck = new ManageTruckMemo();
+                    return manageTruck.InsertTruckMemoEntry(documentStockTransfer);
+                }
+                else
+                {
+                    return new Tuple<bool, string>(false, "Permission not Granted");
+                }
             }
         }
 

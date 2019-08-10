@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.ManageDocuments;
 using TNCSCAPI.Models.Documents;
 
@@ -18,21 +19,29 @@ namespace TNCSCAPI.Controllers.Documents
         [HttpPost("{id}")]
         public Tuple<bool,string> Post(DocumentStockIssuesEntity documentStockIssuesEntity)
         {
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", documentStockIssuesEntity.IssuingCode));
-            var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
-            ManageReport manageReport = new ManageReport();
-            if (manageReport.CheckDataAvailable(result))
+            if (documentStockIssuesEntity.Type == 2)
             {
-                StockIssueMemo stockIssueMemo = new StockIssueMemo();
-                return stockIssueMemo.InsertStockIssueData(documentStockIssuesEntity);
+                ManageDocumentIssues documentIssues = new ManageDocumentIssues();
+                documentIssues.GenerateIssues(documentStockIssuesEntity);
+                return new Tuple<bool, string>(true, "Print Generated Successfully");
             }
             else
             {
-                return new Tuple<bool, string>(false, "Permission not Granted");
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", documentStockIssuesEntity.IssuingCode));
+                var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+                ManageReport manageReport = new ManageReport();
+                if (manageReport.CheckDataAvailable(result))
+                {
+                    StockIssueMemo stockIssueMemo = new StockIssueMemo();
+                    return stockIssueMemo.InsertStockIssueData(documentStockIssuesEntity);
+                }
+                else
+                {
+                    return new Tuple<bool, string>(false, "Permission not Granted");
+                }
             }
-           
         }
 
         [HttpGet("{id}")]
