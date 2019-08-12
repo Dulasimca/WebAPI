@@ -62,7 +62,7 @@ namespace TNCSCAPI.Controllers.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@SINo", value));
                 ds = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsBySINo", sqlParameters);
             }
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            return JsonConvert.SerializeObject(ds);
         }
     }
 }
