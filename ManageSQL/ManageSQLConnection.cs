@@ -72,6 +72,7 @@ namespace TNCSCAPI
             }
             catch (Exception ex)
             {
+                AuditLog.WriteError(ex.Message);
                 throw ex;
             }
             finally

@@ -75,15 +75,15 @@ namespace TNCSCAPI
                   #else
                     ManageDocumentIssues documentIssues = new ManageDocumentIssues();
                     documentIssues.GenerateIssues(issueList);
-                  #endif
+                   #endif
 
 
-                    //Delete Stock issue Item Details
+                 //   Delete Stock issue Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
 
                     sqlCommand = new SqlCommand();
-                    //  sqlCommand.Transaction = objTrans;
+                     sqlCommand.Transaction = objTrans;
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "DeleteSIItemDetails";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -100,7 +100,7 @@ namespace TNCSCAPI
                         sqlCommand.Dispose();
 
                         sqlCommand = new SqlCommand();
-                        //  sqlCommand.Transaction = objTrans;
+                        sqlCommand.Transaction = objTrans;
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertSIItemDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -132,7 +132,7 @@ namespace TNCSCAPI
                         sqlCommand.Dispose();
 
                         sqlCommand = new SqlCommand();
-                        //  sqlCommand.Transaction = objTrans;
+                        sqlCommand.Transaction = objTrans;
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertIssuememodono";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -147,10 +147,10 @@ namespace TNCSCAPI
                         sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                         sqlCommand.ExecuteNonQuery();
                     }
-
+                    objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
-                    objTrans.Commit();
+                    
                     return new Tuple<bool, string>(true,SINo);
 
                 }
