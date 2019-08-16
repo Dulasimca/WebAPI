@@ -136,6 +136,16 @@ namespace TNCSCAPI.ManageAllReports.Stack
                         statusEntity.GodownName = Convert.ToString(item["GodownName"]);
                         statusEntity.TransactionDate = Date;
                         DataRow[] rows = ds.Tables[0].Select("GCode='" + Convert.ToString(item["GCode"]) + "'");
+                        //Check the Region Approved Status
+                        DataRow[] rowsRegion = ds.Tables[0].Select("GCode='" + Convert.ToString(item["GCode"]) + "'");
+                        if (rowsRegion.Length > 0)
+                        {
+                            statusEntity.Status = "Approved";
+                        }
+                        else
+                        {
+                            statusEntity.Status = "Pending";
+                        }
                         if (rows.Length >= 1)
                         {
                             statusEntity.Receipt = rows[0]["Receipt"].ToString();
@@ -178,6 +188,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
         public string Transfer { get; set; }
         public string ClosingBalance { get; set; }
         public string ApprovalDate { get; set; }
+        public string Status { get; set; }
         public string UserId { get; set; }
     }
 
