@@ -25,6 +25,8 @@ namespace TNCSCAPI.Controllers.Reports
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", commodity.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@TRCODE", commodity.TRCode));
             ds = manageSQLConnection.GetDataSetValues("GetCOMMODITYRECEIPT", sqlParameters);
+            //
+
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }
