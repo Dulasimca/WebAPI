@@ -29,7 +29,7 @@ namespace TNCSCAPI.Models.Documents
        public DateTime ObStackDate { get; set; }
        public string ExportFlag { get; set; }
        public string RegionCode { get; set; }
-      public string Flag1 { get; set; }
+       public string Flag1 { get; set; }
        public string Flag2 { get; set; }
        public DateTime clstackdate { get; set; }
     }
