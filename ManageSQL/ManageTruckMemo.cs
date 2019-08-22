@@ -69,13 +69,13 @@ namespace TNCSCAPI.ManageSQL
 
                     documentStockTransferDetails.STNo = STNo;
 
-            #if (!DEBUG)
+            //#if (!DEBUG)
                      ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
                     Task.Run(() => documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails));
-            #else
-                    ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
-                    documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails);
-            #endif
+            //#else
+            //        ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
+            //        documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails);
+            //#endif
 
 
                     //Delete Sr Item Details

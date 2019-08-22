@@ -17,7 +17,7 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockIssueMemoController : ControllerBase
     {
         [HttpPost("{id}")]
-        public Tuple<bool,string> Post(DocumentStockIssuesEntity documentStockIssuesEntity)
+        public Tuple<bool,string> Post(DocumentStockIssuesEntity documentStockIssuesEntity = null)
         {
             if (documentStockIssuesEntity.Type == 2)
             {

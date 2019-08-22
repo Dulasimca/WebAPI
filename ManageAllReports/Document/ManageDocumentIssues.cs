@@ -68,11 +68,11 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                                                             |");
             if (isDuplicate)
             {
-                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                DUPLICATE COPY                 |");
+                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                DUPLICATE COPY                |");
             }
             else
             {
-                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                                               |");
+                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                                              |");
             }
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.Write("|ISSUE MEMO NO  :   ");

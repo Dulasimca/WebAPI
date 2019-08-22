@@ -69,13 +69,13 @@ namespace TNCSCAPI
                     SINo = Convert.ToString(sqlCommand.Parameters["@SINo"].Value);
                     issueList.SINo = SINo;
 
-                   #if (!DEBUG)
+                   //#if (!DEBUG)
                       ManageDocumentIssues documentIssues = new ManageDocumentIssues();
                       Task.Run(() => documentIssues.GenerateIssues(issueList));
-                  #else
-                    ManageDocumentIssues documentIssues = new ManageDocumentIssues();
-                    documentIssues.GenerateIssues(issueList);
-                   #endif
+                  //#else
+                  //  ManageDocumentIssues documentIssues = new ManageDocumentIssues();
+                  //  documentIssues.GenerateIssues(issueList);
+                  // #endif
 
 
                  //   Delete Stock issue Item Details

@@ -17,7 +17,7 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockDeliveryOrderController : ControllerBase
     {
         [HttpPost("{id}")]
-        public Tuple<bool,string> Post(DocumentDeliveryOrderEntity deliveryOrderEntity)
+        public Tuple<bool,string> Post(DocumentDeliveryOrderEntity deliveryOrderEntity = null)
         {
             if (deliveryOrderEntity.Type == 2)
             {

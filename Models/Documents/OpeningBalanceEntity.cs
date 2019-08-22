@@ -24,13 +24,13 @@ namespace TNCSCAPI.Models.Documents
       public string  GodownCode { get; set; }
       public string  CommodityCode { get; set; }
        public string  StackNo { get; set; }
-       public double  Bags { get; set; }
-       public double  Weights { get; set; }
-       public DateTime ObStackDate { get; set; }
+       public string Bags { get; set; }
+       public string Weights { get; set; }
+       public string ObStackDate { get; set; }
        public string ExportFlag { get; set; }
        public string RegionCode { get; set; }
        public string Flag1 { get; set; }
        public string Flag2 { get; set; }
-       public DateTime clstackdate { get; set; }
+      // public DateTime clstackdate { get; set; }
     }
 }

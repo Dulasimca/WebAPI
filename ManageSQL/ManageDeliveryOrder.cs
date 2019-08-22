@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
 
@@ -10,9 +11,7 @@ namespace TNCSCAPI.ManageSQL
     {
         SqlConnection sqlConnection = new SqlConnection();
         SqlCommand sqlCommand = new SqlCommand();
-        SqlDataAdapter dataAdapter;
-
-        /// <summary>
+         /// <summary>
         /// Insert Delivery order details
         /// </summary>
         /// <param name="deliveryOrderEntity">Delivery order details entity</param>
@@ -65,13 +64,13 @@ namespace TNCSCAPI.ManageSQL
                     deliveryOrderEntity.Dono = SRNo;
                     deliveryOrderEntity.RowId = RowID;
 
-                    #if (!DEBUG)
+                    //#if (!DEBUG)
                         ManageDocumentDeliveryOrder documentDO = new ManageDocumentDeliveryOrder();
                         Task.Run(() => documentDO.GenerateDeliveryOrderText(deliveryOrderEntity));
-                    #else
-                        ManageDocumentDeliveryOrder documentDO = new ManageDocumentDeliveryOrder();
-                        documentDO.GenerateDeliveryOrderText(deliveryOrderEntity);
-                    #endif
+                    //#else
+                    //    ManageDocumentDeliveryOrder documentDO = new ManageDocumentDeliveryOrder();
+                    //    documentDO.GenerateDeliveryOrderText(deliveryOrderEntity);
+                    //#endif
 
 
                     //Delete Sr Item Details
@@ -111,30 +110,30 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.ExecuteNonQuery();
                     }
 
-                    //Insert data into SR Item details
-                    foreach (var item in deliveryOrderEntity.deliveryPaymentDetails)
-                    {
-                        sqlCommand.Parameters.Clear();
-                        sqlCommand.Dispose();
-                        sqlCommand = new SqlCommand();
-                        sqlCommand.Transaction = objTrans;
-                        sqlCommand.Connection = sqlConnection;
-                        sqlCommand.CommandText = "InsertDeliveryPaymentDetails";
-                        sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.AddWithValue("@Dono", SRNo);
-                        sqlCommand.Parameters.AddWithValue("@RowId", RowID);
-                        sqlCommand.Parameters.AddWithValue("@PaymentMode", item.PaymentMode);
-                        sqlCommand.Parameters.AddWithValue("@PaymentAmount", item.PaymentAmount);
-                        sqlCommand.Parameters.AddWithValue("@ChequeNo", item.ChequeNo);
-                        sqlCommand.Parameters.AddWithValue("@ChDate", item.ChDate);
-                        sqlCommand.Parameters.AddWithValue("@bank", item.bank);
-                        sqlCommand.Parameters.AddWithValue("@payableat", item.payableat);
-                        sqlCommand.Parameters.AddWithValue("@Rcode", item.Rcode);
-                        sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                        sqlCommand.Parameters.AddWithValue("Flag1", "-");
-                        sqlCommand.Parameters.AddWithValue("Flag2", "-");
-                        sqlCommand.ExecuteNonQuery();
-                    }
+                    ////Insert data into SR Item details
+                    //foreach (var item in deliveryOrderEntity.deliveryPaymentDetails)
+                    //{
+                    //    sqlCommand.Parameters.Clear();
+                    //    sqlCommand.Dispose();
+                    //    sqlCommand = new SqlCommand();
+                    //    sqlCommand.Transaction = objTrans;
+                    //    sqlCommand.Connection = sqlConnection;
+                    //    sqlCommand.CommandText = "InsertDeliveryPaymentDetails";
+                    //    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    //    sqlCommand.Parameters.AddWithValue("@Dono", SRNo);
+                    //    sqlCommand.Parameters.AddWithValue("@RowId", RowID);
+                    //    sqlCommand.Parameters.AddWithValue("@PaymentMode", item.PaymentMode);
+                    //    sqlCommand.Parameters.AddWithValue("@PaymentAmount", item.PaymentAmount);
+                    //    sqlCommand.Parameters.AddWithValue("@ChequeNo", item.ChequeNo);
+                    //    sqlCommand.Parameters.AddWithValue("@ChDate", item.ChDate);
+                    //    sqlCommand.Parameters.AddWithValue("@bank", item.bank);
+                    //    sqlCommand.Parameters.AddWithValue("@payableat", item.payableat);
+                    //    sqlCommand.Parameters.AddWithValue("@Rcode", item.Rcode);
+                    //    sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
+                    //    sqlCommand.Parameters.AddWithValue("Flag1", "-");
+                    //    sqlCommand.Parameters.AddWithValue("Flag2", "-");
+                    //    sqlCommand.ExecuteNonQuery();
+                    //}
 
                     //Insert data into SR Item details
                     foreach (var item in deliveryOrderEntity.deliveryMarginDetails)
@@ -162,30 +161,30 @@ namespace TNCSCAPI.ManageSQL
                     }
 
 
-                    //Insert data into SR Item details
-                    foreach (var item in deliveryOrderEntity.deliveryAdjustmentDetails)
-                    {
-                        sqlCommand.Parameters.Clear();
-                        sqlCommand.Dispose();
-                        sqlCommand = new SqlCommand();
-                        sqlCommand.Transaction = objTrans;
-                        sqlCommand.Connection = sqlConnection;
-                        sqlCommand.CommandText = "InsertDeliveryAdjustmentDetails";
-                        sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.AddWithValue("@Dono", SRNo);
-                        sqlCommand.Parameters.AddWithValue("@RowId", RowID);
-                        sqlCommand.Parameters.AddWithValue("@AdjustedDoNo", item.AdjustedDoNo);
-                        sqlCommand.Parameters.AddWithValue("@Amount", item.Amount);
-                        sqlCommand.Parameters.AddWithValue("@AdjustmentType", item.AdjustmentType);
-                        sqlCommand.Parameters.AddWithValue("@AdjustDate", item.AdjustDate);
-                        sqlCommand.Parameters.AddWithValue("@AmountNowAdjusted", item.AmountNowAdjusted);
-                        sqlCommand.Parameters.AddWithValue("@Balance", item.Balance);
-                        sqlCommand.Parameters.AddWithValue("@Rcode", item.Rcode);
-                        sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                        sqlCommand.Parameters.AddWithValue("Flag1", "-");
-                        sqlCommand.Parameters.AddWithValue("Flag2", "-");
-                        sqlCommand.ExecuteNonQuery();
-                    }
+                    ////Insert data into SR Item details
+                    //foreach (var item in deliveryOrderEntity.deliveryAdjustmentDetails)
+                    //{
+                    //    sqlCommand.Parameters.Clear();
+                    //    sqlCommand.Dispose();
+                    //    sqlCommand = new SqlCommand();
+                    //    sqlCommand.Transaction = objTrans;
+                    //    sqlCommand.Connection = sqlConnection;
+                    //    sqlCommand.CommandText = "InsertDeliveryAdjustmentDetails";
+                    //    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    //    sqlCommand.Parameters.AddWithValue("@Dono", SRNo);
+                    //    sqlCommand.Parameters.AddWithValue("@RowId", RowID);
+                    //    sqlCommand.Parameters.AddWithValue("@AdjustedDoNo", item.AdjustedDoNo);
+                    //    sqlCommand.Parameters.AddWithValue("@Amount", item.Amount);
+                    //    sqlCommand.Parameters.AddWithValue("@AdjustmentType", item.AdjustmentType);
+                    //    sqlCommand.Parameters.AddWithValue("@AdjustDate", item.AdjustDate);
+                    //    sqlCommand.Parameters.AddWithValue("@AmountNowAdjusted", item.AmountNowAdjusted);
+                    //    sqlCommand.Parameters.AddWithValue("@Balance", item.Balance);
+                    //    sqlCommand.Parameters.AddWithValue("@Rcode", item.Rcode);
+                    //    sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
+                    //    sqlCommand.Parameters.AddWithValue("Flag1", "-");
+                    //    sqlCommand.Parameters.AddWithValue("Flag2", "-");
+                    //    sqlCommand.ExecuteNonQuery();
+                    //}
 
                     //Insert SRT Details table
                     sqlCommand.Parameters.Clear();
@@ -198,14 +197,14 @@ namespace TNCSCAPI.ManageSQL
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return new Tuple<bool, string> (false, "Please Contact Administrator");
+                    return new Tuple<bool, string> (false, "Please Contact Dulasi" + ex.Message);
                 }
                 finally
                 {
                     sqlConnection.Close();
                     sqlCommand.Dispose();
                     ds.Dispose();
-                    dataAdapter = null;
+                    
                 }
             }
 

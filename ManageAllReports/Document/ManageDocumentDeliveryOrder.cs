@@ -109,17 +109,17 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("||------------------------------------------------------|                                                  |");
             streamWriter.WriteLine("||CHQ/DD NO |  DATE    |     BANK NAME      |  AMOUNT   |                                                  |");
             streamWriter.WriteLine("||------------------------------------------------------|                                                  |");
-            foreach (var item in deliveryOrderList.deliveryPaymentDetails)
-            {
-                streamWriter.Write("||");
-                streamWriter.Write(manageReport.StringFormat(item.ChequeNo, 10, 2));
-                streamWriter.Write(manageReport.StringFormat(manageReport.FormatDate(item.ChDate.ToString()), 10, 2));
-                streamWriter.Write(manageReport.StringFormat(item.bank, 20, 2));
-                streamWriter.Write(manageReport.StringFormat(item.PaymentAmount.ToString(), 11, 2));
-                streamWriter.Write("                                                  |");
-                streamWriter.WriteLine(" ");
-                dTotal = dTotal + Convert.ToDouble(item.PaymentAmount);
-            }
+            //foreach (var item in deliveryOrderList.deliveryPaymentDetails)
+            //{
+            //    streamWriter.Write("||");
+            //    streamWriter.Write(manageReport.StringFormat(item.ChequeNo, 10, 2));
+            //    streamWriter.Write(manageReport.StringFormat(manageReport.FormatDate(item.ChDate.ToString()), 10, 2));
+            //    streamWriter.Write(manageReport.StringFormat(item.bank, 20, 2));
+            //    streamWriter.Write(manageReport.StringFormat(item.PaymentAmount.ToString(), 11, 2));
+            //    streamWriter.Write("                                                  |");
+            //    streamWriter.WriteLine(" ");
+            //    dTotal = dTotal + Convert.ToDouble(item.PaymentAmount);
+            //}
             streamWriter.Write("||                                  TOTAL   |");
             streamWriter.Write(manageReport.StringFormat(dTotal.ToString(), 11, 2));
             streamWriter.Write("                                                  |");
@@ -143,7 +143,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("||S.NO. |   ITEM DESCRIPTION      |SCHEME             |QUANTITY TO BE ISSUED|RATE/UNIT  | TOTAL VALUE |    |");
             streamWriter.WriteLine("||      |                         |                   |    KGS.(Nett) GMS.  | RS.   P.  |   RS.    P. |    |");
             streamWriter.WriteLine("||------|-------------------------|-------------------|---------------------|-----------|-------------|    |");
-            
+
             foreach (var item in deliveryOrderList.documentDeliveryItems)
             {
                 i = i + 1;

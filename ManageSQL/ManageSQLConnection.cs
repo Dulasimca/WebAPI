@@ -144,7 +144,7 @@ namespace TNCSCAPI
                 return true;
 
             }
-            catch(Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -157,7 +157,7 @@ namespace TNCSCAPI
             }
         }
 
-        public Tuple<bool,string> InsertReceiptSrDetailEntry(DocumentStockReceiptList receiptList)
+        public Tuple<bool, string> InsertReceiptSrDetailEntry(DocumentStockReceiptList receiptList)
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, SRNo = string.Empty;
@@ -213,17 +213,12 @@ namespace TNCSCAPI
 
                     //Generate the report file.
                     receiptList.SRNo = SRNo;
-                    #if (Debug)
-                        ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
-                        Task.Run(()=>documentReceipt.GenerateReceipt(receiptList));
-                    #else
-                        ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
-                        documentReceipt.GenerateReceipt(receiptList);
-                    #endif
+                    ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
+                    Task.Run(() => documentReceipt.GenerateReceipt(receiptList));
 
                     //Delete Sr Item Details
-                    sqlCommand.Parameters.Clear();
-                    sqlCommand.Dispose();
+                    //sqlCommand.Parameters.Clear();
+                    //sqlCommand.Dispose();
 
                     sqlCommand = new SqlCommand();
                     sqlCommand.Transaction = objTrans;
@@ -233,7 +228,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@SRNo", SRNo);
                     sqlCommand.ExecuteNonQuery();
 
-                    //Insert data into SR Item details
+                    ////Insert data into SR Item details
 
                     List<StockReceiptItemList> stockReceiptItems = new List<StockReceiptItemList>();
                     stockReceiptItems = receiptList.ItemList;
@@ -265,7 +260,7 @@ namespace TNCSCAPI
                         sqlCommand.ExecuteNonQuery();
                     }
 
-                    //Insert SRT Details table
+                    ////Insert SRT Details table
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
 
@@ -284,7 +279,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.ExecuteNonQuery();
                     objTrans.Commit();
-                    return new Tuple<bool, string> (true, SRNo);
+                    return new Tuple<bool, string>(true, SRNo);
 
                 }
                 catch (Exception ex)

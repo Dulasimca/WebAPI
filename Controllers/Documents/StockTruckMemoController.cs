@@ -17,7 +17,7 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockTruckMemoController : ControllerBase
     {
         [HttpPost("{id}")]
-        public Tuple<bool,string> Post(DocumentStockTransferDetails documentStockTransfer)
+        public Tuple<bool,string> Post(DocumentStockTransferDetails documentStockTransfer = null)
         {
             if (documentStockTransfer.Type == 2)
             {

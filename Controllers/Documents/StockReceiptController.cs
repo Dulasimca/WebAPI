@@ -13,8 +13,32 @@ namespace TNCSCAPI.Controllers.Documents
     [ApiController]
     public class StockReceiptController : ControllerBase
     {
+        //[HttpPost("{id}")]
+        //public Tuple<bool, string> Post(DocumentStockReceiptList stockReceipt = null)
+        //{
+
+
+        //    ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+        //        List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+        //        sqlParameters.Add(new KeyValuePair<string, string>("@GCode", stockReceipt.ReceivingCode));
+        //        var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+        //        ManageReport manageReport = new ManageReport();
+        //    if (manageReport.CheckDataAvailable(result))
+        //    {
+        //        StockReceipt receipt = new StockReceipt();
+        //         return receipt.InsertReceiptData(stockReceipt);
+
+        //    }
+        //    else
+        //    {
+        //        return new Tuple<bool, string>(false, "Permission not Granted");
+        //    }
+
+
+        //}
+
         [HttpPost("{id}")]
-        public Tuple<bool, string> Post(DocumentStockReceiptList stockReceipt)
+        public Tuple<bool, string> Post(DocumentStockReceiptList stockReceipt = null)
         {
             if (stockReceipt.Type == 2)
             {
@@ -61,6 +85,7 @@ namespace TNCSCAPI.Controllers.Documents
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
+
         [HttpPut("{id}")]
         public bool Put(string sValue)
         {
