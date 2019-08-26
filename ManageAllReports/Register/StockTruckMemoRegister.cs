@@ -35,7 +35,7 @@ namespace TNCSCAPI.ManageAllReports
                 // sw.WriteLine((char)12);             
                 TruckMemoRegAbstract(sw, entity);
                 sw.Flush();
-                sw.Close();
+               
                 //send mail to corresponding godown.
 
             }
@@ -45,6 +45,7 @@ namespace TNCSCAPI.ManageAllReports
             }
             finally
             {
+                sw.Close();
                 sw = null;
                 fPath = string.Empty; sFileName = string.Empty;
             }

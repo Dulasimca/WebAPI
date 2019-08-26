@@ -1,11 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 
 namespace TNCSCAPI.Controllers.Reports
@@ -23,6 +19,7 @@ namespace TNCSCAPI.Controllers.Reports
             sqlParameters.Add(new KeyValuePair<string, string>("@FDate", commodity.FDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", commodity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", commodity.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", commodity.RCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@TRCODE", commodity.TRCode));
             ds = manageSQLConnection.GetDataSetValues("GetCOMMODITYRECEIPT", sqlParameters);
             //
@@ -32,10 +29,11 @@ namespace TNCSCAPI.Controllers.Reports
     }
     public class CommodityParameter
     {
-       public string FDate { get; set; }
-       public string ToDate { get; set; }
-       public string GCode { get; set; }
-       public string TRCode { get; set; }
-       public string UserName { get; set; }
+        public string FDate { get; set; }
+        public string ToDate { get; set; }
+        public string GCode { get; set; }
+        public string RCode { get; set; }
+        public string TRCode { get; set; }
+        public string UserName { get; set; }
     }
 }

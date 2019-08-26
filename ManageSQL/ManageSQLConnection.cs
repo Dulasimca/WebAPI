@@ -279,14 +279,14 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.ExecuteNonQuery();
                     objTrans.Commit();
-                    return new Tuple<bool, string>(true, SRNo);
+                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage + SRNo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return new Tuple<bool, string>(false, "Please Contact Administrator");
+                    return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
                 }
                 finally
                 {

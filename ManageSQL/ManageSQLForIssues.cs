@@ -12,9 +12,9 @@ namespace TNCSCAPI
     {
         SqlConnection sqlConnection = new SqlConnection();
         SqlCommand sqlCommand = new SqlCommand();
-        public Tuple<bool,string> InsertIssuesEntry(DocumentStockIssuesEntity issueList)
+        public Tuple<bool, string> InsertIssuesEntry(DocumentStockIssuesEntity issueList)
         {
-              SqlTransaction objTrans = null;
+            SqlTransaction objTrans = null;
             string RowID = string.Empty, SINo = string.Empty;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
@@ -27,8 +27,8 @@ namespace TNCSCAPI
                     {
                         sqlConnection.Open();
                     }
-                   objTrans = sqlConnection.BeginTransaction();
-                     sqlCommand.Transaction = objTrans;
+                    objTrans = sqlConnection.BeginTransaction();
+                    sqlCommand.Transaction = objTrans;
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "InsertStockIssueDetails";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -69,21 +69,21 @@ namespace TNCSCAPI
                     SINo = Convert.ToString(sqlCommand.Parameters["@SINo"].Value);
                     issueList.SINo = SINo;
 
-                   //#if (!DEBUG)
-                      ManageDocumentIssues documentIssues = new ManageDocumentIssues();
-                      Task.Run(() => documentIssues.GenerateIssues(issueList));
-                  //#else
-                  //  ManageDocumentIssues documentIssues = new ManageDocumentIssues();
-                  //  documentIssues.GenerateIssues(issueList);
-                  // #endif
+                    //#if (!DEBUG)
+                    ManageDocumentIssues documentIssues = new ManageDocumentIssues();
+                    Task.Run(() => documentIssues.GenerateIssues(issueList));
+                    //#else
+                    //  ManageDocumentIssues documentIssues = new ManageDocumentIssues();
+                    //  documentIssues.GenerateIssues(issueList);
+                    // #endif
 
 
-                 //   Delete Stock issue Item Details
+                    //   Delete Stock issue Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
 
                     sqlCommand = new SqlCommand();
-                     sqlCommand.Transaction = objTrans;
+                    sqlCommand.Transaction = objTrans;
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "DeleteSIItemDetails";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -150,15 +150,15 @@ namespace TNCSCAPI
                     objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
-                    
-                    return new Tuple<bool, string>(true,SINo);
+
+                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage + SINo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
-                   objTrans.Rollback();
-                    return new Tuple<bool, string> (false, "Please Contact Administrator");
+                    objTrans.Rollback();
+                    return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
                 }
                 finally
                 {

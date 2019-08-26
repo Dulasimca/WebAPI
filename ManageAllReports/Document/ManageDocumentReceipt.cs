@@ -30,8 +30,6 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AddDocHeaderForReceipt(streamWriter, stockReceipt, isDuplicate);
                 AddDetails(streamWriter, stockReceipt);
                 AddFooter(streamWriter, stockReceipt);
-                streamWriter.Flush();
-                streamWriter.Close();
             }
             catch (Exception ex)
             {
@@ -39,6 +37,8 @@ namespace TNCSCAPI.ManageAllReports.Document
             }
             finally
             {
+                streamWriter.Flush();
+                streamWriter.Close();
                 fPath = string.Empty; fileName = string.Empty;
                 streamWriter = null;
             }

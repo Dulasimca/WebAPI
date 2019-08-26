@@ -44,8 +44,7 @@ namespace TNCSCAPI.ManageAllReports
                 StockIssuesSchemewiseAbstract(streamWriter, stockIssuesList, entity);
                 StockIssuesReceiverandSchemeAbstract(streamWriter, stockIssuesList, entity);
                 StockIssuesCommoditywiseAbstract(streamWriter, stockIssuesList, entity);
-                streamWriter.Flush();
-                streamWriter.Close();
+                streamWriter.Flush();               
             }
             catch (Exception ex)
             {
@@ -53,6 +52,7 @@ namespace TNCSCAPI.ManageAllReports
             }
             finally
             {
+                streamWriter.Close();
                 fPath = string.Empty; fileName = string.Empty;
                 streamWriter = null;
             }
