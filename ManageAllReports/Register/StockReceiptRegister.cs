@@ -49,7 +49,7 @@ namespace TNCSCAPI.ManageAllReports
                 StockReceiptAbstractCommodityWise(streamWriter, stockReceiptList, entity);
 
                 streamWriter.Flush();
-                streamWriter.Close();
+               
             }
             catch (Exception ex)
             {
@@ -57,6 +57,7 @@ namespace TNCSCAPI.ManageAllReports
             }
             finally
             {
+                streamWriter.Close();
                 fPath = string.Empty; fileName = string.Empty;
                 streamWriter = null;
             }
@@ -107,9 +108,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine(" ");
             sw.WriteLine("Stock Receipt Register:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "  Godown : " + GName + "  Region :" + RName);
-            sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
             sw.WriteLine("Scheme             |Commodity             |No Bags       |Net Wt (Kgs/Nos)    |");
-            sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
         }
 
         /// <summary>
@@ -123,9 +124,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine(" ");
             sw.WriteLine("Stock Receipt Register:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "    Godown : " + GName + "   Region :" + RName);
-            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
             sw.WriteLine("RECD.TYPE       |RECD.FROM      |Scheme         |Commodity             |No Bags     |Net Wt (Kgs/Nos)  |Packing Type         |");
-            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
         }
 
         /// <summary>
@@ -139,9 +140,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine(" ");
             sw.WriteLine("Stock Receipt Register:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "    Godown : " + GName + "    Region :" + RName);
-            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
             sw.WriteLine("Commodity              |No Bags     |Net Wt (Kgs/Nos) |");
-            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
         }
 
         /// <summary>
@@ -157,8 +158,10 @@ namespace TNCSCAPI.ManageAllReports
             string ackNo = string.Empty;
             string fromWhomRcd = string.Empty;
             bool CheckRepeatValue = false;
+            bool isDataAvailable = false;
             foreach (DataRow date in dateList.Rows)
             {
+                isDataAvailable = true;
                 count = 11;
                 string ackNoNext = string.Empty;
                 DataRow[] data = entity.dataSet.Tables[0].Select("Date='" + date["Date"] + "'");
@@ -169,7 +172,7 @@ namespace TNCSCAPI.ManageAllReports
                     {
                         //Add header again
                         count = 11;
-                        sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------|");
+                        sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
                         sw.WriteLine((char)12);
                         AddHeader(sw, Convert.ToString(date["Date"]));
                     }
@@ -197,11 +200,15 @@ namespace TNCSCAPI.ManageAllReports
                     sw.WriteLine("");
                     i = CheckRepeatValue == false ? i + 1 : i; 
                 }
-                sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------|");
+                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.WriteLine((char)12);
             }
-            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine((char)12);
+            if(!isDataAvailable)
+            {
+                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+                sw.WriteLine((char)12);
+            }
+
         }
 
         /// <summary>
@@ -239,6 +246,7 @@ namespace TNCSCAPI.ManageAllReports
                 count++;
                 sw.WriteLine("");
             }
+            sw.WriteLine((char)12);
         }
 
         /// <summary>
@@ -276,6 +284,7 @@ namespace TNCSCAPI.ManageAllReports
                 count++;
                 sw.WriteLine("");
             }
+            sw.WriteLine((char)12);
         }
 
         /// <summary>
@@ -316,6 +325,7 @@ namespace TNCSCAPI.ManageAllReports
                 count++;
                 sw.WriteLine("");
             }
+            sw.WriteLine((char)12);
         }
 
         /// <summary>
@@ -352,6 +362,7 @@ namespace TNCSCAPI.ManageAllReports
                 count++;
                 sw.WriteLine("");
             }
+            sw.WriteLine((char)12);
         }
     }
 

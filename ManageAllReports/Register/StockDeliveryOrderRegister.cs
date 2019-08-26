@@ -43,20 +43,19 @@ namespace TNCSCAPI.ManageAllReports
                 WriteDORegforItemandScheme(sw, dORegEntities, entity);
 
                 WriteDORegforItem(sw, dORegEntities, entity);
-
-
-                sw.Flush();
-                sw.Close();
+                sw.Flush();               
                 //send mail to corresponding godown.
 
             }
             catch (Exception ex)
             {
+                AuditLog.WriteError("GenerateDeliveryOrderForRegister " + ex.Message + " : " + ex.StackTrace);
                 throw ex;
             }
             finally
             {
-                 sw = null;
+                sw.Close();
+                sw = null;
                 fPath = string.Empty; sFileName = string.Empty;
             }
         }
@@ -192,7 +191,12 @@ namespace TNCSCAPI.ManageAllReports
                     sw.Write(report.StringFormat(report.Decimalformat(dr["Balance"].ToString()), 14, 1));
                     sw.Write(report.StringFormat(report.Decimalformat(dr["MarginAmount"].ToString()), 12, 1));
                     sw.WriteLine("");
-                    int addedLines =report.AddMoreContent(sw, sIssuer, 15, 35);
+                    int addedLines = 0;
+                    if (!CheckRepeatValue)
+                    {
+                        addedLines = report.AddMoreContent(sw, sIssuer, 15, 35);
+                    }
+                    
                     sw.WriteLine("    |           |                 |               |           |               |             |              |           |              |               |               |             |              |            |");
                     iCount = iCount + 2 + addedLines;
                     i = CheckRepeatValue == false ? i + 1 : i;

@@ -13,7 +13,7 @@ namespace TNCSCAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-          //  GlobalVariable globalVariable = new GlobalVariable(configuration);
+            //  GlobalVariable globalVariable = new GlobalVariable(configuration);
         }
 
         public IConfiguration Configuration { get; }
@@ -21,6 +21,7 @@ namespace TNCSCAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddCors();
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options =>
@@ -29,10 +30,6 @@ namespace TNCSCAPI
                     if (Resolver != null)
                         (Resolver as DefaultContractResolver).NamingStrategy = null;
                 });
-            //services.AddCors(c =>
-            //{
-            //    c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:4200", "http://180.179.49.72:8083", "https://tncsc-scm.in:80", "https://tncsc-scm.in", "http://tncsc-scm.in", "http://localhost:443", "https://tncsc-scm.in:443"));
-            //});
             //services.Configure<IISServerOptions>(options =>
             //{
             //    options.AutomaticAuthentication = false;
@@ -52,11 +49,17 @@ namespace TNCSCAPI
             {
                 app.UseHsts();
             }
-            
+            //    app.UseCors(options =>
+            //options.AllowAnyOrigin()
+            //.AllowAnyMethod()
+            //.AllowAnyHeader()
+            //options.WithOrigins("http://localhost:4200", "http://180.179.49.72:8083", "https://tncsc-scm.in:80", "https://tncsc-scm.in", "http://tncsc-scm.in", "http://localhost:443", "https://tncsc-scm.in:443", "https://www.tncsc-scm.in")
+            //); 
             app.UseCors(options =>
            options.WithOrigins("http://localhost:4200", "http://180.179.49.72:8083", "https://tncsc-scm.in:80", "https://tncsc-scm.in", "http://tncsc-scm.in", "http://localhost:443", "https://tncsc-scm.in:443", "https://www.tncsc-scm.in")
            .AllowAnyMethod()
            .AllowAnyHeader()
+           .AllowCredentials()
            );
             app.UseHttpsRedirection();
             app.UseMvc();
