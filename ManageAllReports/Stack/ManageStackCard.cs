@@ -137,7 +137,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                         statusEntity.TransactionDate = Date;
                         DataRow[] rows = ds.Tables[0].Select("GCode='" + Convert.ToString(item["GCode"]) + "'");
                         //Check the Region Approved Status
-                        DataRow[] rowsRegion = ds.Tables[0].Select("GCode='" + Convert.ToString(item["GCode"]) + "'");
+                        DataRow[] rowsRegion = ds.Tables[2].Select("GCode='" + Convert.ToString(item["GCode"]) + "'");
                         if (rowsRegion.Length > 0)
                         {
                             statusEntity.Status = "Approved";

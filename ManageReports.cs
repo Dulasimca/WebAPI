@@ -257,10 +257,18 @@ namespace TNCSCAPI
         /// <param name="Path"></param>
         public void DeleteFileIfExists(string Path)
         {
-            if (File.Exists(Path))
+            try
             {
-                File.Delete(Path);
+                if (File.Exists(Path))
+                {
+                    File.Delete(Path);
+                }
             }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("DeleteFileIfExists " + ex.Message);
+            }
+           
         }
 
         /// <summary>

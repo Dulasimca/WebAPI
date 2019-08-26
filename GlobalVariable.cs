@@ -18,5 +18,9 @@
         public const string DocumentIssueFileName = "ISDOC";
         public const string DocumentDOFileName = "DODOC";
         public const string DocumentTruckMemoFileName = "TMDOC";
+
+        ///
+        public const string SavedMessage = "Saved Successfully! : ";
+        public const string ErrorMessage = "Please Contact Administrator.";
     }
 }
