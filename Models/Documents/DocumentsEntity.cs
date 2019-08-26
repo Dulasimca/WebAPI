@@ -150,7 +150,7 @@ namespace TNCSCAPI.Models.Documents
         public string TransactionName { get; set; }
         public string RegionName { get; set; }
         public string UserID { get; set; }
-
+        public string ReceivorName { get; set; }
         public int Type { get; set; }
 
         public List<DocumentDeliveryItemDetails> documentDeliveryItems { get; set; }

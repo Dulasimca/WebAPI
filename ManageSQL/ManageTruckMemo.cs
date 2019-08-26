@@ -20,7 +20,7 @@ namespace TNCSCAPI.ManageSQL
         /// </summary>
         /// <param name="deliveryOrderEntity">Delivery order details entity</param>
         /// <returns></returns>
-        public Tuple<bool,string> InsertTruckMemoEntry(DocumentStockTransferDetails documentStockTransferDetails)
+        public Tuple<bool, string> InsertTruckMemoEntry(DocumentStockTransferDetails documentStockTransferDetails)
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, STNo = string.Empty;
@@ -52,7 +52,7 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.AddWithValue("@GunnyUtilised", documentStockTransferDetails.GunnyUtilised);
                     sqlCommand.Parameters.AddWithValue("@GunnyReleased", documentStockTransferDetails.GunnyReleased);
                     sqlCommand.Parameters.AddWithValue("@IssueSlip", documentStockTransferDetails.IssueSlip);
-                    sqlCommand.Parameters.AddWithValue("@ExportFlag","N");
+                    sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.Parameters.AddWithValue("@Flag1", documentStockTransferDetails.ManualDocNo);
                     sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                     sqlCommand.Parameters.AddWithValue("@TruckMemo", "F");
@@ -69,13 +69,13 @@ namespace TNCSCAPI.ManageSQL
 
                     documentStockTransferDetails.STNo = STNo;
 
-            //#if (!DEBUG)
-                     ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
+                    //#if (!DEBUG)
+                    ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
                     Task.Run(() => documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails));
-            //#else
-            //        ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
-            //        documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails);
-            //#endif
+                    //#else
+                    //        ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
+                    //        documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails);
+                    //#endif
 
 
                     //Delete Sr Item Details
@@ -160,14 +160,14 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
                     objTrans.Commit();
-                    return new Tuple<bool, string> (true,STNo);
+                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage + STNo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return new Tuple<bool, string> (false, "Please Contact Administrator");
+                    return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
                 }
                 finally
                 {

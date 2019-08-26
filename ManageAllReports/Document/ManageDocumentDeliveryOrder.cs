@@ -28,8 +28,8 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AddItemsDetails(streamWriter, deliveryOrderList);
                 AddMarginDetails(streamWriter, deliveryOrderList);
                 AddFooter(streamWriter);
-                streamWriter.Flush();
-                streamWriter.Close();
+               
+               
             }
             catch (Exception ex)
             {
@@ -37,6 +37,8 @@ namespace TNCSCAPI.ManageAllReports.Document
             }
             finally
             {
+                streamWriter.Flush();
+                streamWriter.Close();
                 fPath = string.Empty; fileName = string.Empty;
                 streamWriter = null;
             }
@@ -56,7 +58,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                       TAMILNADU CIVIL SUPPLIES CORPORATION                               |");
             streamWriter.Write("|                                              ");
             streamWriter.Write(manageReport.StringFormatWithoutPipe("REGION : ", 9, 1));
-            streamWriter.Write(manageReport.StringFormat(deliveryOrderEntity.RegionName, 51, 2));
+            streamWriter.Write(manageReport.StringFormat(deliveryOrderEntity.RegionName, 50, 2));
             streamWriter.WriteLine("");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|                                                                                                          |");
@@ -65,35 +67,29 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("|TRANSACTION:");
             streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.TransactionName, 21, 2));
             streamWriter.Write("GODOWN NAME: ");            
-            streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.GodownName, 12, 2));
+            streamWriter.Write(manageReport.StringFormat(deliveryOrderEntity.GodownName, 59, 2));
+            streamWriter.WriteLine(" ");
             streamWriter.Write("|DELIVERY ORDER: ");
             streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.Dono, 16, 2));
             streamWriter.Write("DATE: ");
-            streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.DoDate.ToString(), 11, 2));
+            streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.DoDate.ToString(), 66, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("|==========================================================================================================|");
 
             streamWriter.Write("|ISSUE TO:");
-            streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.GodownName, 21, 2));
+            streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.ReceivorName, 96, 2) + "|");
             streamWriter.WriteLine(" ");
             streamWriter.Write("|INDENT NO:");
             streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.IndentNo, 21, 2));
             // streamWriter.Write(manageReport.StringFormatWithoutPipe("DATE: ", 25, 1));
-            streamWriter.Write("        PERMIT DATE:");
-            streamWriter.Write(manageReport.StringFormatWithoutPipe(manageReport.FormatDate(deliveryOrderEntity.PermitDate.ToString()), 41, 2));
-            streamWriter.Write("        ORDER PERIOD ENDING:");
-            streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.OrderPeriod, 41, 2));
+            streamWriter.Write("PERMIT DATE:");
+            streamWriter.Write(manageReport.StringFormatWithoutPipe(manageReport.FormatDate(deliveryOrderEntity.PermitDate.ToString()), 13, 2));
+            streamWriter.Write("ORDER PERIOD ENDING:");
+            streamWriter.Write(manageReport.StringFormatWithoutPipe(deliveryOrderEntity.OrderPeriod, 27, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("|==========================================================================================================|");
-
-            streamWriter.Write("MARGIN RATE");
-            streamWriter.WriteLine("|| S.NO. | ITEM DESCRIPTION      | SCHEME              | QUANTITY TO BE ISSUED | RATE/UNIT   | TOTAL VALUE   |");
-            streamWriter.WriteLine("||       |                       |                     |   KGS.(Net) GMS.      | RS.   P.    | RS.   P.     ||");
-            streamWriter.WriteLine("||-------|-----------------------|---------------------|-----------------------| TOTAL       |-------------- |");
-            streamWriter.Write("|");
-
         }
 
         /// <summary>
@@ -109,17 +105,17 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("||------------------------------------------------------|                                                  |");
             streamWriter.WriteLine("||CHQ/DD NO |  DATE    |     BANK NAME      |  AMOUNT   |                                                  |");
             streamWriter.WriteLine("||------------------------------------------------------|                                                  |");
-            //foreach (var item in deliveryOrderList.deliveryPaymentDetails)
-            //{
-            //    streamWriter.Write("||");
-            //    streamWriter.Write(manageReport.StringFormat(item.ChequeNo, 10, 2));
-            //    streamWriter.Write(manageReport.StringFormat(manageReport.FormatDate(item.ChDate.ToString()), 10, 2));
-            //    streamWriter.Write(manageReport.StringFormat(item.bank, 20, 2));
-            //    streamWriter.Write(manageReport.StringFormat(item.PaymentAmount.ToString(), 11, 2));
-            //    streamWriter.Write("                                                  |");
-            //    streamWriter.WriteLine(" ");
-            //    dTotal = dTotal + Convert.ToDouble(item.PaymentAmount);
-            //}
+            foreach (var item in deliveryOrderList.deliveryPaymentDetails)
+            {
+                streamWriter.Write("||");
+                streamWriter.Write(manageReport.StringFormat(item.ChequeNo, 10, 2));
+                streamWriter.Write(manageReport.StringFormat(manageReport.FormatDate(item.ChDate), 10, 2));
+                streamWriter.Write(manageReport.StringFormat(item.bank, 20, 2));
+                streamWriter.Write(manageReport.StringFormat(item.PaymentAmount.ToString(), 11, 2));
+                streamWriter.Write("                                                  |");
+                streamWriter.WriteLine(" ");
+                dTotal = dTotal + Convert.ToDouble(item.PaymentAmount);
+            }
             streamWriter.Write("||                                  TOTAL   |");
             streamWriter.Write(manageReport.StringFormat(dTotal.ToString(), 11, 2));
             streamWriter.Write("                                                  |");
@@ -153,14 +149,14 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(manageReport.StringFormat(item.SchemeName, 19, 2));
                 streamWriter.Write(manageReport.StringFormat(item.NetWeight.ToString(), 21, 2));
                 streamWriter.Write(manageReport.StringFormat(item.Rate.ToString(), 11, 1));
-                streamWriter.Write(manageReport.StringFormat(item.Total.ToString(), 13, 11));
+                streamWriter.Write(manageReport.StringFormat(item.Total.ToString(), 13, 1));
                 streamWriter.Write("    |");
                 streamWriter.WriteLine(" ");
                 dTotal = dTotal + Convert.ToDouble(item.Total);
             }
             streamWriter.WriteLine("||------|-------------------------|-------------------|---------------------|-----------|-------------|    |");
             streamWriter.Write("|                                                                            TOTAL      |");
-            streamWriter.Write(manageReport.StringFormat(dTotal.ToString(), 13, 11));
+            streamWriter.Write(manageReport.StringFormat(dTotal.ToString(), 13, 1));
             streamWriter.Write("    |");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("|==========================================================================================================|");
@@ -190,14 +186,14 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(manageReport.StringFormat(item.SchemeName, 19, 2));
                 streamWriter.Write(manageReport.StringFormat(item.MarginNkgs.ToString(), 21, 2));
                 streamWriter.Write(manageReport.StringFormat(item.MarginRate.ToString(), 11, 1));
-                streamWriter.Write(manageReport.StringFormat(item.MarginAmount.ToString(), 13, 11));
+                streamWriter.Write(manageReport.StringFormat(item.MarginAmount.ToString(), 13, 1));
                 streamWriter.Write("    |");
                 streamWriter.WriteLine(" ");
                 dTotal = dTotal + Convert.ToDouble(item.MarginAmount);
             }
             streamWriter.WriteLine("||------|-------------------------|-------------------|---------------------|-----------|-------------|    |");
             streamWriter.Write("|                                                                            TOTAL      |");
-            streamWriter.Write(manageReport.StringFormat(dTotal.ToString(), 13, 11));
+            streamWriter.Write(manageReport.StringFormat(dTotal.ToString(), 13, 1));
             streamWriter.Write("    |");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("|==========================================================================================================|");

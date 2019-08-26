@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 
@@ -289,12 +290,13 @@ namespace TNCSCAPI
         {
             try
             {
-                return Convert.ToDateTime(date).ToString("dd-MMM-yyyy");
+                DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                return dt.ToString("dd-MMM-yyyy");
             }
             catch (Exception ex)
             {
                 AuditLog.WriteError("FormatDate : " + ex.Message);
-                return null;
+                return " ";
             }
 
         }

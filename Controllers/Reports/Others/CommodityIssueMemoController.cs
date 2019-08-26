@@ -23,6 +23,7 @@ namespace TNCSCAPI.Controllers.Reports.Others
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", commodity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", commodity.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@ITCode", commodity.TRCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", commodity.RCode));
             ds = manageSQLConnection.GetDataSetValues("GetCommodityIssueMemo", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }

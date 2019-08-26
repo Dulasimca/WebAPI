@@ -29,8 +29,6 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AddDocHeaderForTruckMemo(streamWriter, truckMemoList, isDuplicate);
                 AddDetails(streamWriter, truckMemoList);
                 AddFooter(streamWriter, truckMemoList);
-                streamWriter.Flush();
-                streamWriter.Close();
             }
             catch (Exception ex)
             {
@@ -38,6 +36,8 @@ namespace TNCSCAPI.ManageAllReports.Document
             }
             finally
             {
+                streamWriter.Flush();
+                streamWriter.Close();
                 fPath = string.Empty; fileName = string.Empty;
                 streamWriter = null;
             }

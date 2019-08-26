@@ -33,9 +33,8 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AddDocHeaderForIssues(streamWriter, stockIssuesEntity, isDuplicate);
                 AddDetails(streamWriter, stockIssuesEntity);
                 AddDODetails(streamWriter, stockIssuesEntity);
-                AddFooter(streamWriter, stockIssuesEntity);
-                streamWriter.Flush();
-                streamWriter.Close();
+                AddFooter(streamWriter, stockIssuesEntity);               
+               
             }
             catch (Exception ex)
             {
@@ -43,6 +42,8 @@ namespace TNCSCAPI.ManageAllReports.Document
             }
             finally
             {
+                streamWriter.Flush();
+                streamWriter.Close();
                 fPath = string.Empty; fileName = string.Empty;
                 streamWriter = null;
             }
@@ -68,11 +69,11 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                                                             |");
             if (isDuplicate)
             {
-                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                DUPLICATE COPY                |");
+                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                DUPLICATE COPY                 |");
             }
             else
             {
-                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                                              |");
+                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                                               |");
             }
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.Write("|ISSUE MEMO NO  :   ");
@@ -82,7 +83,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("TIME:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.GetTime(DateTime.Now.ToString()), 14, 2));
             streamWriter.Write(report.StringFormatWithoutPipe((stockIssuesEntity.IssueRegularAdvance.ToUpper() == "R" ? "REGULAR" : "ADVANCE"), 8, 2));
-            streamWriter.Write(report.StringFormat(stockIssuesEntity.IRelates, 21, 2));
+            streamWriter.Write(report.StringFormat(stockIssuesEntity.IRelates, 20, 2));
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|ISSUING GODOWN :   ");

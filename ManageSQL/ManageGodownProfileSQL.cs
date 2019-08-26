@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 using TNCSCAPI.Controllers.GodownProfile;
 
 namespace TNCSCAPI.ManageSQL
@@ -40,13 +37,13 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.AddWithValue("@mobno", godownProfile.mobno);
                     sqlCommand.Parameters.AddWithValue("@faxno", godownProfile.faxno);
                     sqlCommand.ExecuteNonQuery();
-                        return new Tuple<bool, string>(true, "");
+                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
-                    return new Tuple<bool, string>(false, "Please Contact Administrator");
+                    return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
                 }
                 finally
                 {
