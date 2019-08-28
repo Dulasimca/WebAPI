@@ -8,7 +8,7 @@ namespace TNCSCAPI.ManageDocuments
 {
     public class StockReceipt
     {
-        public Tuple<bool,string> InsertReceiptData(DocumentStockReceiptList stockReceipt)
+        public Tuple<bool,string,string> InsertReceiptData(DocumentStockReceiptList stockReceipt)
         {
             ManageSQLConnection manageSQL = new ManageSQLConnection();
             var result = manageSQL.InsertReceiptSrDetailEntry(stockReceipt);
