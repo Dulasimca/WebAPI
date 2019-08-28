@@ -27,7 +27,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AddPaymentDetails(streamWriter, deliveryOrderList);
                 AddItemsDetails(streamWriter, deliveryOrderList);
                 AddMarginDetails(streamWriter, deliveryOrderList);
-                AddFooter(streamWriter);
+                AddFooter(streamWriter, deliveryOrderList);
                
                
             }
@@ -109,7 +109,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             {
                 streamWriter.Write("||");
                 streamWriter.Write(manageReport.StringFormat(item.ChequeNo, 10, 2));
-                streamWriter.Write(manageReport.StringFormat(manageReport.FormatDate(item.ChDate), 10, 2));
+                streamWriter.Write(manageReport.StringFormat(manageReport.FormatIndianDate(item.ChDate), 10, 2));
                 streamWriter.Write(manageReport.StringFormat(item.bank, 20, 2));
                 streamWriter.Write(manageReport.StringFormat(item.PaymentAmount.ToString(), 11, 2));
                 streamWriter.Write("                                                  |");
@@ -203,7 +203,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// </summary>
         /// <param name="streamWriter"></param>
         /// <param name="stockReceipt"></param>
-        public void AddFooter(StreamWriter streamWriter)
+        public void AddFooter(StreamWriter streamWriter, DocumentDeliveryOrderEntity deliveryOrderList)
         {
             streamWriter.WriteLine("|**(Pre.AmtBal+AmtPay)-(TotalValue+Others)  = Balance >>> For Credit                                       |");
             streamWriter.WriteLine("|**(Pre.AmtBal+TotalValue+others)-(Amtpaid) = Balance >>> For Debit                                        |");
@@ -211,7 +211,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                    SIGNATURE OF GODOWN INCHARGE          |");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
-            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|   "+ manageReport.StringFormatWithoutPipe(deliveryOrderList.Remarks,103,2) + "|");
             streamWriter.WriteLine("|==========================================================================================================|");
             streamWriter.WriteLine((char)12);
         }

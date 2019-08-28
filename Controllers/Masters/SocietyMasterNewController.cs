@@ -18,7 +18,7 @@ namespace TNCSCAPI.Controllers.Masters
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@gcode", GCode));
-            ds = manageSQLConnection.GetDataSetValues("[getsocietymasterentry]", sqlParameters);
+            ds = manageSQLConnection.GetDataSetValues("getsocietymasterentry", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
         [HttpPost("{id}")]

@@ -38,13 +38,19 @@ namespace TNCSCAPI.Controllers.Documents
         //}
 
         [HttpPost("{id}")]
-        public Tuple<bool, string> Post(DocumentStockReceiptList stockReceipt = null)
+        public Tuple<bool, string,string> Post(DocumentStockReceiptList stockReceipt = null)
         {
             if (stockReceipt.Type == 2)
             {
                 ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
                 documentReceipt.GenerateReceipt(stockReceipt);
-                return new Tuple<bool, string>(true, "Print Generated Sucessfully");
+                //update print
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@SRNo", stockReceipt.SRNo));
+                 manageSQLConnection.UpdateValues("UpdateSRDetailsUnLoading", sqlParameters);
+
+                return new Tuple<bool, string,string>(true, "Print Generated Sucessfully","");
             }
             else
             {
@@ -60,7 +66,7 @@ namespace TNCSCAPI.Controllers.Documents
                 }
                 else
                 {
-                    return new Tuple<bool, string>(false, "Permission not Granted");
+                    return new Tuple<bool, string,string>(false, "Permission not Granted","");
                 }
             }
         }
@@ -87,15 +93,16 @@ namespace TNCSCAPI.Controllers.Documents
         }
 
         [HttpPut("{id}")]
-        public bool Put(string sValue)
+        public bool Put(PrintEntity entity)
         {
-            DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@SRDate", sValue));
-            ds = manageSQLConnection.GetDataSetValues("GetSRDetailsByDate", sqlParameters);
-            return true;
+            sqlParameters.Add(new KeyValuePair<string, string>("@SRNo", entity.DOCNumber));
+            return manageSQLConnection.UpdateValues("UpdateSRDetailsUnLoading", sqlParameters);
         }
+    }
+    public class PrintEntity
+    {
+        public string DOCNumber { get; set; }
     }
 }

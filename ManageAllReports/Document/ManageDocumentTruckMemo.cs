@@ -159,7 +159,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|GODOWN INCHARGE                                                        SIGNATURE OF THE TC REPRESENTATIVE |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
-            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|   " + report.StringFormatWithoutPipe(GetRemarks(transferDetails), 103, 2) + "|");
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine((char)12);
         }
@@ -171,10 +171,24 @@ namespace TNCSCAPI.ManageAllReports.Document
             {
                 WtCode = transferDetails.documentSTItemDetails[0].WTCode;
             }
-            catch
+            catch (Exception ex)
             {
+                AuditLog.WriteError(" GetWTCode " + ex.Message + " " + ex.StackTrace);
             }
             return WtCode;
+        }
+
+        public string GetRemarks(DocumentStockTransferDetails transferDetails)
+        {
+            try
+            {
+                return transferDetails.documentSTTDetails[0].Remarks;
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(" GetRemarks " + ex.Message + " " + ex.StackTrace);
+            }
+            return "-";
         }
 
         public string GetWNo(DocumentStockTransferDetails transferDetails)

@@ -158,9 +158,9 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.Write("|MODE OF WEIGHMENT: ");
-            streamWriter.Write(report.StringFormatWithoutPipe(" ", 13, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(GetWTCode(stockReceipt), 13, 2));
             streamWriter.Write("WAGON NO      : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(" ", 14, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe("-", 14, 2));
             streamWriter.Write("RR NO         : ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.MTransport, 25, 2));
             streamWriter.Write("|");
@@ -172,10 +172,23 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|DEPOSITOR OR HIS REPRESENTATIVE                                               GODOWN INCHARGE             |");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
-            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockReceipt.Remarks, 103, 2)+"|");
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine(" Prepared DateTime:"+ stockReceipt.SRDate+ "             Printing DateTime:"+DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss"));
             streamWriter.WriteLine((char)12);
         }
+        private string GetWTCode(DocumentStockReceiptList stockReceipt)
+        {
+            try
+            {
+                return stockReceipt.ItemList[0].WTCode;
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GetWTCode : " + ex.Message);
+                return "0";
+            }
+        }
     }
+   
 }

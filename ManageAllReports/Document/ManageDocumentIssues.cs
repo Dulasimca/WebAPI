@@ -148,7 +148,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 i = i + 1;
                 streamWriter.Write("||");
                 streamWriter.Write(report.StringFormat(item.DNo, 10, 2));
-                streamWriter.Write(report.StringFormat(report.FormatDate(item.DDate.ToString()), 10, 2));
+                streamWriter.Write(report.StringFormat(report.FormatIndianDate(item.DDate.ToString()), 10, 2));
                 streamWriter.Write(report.StringFormat(stockIssuesEntity.SINo, 10, 2));
                 streamWriter.Write(report.StringFormat(report.FormatDate(stockIssuesEntity.SIDate.ToString()), 10, 2));
                 streamWriter.Write("          |          |                                          |");
@@ -175,7 +175,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|DEPOSITOR OR HIS REPRESENTATIVE                                               GODOWN INCHARGE                |");
             streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|REMARKS                                                                                                      |");
-            streamWriter.WriteLine("|                                                                                                             |");
+            streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockIssuesEntity.Remarks,106,2) + "|");
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine((char)12);
         }

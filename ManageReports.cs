@@ -309,6 +309,25 @@ namespace TNCSCAPI
 
         }
 
+        /// <summary>
+        /// Change the Date Format dd-MM-yyyy
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>Format dd-MM-yyyy</returns>
+        public string FormatIndianDate(string date)
+        {
+            try
+            {
+                DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                return dt.ToString("dd-MM-yyyy");
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("FormatDate : " + ex.Message);
+                return " ";
+            }
+
+        }
 
         /// <summary>
         /// Change the Date Format dd-MM-yyyy
@@ -319,7 +338,8 @@ namespace TNCSCAPI
         {
             try
             {
-                return Convert.ToDateTime(date).ToString("hh:mm:ss");
+                DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                return dt.ToString("hh:mm:ss");
             }
             catch (Exception ex)
             {

@@ -102,9 +102,7 @@ namespace TNCSCAPI
                 {
                     sqlCommand.Parameters.AddWithValue(keyValuePair.Key, keyValuePair.Value);
                 }
-
-                dataAdapter = new SqlDataAdapter(sqlCommand);
-                dataAdapter.Fill(ds);
+                sqlCommand.ExecuteNonQuery();
                 return true;
             }
             catch (Exception ex)
@@ -157,7 +155,7 @@ namespace TNCSCAPI
             }
         }
 
-        public Tuple<bool, string> InsertReceiptSrDetailEntry(DocumentStockReceiptList receiptList)
+        public Tuple<bool, string,string> InsertReceiptSrDetailEntry(DocumentStockReceiptList receiptList)
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, SRNo = string.Empty;
@@ -217,8 +215,8 @@ namespace TNCSCAPI
                     Task.Run(() => documentReceipt.GenerateReceipt(receiptList));
 
                     //Delete Sr Item Details
-                    //sqlCommand.Parameters.Clear();
-                    //sqlCommand.Dispose();
+                    sqlCommand.Parameters.Clear();
+                    sqlCommand.Dispose();
 
                     sqlCommand = new SqlCommand();
                     sqlCommand.Transaction = objTrans;
@@ -279,14 +277,14 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.ExecuteNonQuery();
                     objTrans.Commit();
-                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage + SRNo);
+                    return new Tuple<bool, string,string>(true, GlobalVariable.SavedMessage + SRNo, SRNo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
+                    return new Tuple<bool, string,string>(false, GlobalVariable.ErrorMessage,"");
                 }
                 finally
                 {

@@ -33,6 +33,6 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
         public int RoleId { get; set; }
         public string RegionCode { get; set; }
         public string GodownCode { get; set; }
-        public DateTime DocumentDate { get; set; }
+        public string DocumentDate { get; set; }
     }
 }
