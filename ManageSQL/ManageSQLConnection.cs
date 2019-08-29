@@ -423,5 +423,50 @@ namespace TNCSCAPI
             }
         }
 
+        public DateTime GetSRTime(string SRNo)
+        {
+            try
+            {
+                using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
+                {
+                    DataSet ds = new DataSet();
+                    sqlCommand = new SqlCommand();
+                    try
+                    {
+                        if (sqlConnection.State == 0)
+                        {
+                            sqlConnection.Open();
+                        }
+                        sqlCommand.Connection = sqlConnection;
+                        sqlCommand.CommandText = "GetSRTime";
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@SRNO", SRNo);
+                        dataAdapter = new SqlDataAdapter(sqlCommand);
+                        dataAdapter.Fill(ds);
+                        
+                        sqlCommand.Parameters.Clear();
+                        sqlCommand.Dispose();
+                        return Convert.ToDateTime(ds.Tables[0].Rows[0][0]);
+                        //   objTrans.Commit();
+                    }
+                    finally
+                    {
+                        if (sqlConnection.State == 0)
+                        {
+                            sqlConnection.Open();
+                        }
+                        sqlCommand.Dispose();
+                        ds.Dispose();
+                        dataAdapter = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GetSRTime " + ex.Message);
+                return DateTime.Now;
+            }
+        }
+
     }
 }

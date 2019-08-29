@@ -81,7 +81,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("DATE: ");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockIssuesEntity.SIDate.ToString()), 12, 2));
             streamWriter.Write("TIME:");
-            streamWriter.Write(report.StringFormatWithoutPipe(report.GetCurrentTime(), 14, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(report.GetCurrentTime(DateTime.Now), 14, 2));
             streamWriter.Write(report.StringFormatWithoutPipe((stockIssuesEntity.IssueRegularAdvance.ToUpper() == "R" ? "REGULAR" : "ADVANCE"), 8, 2));
             streamWriter.Write(report.StringFormat(stockIssuesEntity.IRelates, 20, 2));
             streamWriter.WriteLine(" ");

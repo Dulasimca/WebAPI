@@ -43,7 +43,7 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", issuerEntity.Activeflag));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issuerEntity.ACSCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.Godcode));
-            return manageSQLConnection.UpdateValues("GetIssuerMaster", sqlParameters);
+            return manageSQLConnection.UpdateValues("UpdateIssuerMaster", sqlParameters);
         }
 
 

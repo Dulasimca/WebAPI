@@ -349,11 +349,11 @@ namespace TNCSCAPI
 
         }
 
-        public string GetCurrentTime()
+        public string GetCurrentTime(DateTime dt)
         {
             try
             {
-                return DateTime.Now.ToString("hh:mm:ss");
+                return dt.ToString("hh:mm:ss");
             }
             catch (Exception)
             {
