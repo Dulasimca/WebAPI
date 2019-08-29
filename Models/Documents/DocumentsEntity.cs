@@ -26,7 +26,12 @@ namespace TNCSCAPI.Models.Documents
 
         public string GodownName { get; set; }
         public string RegionName { get; set; }
-        public string TransactionType { get; set; }
+        public string TransactionName { get; set; }
+        public string TransporterName { get; set; }
+        public string LWBNo { get; set; }
+        public string LWBDate { get; set; }
+        public string LDate { get; set; }
+        //public string DepositorType { get; set; }
         public string DepositorName { get; set; }
         public string UnLoadingSlip { get; set; }
         public string UserID { get; set; }

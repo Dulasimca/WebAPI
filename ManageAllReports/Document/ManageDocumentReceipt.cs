@@ -97,7 +97,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("|RECEIVING GODOWN   :");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.GodownName, 30, 2));
             streamWriter.Write("DEPOSITOR'S NAME: ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.DepositorName, 36, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TransactionName, 36, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
 
@@ -147,7 +147,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("LORRY NO      : ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.LNo, 14, 2));
             streamWriter.Write("TC NAME       : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(" ", 25, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TransporterName, 25, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
             streamWriter.Write("|T.MEMO/INVOICE DT: ");

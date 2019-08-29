@@ -274,6 +274,10 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@LNo", receiptList.LNo);
                     sqlCommand.Parameters.AddWithValue("@TransportMode", receiptList.MTransport);
                     sqlCommand.Parameters.AddWithValue("@LFrom", receiptList.LFrom);
+                    sqlCommand.Parameters.AddWithValue("@TransporterName", receiptList.TransporterName);
+                    sqlCommand.Parameters.AddWithValue("@LWBillNo", receiptList.LWBNo);
+                    sqlCommand.Parameters.AddWithValue("@LWBillDate", receiptList.LWBDate);
+                    sqlCommand.Parameters.AddWithValue("@LDate", receiptList.LDate);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.ExecuteNonQuery();
                     objTrans.Commit();
