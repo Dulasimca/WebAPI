@@ -1,11 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace TNCSCAPI.Controllers.Masters
 {
@@ -14,26 +10,28 @@ namespace TNCSCAPI.Controllers.Masters
     public class IssuerMasterController : ControllerBase
     {
 
-        [HttpPost("{id}")]
-        public string Post(string GCode)
+         [HttpGet("{id}")]
+        public string Get(string GCode, int Type = 0)
         {
-            DataSet ds = new DataSet();
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@GodCode", GCode));
-            ds =  manageSQLConnection.GetDataSetValues("GetIssuersMasterAllData", sqlParameters);
-            return JsonConvert.SerializeObject(ds.Tables[0]);
-        }
-
-        [HttpGet("{id}")]
-        public string Get(string GCode)
-        {
-            DataSet ds = new DataSet();
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
-            ds = manageSQLConnection.GetDataSetValues("GetIssuerMaster", sqlParameters);
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            if(Type==2)
+            {
+                DataSet ds = new DataSet();
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GodCode", GCode));
+                ds = manageSQLConnection.GetDataSetValues("GetIssuersMasterAllData", sqlParameters);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            else
+            {
+                DataSet ds = new DataSet();
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+                ds = manageSQLConnection.GetDataSetValues("GetIssuerMaster", sqlParameters);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+         
         }
 
         [HttpPut("{id}")]
