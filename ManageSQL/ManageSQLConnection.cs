@@ -274,6 +274,10 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@LNo", receiptList.LNo);
                     sqlCommand.Parameters.AddWithValue("@TransportMode", receiptList.MTransport);
                     sqlCommand.Parameters.AddWithValue("@LFrom", receiptList.LFrom);
+                    sqlCommand.Parameters.AddWithValue("@TransporterName", receiptList.TransporterName);
+                    sqlCommand.Parameters.AddWithValue("@LWBillNo", receiptList.LWBNo);
+                    sqlCommand.Parameters.AddWithValue("@LWBillDate", receiptList.LWBDate);
+                    sqlCommand.Parameters.AddWithValue("@LDate", receiptList.LDate);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.ExecuteNonQuery();
                     objTrans.Commit();
@@ -416,6 +420,51 @@ namespace TNCSCAPI
                     ds.Dispose();
                     dataAdapter = null;
                 }
+            }
+        }
+
+        public DateTime GetSRTime(string SRNo)
+        {
+            try
+            {
+                using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
+                {
+                    DataSet ds = new DataSet();
+                    sqlCommand = new SqlCommand();
+                    try
+                    {
+                        if (sqlConnection.State == 0)
+                        {
+                            sqlConnection.Open();
+                        }
+                        sqlCommand.Connection = sqlConnection;
+                        sqlCommand.CommandText = "GetSRTime";
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@SRNO", SRNo);
+                        dataAdapter = new SqlDataAdapter(sqlCommand);
+                        dataAdapter.Fill(ds);
+                        
+                        sqlCommand.Parameters.Clear();
+                        sqlCommand.Dispose();
+                        return Convert.ToDateTime(ds.Tables[0].Rows[0][0]);
+                        //   objTrans.Commit();
+                    }
+                    finally
+                    {
+                        if (sqlConnection.State == 0)
+                        {
+                            sqlConnection.Open();
+                        }
+                        sqlCommand.Dispose();
+                        ds.Dispose();
+                        dataAdapter = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GetSRTime " + ex.Message);
+                return DateTime.Now;
             }
         }
 

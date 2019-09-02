@@ -90,7 +90,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("|PERIOD OF ALLOTMENT:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockReceipt.SRDate.ToString()), 30, 2));
             streamWriter.Write("Transaction Type: ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TransactionType, 36, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TransactionName, 36, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
 
@@ -141,13 +141,16 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockReceipt"></param>
         public void AddFooter(StreamWriter streamWriter, DocumentStockReceiptList stockReceipt)
         {
+            //GetDate()
+            ManageSQLConnection manageSQL = new ManageSQLConnection();
+            DateTime dateTime = manageSQL.GetSRTime(stockReceipt.SRNo);
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             streamWriter.Write("|T.MEMO/INVOICE NO: ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TruckMemoNo, 13, 2));
             streamWriter.Write("LORRY NO      : ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.LNo, 14, 2));
             streamWriter.Write("TC NAME       : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(" ", 25, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.TransporterName, 25, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
             streamWriter.Write("|T.MEMO/INVOICE DT: ");
@@ -174,7 +177,8 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
             streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockReceipt.Remarks, 103, 2)+"|");
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
-            streamWriter.WriteLine(" Prepared DateTime:"+ stockReceipt.SRDate+ "             Printing DateTime:"+DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss"));
+            string receiptDateTime = stockReceipt.SRDate + " "+ report.GetCurrentTime(dateTime);
+            streamWriter.WriteLine(" Prepared DateTime:"+ receiptDateTime + "       Printing DateTime:"+DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss"));
             streamWriter.WriteLine((char)12);
         }
         private string GetWTCode(DocumentStockReceiptList stockReceipt)

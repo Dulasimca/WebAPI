@@ -30,7 +30,7 @@ namespace TNCSCAPI.ManageSQL
                     objTrans = sqlConnection.BeginTransaction();
                     sqlCommand.Transaction = objTrans;
                     sqlCommand.Connection = sqlConnection;
-                    sqlCommand.CommandText = "InsertDDChequeDetails";
+                    sqlCommand.CommandText = "Insertmemofile";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
                   //  sqlCommand.Parameters.AddWithValue("@RowId", chequeEntity.RowId);
                     sqlCommand.Parameters.AddWithValue("@vrno1", chequeEntity.ReceiptNo);

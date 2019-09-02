@@ -82,7 +82,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("|              DATE:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(truckMemoList.STDate.ToString()), 21, 2));
             streamWriter.Write(report.StringFormatWithoutPipe("TIME: ", 25, 1));
-            streamWriter.Write(report.StringFormatWithoutPipe("", 16, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(report.GetCurrentTime(DateTime.Now), 16, 2));
             streamWriter.Write("DATE:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(truckMemoList.RDate.ToString()), 16, 2));
             streamWriter.Write("|");

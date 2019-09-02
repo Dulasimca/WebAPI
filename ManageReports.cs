@@ -344,9 +344,21 @@ namespace TNCSCAPI
             catch (Exception ex)
             {
                 AuditLog.WriteError("FormatDate : " + ex.Message);
-                return null;
+                return " ";
             }
 
+        }
+
+        public string GetCurrentTime(DateTime dt)
+        {
+            try
+            {
+                return dt.ToString("hh:mm:ss");
+            }
+            catch (Exception)
+            {
+                return " ";
+            }
         }
 
 
