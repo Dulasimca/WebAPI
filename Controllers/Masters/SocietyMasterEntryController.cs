@@ -24,7 +24,7 @@ namespace TNCSCAPI.Controllers.Masters
         [HttpPut("{id}")]
         public bool Put(SocietyMasterEntryIssuerEntity societyMasterEntry)
         {
-            DataSet ds = new DataSet();
+           // DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@soccode", societyMasterEntry.SCode));

@@ -41,8 +41,8 @@ namespace TNCSCAPI.Controllers.Masters
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", issuerEntity.IssuerCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", issuerEntity.Activeflag));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issuerEntity.ACSCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.Godcode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.ACSCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issuerEntity.Godcode));
             return manageSQLConnection.UpdateValues("UpdateIssuerMaster", sqlParameters);
         }
 
