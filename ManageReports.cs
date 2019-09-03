@@ -339,7 +339,7 @@ namespace TNCSCAPI
             try
             {
                 DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                return dt.ToString("hh:mm:ss");
+                return dt.ToString("hh:mm:ss tt");
             }
             catch (Exception ex)
             {
@@ -353,7 +353,7 @@ namespace TNCSCAPI
         {
             try
             {
-                return dt.ToString("hh:mm:ss");
+                return dt.ToString("hh:mm:ss tt");
             }
             catch (Exception)
             {

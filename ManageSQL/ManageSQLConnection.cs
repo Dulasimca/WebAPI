@@ -443,11 +443,13 @@ namespace TNCSCAPI
                         sqlCommand.Parameters.AddWithValue("@SRNO", SRNo);
                         dataAdapter = new SqlDataAdapter(sqlCommand);
                         dataAdapter.Fill(ds);
-                        
-                        sqlCommand.Parameters.Clear();
-                        sqlCommand.Dispose();
                         return Convert.ToDateTime(ds.Tables[0].Rows[0][0]);
                         //   objTrans.Commit();
+                    }
+                    catch(Exception ex)
+                    {
+                        AuditLog.WriteError("GetSRTime " + ex.Message);
+                        return DateTime.Now;
                     }
                     finally
                     {
@@ -455,6 +457,7 @@ namespace TNCSCAPI
                         {
                             sqlConnection.Open();
                         }
+                          sqlCommand.Parameters.Clear();
                         sqlCommand.Dispose();
                         ds.Dispose();
                         dataAdapter = null;

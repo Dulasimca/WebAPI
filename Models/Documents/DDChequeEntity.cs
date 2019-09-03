@@ -11,6 +11,10 @@ namespace TNCSCAPI.Models.Documents
         public string ReceiptNo { get; set; } //vrno
         public string Details { get; set; } //detail
         public string Flag { get; set; } //eflag
+        public string UserID { get; set; }
+        public string GodownName { get; set; }
+        public string RegionName { get; set; }
+        public string Total { get; set; }
         public List<ReceiptChequedetailEntity> DDChequeItems { get; set; }
 
     }

@@ -150,7 +150,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(report.StringFormat(item.DNo, 10, 2));
                 streamWriter.Write(report.StringFormat(report.FormatIndianDate(item.DDate.ToString()), 10, 2));
                 streamWriter.Write(report.StringFormat(stockIssuesEntity.SINo, 10, 2));
-                streamWriter.Write(report.StringFormat(report.FormatDate(stockIssuesEntity.SIDate.ToString()), 10, 2));
+                streamWriter.Write(report.StringFormat(report.FormatIndianDate(stockIssuesEntity.SIDate.ToString()), 10, 2));
                 streamWriter.Write("          |          |                                          |");
                 streamWriter.WriteLine(" ");
             }

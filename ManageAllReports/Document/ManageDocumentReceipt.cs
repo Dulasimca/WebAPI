@@ -10,7 +10,6 @@ namespace TNCSCAPI.ManageAllReports.Document
         ManageReport report = new ManageReport();
         public void GenerateReceipt(DocumentStockReceiptList stockReceipt)
         {
-            AuditLog.WriteError("GenerateStockReceiptRegister");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             bool isDuplicate = false;
