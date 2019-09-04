@@ -125,6 +125,19 @@ namespace TNCSCAPI
 
         }
 
+        public string ConvertToUpper(string sValue)
+        {
+            try
+            {
+                return !string.IsNullOrEmpty(sValue) ? sValue.ToUpper() : sValue;
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(" ConvertToUpper : " + ex.Message + " " + ex.StackTrace);
+                return sValue;
+            }
+        }
+
         /// <summary>
         /// Gets the empty space values only
         /// </summary>

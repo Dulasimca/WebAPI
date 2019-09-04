@@ -167,7 +167,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockIssuesEntity"></param>
         private void AddFooter(StreamWriter streamWriter, DocumentStockIssuesEntity stockIssuesEntity)
         {
-            streamWriter.WriteLine("|LORRY NO      :" + report.StringFormatWithoutPipe(stockIssuesEntity.LorryNo, 17, 2) + "TC NAME       : -                                                           |");
+            streamWriter.WriteLine("|LORRY NO      :" + report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity.LorryNo), 17, 2) + "TC NAME       : -                                                           |");
             streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account             |");
             streamWriter.WriteLine("|                                                                                                             |");

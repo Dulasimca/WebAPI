@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
 
 namespace TNCSCAPI.ManageSQL
@@ -44,6 +45,11 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.ExecuteNonQuery();
 
                     RowID = Convert.ToString(sqlCommand.Parameters["@vrno"].Value);
+                    chequeEntity.ReceiptNo = RowID;
+
+                    // Generate Text file
+                    ManageDDCheque manageDDCheque = new ManageDDCheque();
+                    manageDDCheque.GenerateDDCheque(chequeEntity);
 
                     foreach (var item in chequeEntity.DDChequeItems)
                     {
@@ -67,12 +73,14 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Parameters.AddWithValue("@recdate", item.ReceiptDate);
                         sqlCommand.Parameters.AddWithValue("@eflag", "N");
                         sqlCommand.ExecuteNonQuery();
-                    }                   
+                    }
+                    objTrans.Commit();
                     return new Tuple<bool, string,string>(true, GlobalVariable.SavedMessage, RowID);
 
                 }
                 catch (Exception ex)
                 {
+                    objTrans.Rollback();
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     return new Tuple<bool, string,string>(false, GlobalVariable.ErrorMessage,"");
                 }

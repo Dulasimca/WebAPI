@@ -7,7 +7,7 @@ namespace TNCSCAPI.ManageAllReports.Document
     public class ManageDDCheque
     {
         ManageReport report = new ManageReport();
-        public void GenerateReceipt(DDChequeEntity chequeEntity)
+        public void GenerateDDCheque(DDChequeEntity chequeEntity)
         {
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
@@ -24,8 +24,8 @@ namespace TNCSCAPI.ManageAllReports.Document
                 //  isDuplicate = ReceiptId == "0" ? false : true;
                 streamWriter = new StreamWriter(filePath, true);
                 AddDocHeaderForReceipt(streamWriter, chequeEntity);
-                AddDetails(streamWriter, stockReceipt);
-                AddFooter(streamWriter, stockReceipt);
+                AddDetails(streamWriter, chequeEntity);
+                AddFooter(streamWriter, chequeEntity);
             }
             catch (Exception ex)
             {
@@ -103,6 +103,9 @@ namespace TNCSCAPI.ManageAllReports.Document
         public void AddFooter(StreamWriter streamWriter, DDChequeEntity chequeEntity)
         {
             streamWriter.WriteLine("------------------------------------------------------------------------------");
+            streamWriter.WriteLine(report.StringFormatWithoutPipe(chequeEntity.Details, 55, 1));
+            report.AddMoreContent(streamWriter, chequeEntity.Details, 55, 1);//Add content next line.
+            streamWriter.WriteLine(" ");
             streamWriter.WriteLine("                                     For Tamil Nadu Civil Supplies Corporation");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine(" ");
