@@ -60,14 +60,14 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("   ");
             streamWriter.Write("DATE : ");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(chequeEntity.DDChequeItems[0].ReceiptDate), 13, 2));
-            streamWriter.Write("");
+            streamWriter.WriteLine("");
             streamWriter.WriteLine("------------------------------------------------------------------------------");
             streamWriter.Write("   Received with Thanks from Thiru / M/s.");
             streamWriter.Write(report.StringFormatWithoutPipe(chequeEntity.DDChequeItems[0].ReceivedFrom, 35, 2));
             streamWriter.WriteLine("");
             streamWriter.WriteLine("");
             streamWriter.Write(" Rupees ");
-            streamWriter.Write(report.StringFormatWithoutPipe(ConvertNumbertoWords(Convert.ToInt64(chequeEntity.Total)),68,2));
+            streamWriter.Write(report.StringFormatWithoutPipe(ConvertNumbertoWords(Convert.ToInt64(chequeEntity.Total)), 68, 2));
             streamWriter.WriteLine("");
             streamWriter.WriteLine(" by Cash/DD/Cheque ");
             streamWriter.WriteLine("------------------------------------------------------------------------------");
@@ -86,9 +86,9 @@ namespace TNCSCAPI.ManageAllReports.Document
             foreach (var item in chequeEntity.DDChequeItems)
             {
                 i = i + 1;
-                streamWriter.Write(report.StringFormat(item.PaymentType + " "+ item.ChequeNo+" ", 16, 2));
-                streamWriter.Write(report.StringFormat(report.FormatIndianDate(item.ChequeDate)+" ", 10, 2));
-                streamWriter.Write(report.StringFormat(item.Bank+" ", 30, 2));
+                streamWriter.Write(report.StringFormat(item.PaymentType + " " + item.ChequeNo + " ", 16, 2));
+                streamWriter.Write(report.StringFormat(report.FormatIndianDate(item.ChequeDate) + " ", 10, 2));
+                streamWriter.Write(report.StringFormat(item.Bank + " ", 30, 2));
                 streamWriter.Write(report.StringFormat(item.Amount, 14, 1));
                 streamWriter.WriteLine(" ");
             }
@@ -103,14 +103,14 @@ namespace TNCSCAPI.ManageAllReports.Document
         public void AddFooter(StreamWriter streamWriter, DDChequeEntity chequeEntity)
         {
             streamWriter.WriteLine("------------------------------------------------------------------------------");
-            streamWriter.WriteLine(report.StringFormatWithoutPipe(chequeEntity.Details, 55, 1));
+            streamWriter.WriteLine(report.StringFormatWithoutPipe(chequeEntity.Details, 55, 2));
             report.AddMoreContent(streamWriter, chequeEntity.Details, 55, 1);//Add content next line.
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("                                     For Tamil Nadu Civil Supplies Corporation");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("                                        Asst./ Cashier  Supdt. D.M A/c ");
-            streamWriter.Write("                                                 ");
+            streamWriter.Write("                                    ");
             streamWriter.Write(report.StringFormatWithoutPipe(chequeEntity.RegionName, 30, 1));
             streamWriter.WriteLine();
             streamWriter.WriteLine((char)12);
@@ -121,7 +121,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         {
             if (number == 0) return "ZERO";
             if (number < 0) return "minus " + ConvertNumbertoWords(Math.Abs(number));
-            string words = "";
+            string words = string.Empty;
             if ((number / 1000000) > 0)
             {
                 words += ConvertNumbertoWords(number / 100000) + " LAKES ";
@@ -160,7 +160,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                     if ((number % 10) > 0) words += " " + unitsMap[number % 10];
                 }
             }
-            return words;
+            return !string.IsNullOrEmpty(words) ? words +" ONLY": words;
         }
 
     }
