@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.ManageSQL;
 using TNCSCAPI.Models.Documents;
 
@@ -18,8 +19,17 @@ namespace TNCSCAPI.Controllers.Documents
         [HttpPost("{id}")]
         public Tuple<bool, string,string> Post(DDChequeEntity chequeEntity = null)
         {
-            ManageSQLForDDCheque manageSQL = new ManageSQLForDDCheque();
-            return manageSQL.InsertDDChequeEntry(chequeEntity);
+            if (chequeEntity.Type == 2)
+            {
+                ManageDDCheque manageDDCheque = new ManageDDCheque();
+                manageDDCheque.GenerateDDCheque(chequeEntity);
+                return new Tuple<bool, string, string>(true, "Print Generated !", chequeEntity.ReceiptNo);
+            }
+            else
+            {
+                ManageSQLForDDCheque manageSQL = new ManageSQLForDDCheque();
+                return manageSQL.InsertDDChequeEntry(chequeEntity);
+            }
         }
 
         [HttpGet("{id}")]

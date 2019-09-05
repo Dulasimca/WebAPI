@@ -67,7 +67,9 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("");
             streamWriter.WriteLine("");
             streamWriter.Write(" Rupees ");
-            streamWriter.Write(report.StringFormatWithoutPipe(ConvertNumbertoWords(Convert.ToInt64(chequeEntity.Total)), 68, 2));
+            string Rupees = ConvertNumbertoWords(Convert.ToInt64(chequeEntity.Total));
+            Rupees = Rupees != "ZERO" ? Rupees + " ONLY" : Rupees;
+            streamWriter.Write(report.StringFormatWithoutPipe(Rupees, 68, 2));
             streamWriter.WriteLine("");
             streamWriter.WriteLine(" by Cash/DD/Cheque ");
             streamWriter.WriteLine("------------------------------------------------------------------------------");
@@ -124,7 +126,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             string words = string.Empty;
             if ((number / 1000000) > 0)
             {
-                words += ConvertNumbertoWords(number / 100000) + " LAKES ";
+                words += ConvertNumbertoWords(number / 100000) + " LAKHS ";
                 number %= 1000000;
             }
             if ((number / 1000) > 0)
@@ -160,7 +162,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                     if ((number % 10) > 0) words += " " + unitsMap[number % 10];
                 }
             }
-            return !string.IsNullOrEmpty(words) ? words +" ONLY": words;
+            return words;
         }
 
     }
