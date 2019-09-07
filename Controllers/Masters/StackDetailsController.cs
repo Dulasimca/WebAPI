@@ -15,13 +15,14 @@ namespace TNCSCAPI.Controllers.Masters
     {
 
         [HttpGet("{id}")]
-        public string Get(string GCode, string ITCode)
+        public string Get(string GCode, string ITCode,string TRCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@CommodityCode", ITCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@TRCode", TRCode));
             ds = manageSQLConnection.GetDataSetValues("GetStackDetails", sqlParameters);
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))
