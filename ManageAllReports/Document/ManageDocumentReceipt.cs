@@ -73,9 +73,9 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("|ACKNOWLEDGEMENT NO:");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.SRNo, 21, 2));
             streamWriter.Write("ALLOTMENT/RELEASE ORDER: ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.PAllotment, 12, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.OrderNo +" " + stockReceipt.PAllotment, 16, 2));
             streamWriter.Write("GATE PASS : ");
-            streamWriter.Write(report.StringFormatWithoutPipe("", 14, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe("", 10, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
 

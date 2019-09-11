@@ -50,7 +50,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stackEntity.GCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", stackEntity.ICode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stackEntity.StackDate));
-                sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", stackEntity.TStockNo));
+                sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", stackEntity.TStockNo.Trim()));
                 ds = manageSQLConnection.GetDataSetValues("GetStackCardDetailsbyId", sqlParameters);
                 //Calculate the 
                 var result= manageStackCard.ManageStackBalance(ds);
