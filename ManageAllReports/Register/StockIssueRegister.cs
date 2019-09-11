@@ -41,6 +41,7 @@ namespace TNCSCAPI.ManageAllReports
                 List<StockIssuesEntity> stockIssuesList = new List<StockIssuesEntity>();
                 stockIssuesList = report.ConvertDataTableToList<StockIssuesEntity>(entity.dataSet.Tables[0]);
                 StockIssuesAbstract(streamWriter, stockIssuesList, entity);
+                StockIssuesReceiverTypeAbstract(streamWriter, stockIssuesList, entity);
                 StockIssuesSchemewiseAbstract(streamWriter, stockIssuesList, entity);
                 StockIssuesReceiverandSchemeAbstract(streamWriter, stockIssuesList, entity);
                 StockIssuesCommoditywiseAbstract(streamWriter, stockIssuesList, entity);
@@ -134,7 +135,7 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine("                                          Stock Issue Register");
             sw.WriteLine(" ");
-            sw.WriteLine("Issue Date:" + report.FormatDate(date) + "  (Net Wt in kgs\\Klts\\Nos)     Godown : " + GName + "          Region :" + RName);
+            sw.WriteLine("Issue Date:" + report.FormatDirectDate(date) + "  (Net Wt in kgs\\Klts\\Nos)     Godown : " + GName + "          Region :" + RName);
             sw.WriteLine("---------------------------------------------------------------------------------------------------------------------------------------------");
             sw.WriteLine("S.No Issue Memo  D.No        Lorry No   To Whom Issued                    Scheme       StackNo      No bags  Commodity               Net wt  ");
             sw.WriteLine("---------------------------------------------------------------------------------------------------------------------------------------------");
@@ -200,6 +201,67 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine("------------------------------------------------------------------------------------------");
             sw.WriteLine("");
         }
+
+
+        /// <summary>
+        /// Abstract details for Stock issues
+        /// </summary>
+        /// <param name="sw">Streamwriter</param>
+        /// <param name="stockIssues">Stock issues entity</param>
+        /// <param name="entity">Common entity</param>
+        public void StockIssuesReceiverTypeAbstract(StreamWriter sw, List<StockIssuesEntity> stockIssues, CommonEntity entity)
+        {
+            int count = 11;
+            string weighmentType = string.Empty;
+            var resultSet = from d in stockIssues
+                            group d by new { d.TyName, d.Commodity, d.ITBweighment } into groupedData
+                            select new
+                            {
+                                NoPacking = groupedData.Sum(s => s.NoPacking),
+                                NetWt = groupedData.Sum(s => s.NetWt),
+                                GroupByNames = groupedData.Key
+                            };
+            AddheaderForReceiverTypeAbstract(sw, entity);
+            foreach (var item in resultSet)
+            {
+                if (count >= 50)
+                {
+                    count = 11;
+                    sw.WriteLine("---------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine((char)12);
+                    AddheaderForReceiverTypeAbstract(sw, entity);
+                }
+                weighmentType = item.GroupByNames.ITBweighment.ToUpper();
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.TyName, 35, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 35, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.NoPacking.ToString(), 12, 2));
+                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.Decimalformat(item.NetWt.ToString()), 20, 1));
+                sw.WriteLine("");
+                sw.WriteLine(" ");
+                count = count + 2;
+            }
+            sw.WriteLine("---------------------------------------------------------------------------------------------------------");
+            sw.WriteLine((char)12);
+        }
+
+        /// <summary>
+        /// Add header for abstract report
+        /// </summary>
+        /// <param name="sw">streamwriter</param>
+        /// <param name="entity">common entity</param>
+        public void AddheaderForReceiverTypeAbstract(StreamWriter sw, CommonEntity entity)
+        {
+            sw.WriteLine("                      TAMILNADU CIVIL SUPPLIES CORPORATION                Report Date :   " + ManageReport.GetCurrentDate());
+            sw.WriteLine(" ");
+            sw.WriteLine("                                 Stock Issue Receiver Type Abstract");
+            sw.WriteLine(" ");
+            sw.WriteLine("Issue Date:" + report.FormatDate(entity.FromDate) + "Godown : " + GName + "          Region :" + RName);
+            sw.WriteLine("---------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("Receiver Name                       Commodity                           No Bags      Net Wt (in Kgs)\\Nos");
+            sw.WriteLine("---------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("");
+        }
+
 
         /// <summary>
         /// Add scheme wise abstract details
@@ -272,7 +334,7 @@ namespace TNCSCAPI.ManageAllReports
             int count = 11;
             string weighmentType = string.Empty;
             var resultSet = from d in stockIssues
-                            group d by new { d.To_Whom_Issued, d.Scheme, d.Commodity, d.ITBweighment, d.PName } into groupedData
+                            group d by new { d.TyName, d.Scheme, d.Commodity, d.ITBweighment, d.PName } into groupedData
                             select new
                             {
                                 NoPacking = groupedData.Sum(s => s.NoPacking),
@@ -290,7 +352,7 @@ namespace TNCSCAPI.ManageAllReports
                     AddheaderForReceiverTypeAndSchemewiseAbstract(sw, entity);
                 }
                 weighmentType = item.GroupByNames.ITBweighment.ToUpper();
-                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.To_Whom_Issued, 35, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.TyName, 35, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Scheme, 13, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 27, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.NoPacking.ToString(), 8, 2));
@@ -398,6 +460,7 @@ namespace TNCSCAPI.ManageAllReports
         public double? NetWt { get; set; }
         public string ITBweighment { get; set; }
         public string PName { get; set; }
+        public string TyName { get; set; }
     }
 
 }

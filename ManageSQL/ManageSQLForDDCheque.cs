@@ -75,7 +75,7 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.ExecuteNonQuery();
                     }
                     objTrans.Commit();
-                    return new Tuple<bool, string,string>(true, GlobalVariable.SavedMessage, RowID);
+                    return new Tuple<bool, string,string>(true, GlobalVariable.SavedMessage + " Receipt No : "+ RowID, RowID);
 
                 }
                 catch (Exception ex)
