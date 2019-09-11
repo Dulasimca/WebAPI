@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using TNCSCAPI.ManageSQL;
 
 namespace TNCSCAPI.Controllers.Reports.Sales
 {
@@ -11,5 +13,29 @@ namespace TNCSCAPI.Controllers.Reports.Sales
     [ApiController]
     public class SalesController : ControllerBase
     {
+        [HttpPost("{id}")]
+        public string Post(IssueMemoEntity issueMemoDetails)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issueMemoDetails.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@society", issueMemoDetails.SCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@type", issueMemoDetails.TCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", issueMemoDetails.Fdate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", issueMemoDetails.Tdate));
+            ds = manageSQLConnection.GetDataSetValues("Getissuememo", sqlParameters);
+            return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
+
+    }
+
+    public class IssueMemoEntity
+    {
+        public string GCode { get; set; }
+        public string SCode { get; set; }
+        public string TCode { get; set; }
+        public string Fdate { get; set; }
+        public string Tdate { get; set; }
     }
 }
