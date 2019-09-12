@@ -62,13 +62,13 @@ namespace TNCSCAPI.ManageAllReports
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="date"></param>
-        public void AddHeader(StreamWriter sw, string date)
+        public void AddHeader(StreamWriter sw, CommonEntity entity)
         {
             sw.WriteLine("                                    TAMILNADU CIVIL SUPPLIES CORPORATION                       " + RName);
             sw.WriteLine(" ");
             sw.WriteLine("                                        Receipt Datewise Details of - Commodity    Godown : " + GName);
             sw.WriteLine(" ");
-            sw.WriteLine("          From:" + report.FormatDate(date) + "           To : " + report.FormatDate(date) + "          -EXCESS ");
+            sw.WriteLine("          From:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate) + "          -EXCESS ");
             sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
             sw.WriteLine("S.No|  Ack No   |Date      |   Commodity    |  Bags  |  Qty(Kgs)/NO's  |   Received From     | Lorry No  |   T.MEMO.NO   | T.MEMO DT |  ORDERNO  | EXCESS | SHORT |");
             sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
@@ -89,22 +89,22 @@ namespace TNCSCAPI.ManageAllReports
             string fromWhomRcd = string.Empty;
             bool CheckRepeatValue = false;
             bool isDataAvailable = false;
-            foreach (DataRow date in dateList.Rows)
+            AddHeader(sw, entity);
+           foreach (DataRow date in dateList.Rows)
             {
                 isDataAvailable = true;
                 count = 11;
                 string ackNoNext = string.Empty;
                 DataRow[] data = entity.dataSet.Tables[0].Select("Date='" + date["Date"] + "'");
-                AddHeader(sw, Convert.ToString(date["Date"]));
                 foreach (DataRow row in data)
                 {
                     if (count >= 50)
                     {
                         //Add header again
                         count = 11;
-                        sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+                        sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
                         sw.WriteLine((char)12);
-                        AddHeader(sw, Convert.ToString(date["Date"]));
+                        AddHeader(sw, entity);
                     }
                     ackNoNext = row["Ackno"].ToString();
                     fromWhomRcd = Convert.ToString(row["RecdFrom"]).Trim();
@@ -129,16 +129,16 @@ namespace TNCSCAPI.ManageAllReports
                     sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Truckmemodate"].ToString() : " ", 11, 1));
                     sw.Write(report.StringFormat(row["Orderno"].ToString(), 11, 2));
                     sw.Write(report.StringFormat("", 8, 1));
-                    sw.Write(report.StringFormat("", 8, 1));
+                    sw.Write(report.StringFormat("", 7, 1));
                     sw.WriteLine("");
                     i = CheckRepeatValue == false ? i + 1 : i;
                 }
-                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.WriteLine((char)12);
             }
             if (!isDataAvailable)
             {
-                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.WriteLine((char)12);
             }
 
