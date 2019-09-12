@@ -21,7 +21,10 @@
         public const string DDChequeFileName = "DDCHE";
         public const string QuantityAccountIssues = "ISQAC";
         public const string QuantityAccountReceipt = "REQAC";
-
+        public const string HullingDetailsReportFileName = "";
+        public const string SchemeReceiptReportFileName = "";
+        public const string StackCardDetailsReportFileName = "";
+        public const string CommodityReceiptReportFileName = "COMREC";
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
     }
