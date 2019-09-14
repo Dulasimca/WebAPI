@@ -9,7 +9,6 @@ namespace TNCSCAPI.ManageAllReports.Document
         ManageReport report = new ManageReport();
         public void GenerateTruckMemo(DocumentStockTransferDetails truckMemoList)
         {
-            AuditLog.WriteError("GenerateTruckMemoRegister");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             bool isDuplicate = false;

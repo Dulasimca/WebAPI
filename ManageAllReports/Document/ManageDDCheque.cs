@@ -105,6 +105,10 @@ namespace TNCSCAPI.ManageAllReports.Document
         public void AddFooter(StreamWriter streamWriter, DDChequeEntity chequeEntity)
         {
             streamWriter.WriteLine("------------------------------------------------------------------------------");
+            streamWriter.Write("                                                    Total |");
+            streamWriter.Write(report.StringFormat(chequeEntity.Total, 14, 1));
+            streamWriter.WriteLine(" ");
+            streamWriter.WriteLine("------------------------------------------------------------------------------");
             streamWriter.WriteLine(report.StringFormatWithoutPipe(chequeEntity.Details, 55, 2));
             report.AddMoreContent(streamWriter, chequeEntity.Details, 55, 1);//Add content next line.
             streamWriter.WriteLine(" ");
