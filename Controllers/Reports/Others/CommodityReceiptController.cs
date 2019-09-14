@@ -2,7 +2,8 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
-
+using System.Threading.Tasks;
+using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.Controllers.Reports
 {
@@ -23,6 +24,20 @@ namespace TNCSCAPI.Controllers.Reports
             sqlParameters.Add(new KeyValuePair<string, string>("@TRCODE", commodity.TRCode));
             ds = manageSQLConnection.GetDataSetValues("GetCOMMODITYRECEIPT", sqlParameters);
             //
+            CommodityReceipt commodityReceipt = new CommodityReceipt();
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = commodity.GCode,
+                    FromDate = commodity.FDate,
+                    Todate = commodity.ToDate,
+                    UserName = commodity.UserName
+                };
+                Task.Run(() => commodityReceipt.GenerateCommodityReceiptReport(entity)); //Generate the Report
+            }
 
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }

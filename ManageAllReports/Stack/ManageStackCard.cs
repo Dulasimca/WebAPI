@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-
+using System.IO;
 
 namespace TNCSCAPI.ManageAllReports.Stack
 {
     public class ManageStackCard
     {
+        private string GName { get; set; }
+        private string RName { get; set; }
+        private string Commodity { get; set; }
+        private string TStockNo { get; set; }
+        ManageReport report = new ManageReport();
+
         public List<StackCardEntity> ManageStackBalance(DataSet dataSet)
         {
             try
@@ -91,6 +97,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                             stackCardEntities.Add(stackCard);
                         }
                     }
+                    
                     //Add Total values
                     StackCardEntity TstackCard = new StackCardEntity();
                     TstackCard.AckDate = "Total";
@@ -176,6 +183,64 @@ namespace TNCSCAPI.ManageAllReports.Stack
                 return null;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        public void GenerateStackCardDetailsReport(CommonEntity entity)
+        {
+            AuditLog.WriteError("GenerateHullingReport");
+            string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
+            StreamWriter streamWriter = null;
+            try
+            {
+                GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
+                RName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
+                fileName = entity.GCode + GlobalVariable.StackCardDetailsReportFileName;
+                fPath = GlobalVariable.ReportPath + "Reports";
+                report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
+                subF_Path = fPath + "//" + entity.UserName; //ManageReport.GetDateForFolder();
+                report.CreateFolderIfnotExists(subF_Path);
+                //delete file if exists
+                filePath = subF_Path + "//" + fileName + ".txt";
+                report.DeleteFileIfExists(filePath);
+
+                streamWriter = new StreamWriter(filePath, true);
+                // DateWiseStockReceiptRegister(streamWriter, entity);
+
+                List<StackCardEntity> stackCardList = new List<StackCardEntity>();
+                stackCardList = report.ConvertDataTableToList<StackCardEntity>(entity.dataSet.Tables[0]);
+                streamWriter.Flush();
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message + " " + ex.StackTrace);
+            }
+            finally
+            {
+                streamWriter.Close();
+                fPath = string.Empty; fileName = string.Empty;
+                streamWriter = null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="date"></param>
+        public void AddHeader(StreamWriter sw, string date)
+        {
+            sw.WriteLine("                                  TAMILNADU CIVIL SUPPLIES CORPORATION           Region :   " + RName);
+            sw.WriteLine("          Commodity:" + Commodity + "           Godown : " + GName + "          Stack.No :" + TStockNo);
+            sw.WriteLine(" ");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("S.NO|  RECEIPT                                  | ISSUES                                                  |");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("    |  DATE           BAGS      QUANTITY        |  DATE           BAGS      QUANTITY          COL.BAL     |");
+        }
+
 
     }
 

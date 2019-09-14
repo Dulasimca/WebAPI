@@ -3,7 +3,7 @@
     public class GlobalVariable
     {
         //Testing connection
-        public const string ConnectionString = "data source=localhost;initial catalog=TNCSCSCM;user id = sqladmin; password =sql@svc&ac!72;";
+        public const string ConnectionString = "data source=180.179.49.72;initial catalog=TNCSCSCM;user id = sqladmin; password =sql@svc&ac!72;";
         public const string ReportPath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//";
 
         //Live connection
@@ -21,7 +21,11 @@
         public const string DDChequeFileName = "DDCHE";
         public const string QuantityAccountIssues = "ISQAC";
         public const string QuantityAccountReceipt = "REQAC";
-
+        public const string HullingDetailsReportFileName = "";
+        public const string SchemeReceiptReportFileName = "";
+        public const string StackCardDetailsReportFileName = "";
+        public const string CommodityReceiptReportFileName = "COMREC";
+        public const string CommodityIssueMemoReportFileName = "COMIM";
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
     }
