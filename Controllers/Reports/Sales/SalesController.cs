@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using TNCSCAPI.ManageSQL;
+using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.Controllers.Reports.Sales
 {
@@ -39,8 +40,7 @@ namespace TNCSCAPI.Controllers.Reports.Sales
              ds = manageSQLConnection.GetDataSetValues("getIssuememoabstract", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-
-    }
+}
 
     public class IssueMemoEntity
     {
