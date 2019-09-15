@@ -74,6 +74,49 @@ namespace TNCSCAPI
         /// <param name="length">Total Length</param>
         /// <param name="type">Format type 1- before,2-After</param>
         /// <returns></returns>
+        public string AddLine(int length)
+        {
+            string addvalues = string.Empty;
+           try
+            {
+                    for (int i = 0; i < length; i++)
+                    {
+                        addvalues = addvalues + "-";
+                    }
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("AddLine : " + ex.Message + " " + ex.InnerException);
+            }
+            return addvalues + "|";
+
+        }
+
+        public Tuple<string,bool> StringFormatWithEmpty(string svalue)
+        {
+            try
+            {
+                if(!string.IsNullOrEmpty(svalue) && svalue!=null)
+                {
+                    return new Tuple<string, bool>(svalue,true);
+                }
+                return new Tuple<string, bool>(" ", false); 
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("StringFormatWithEmpty : " + ex.Message + " " + ex.InnerException);
+                return new Tuple<string, bool>(" ", false); 
+            }
+        }
+
+      
+        /// <summary>
+        /// Format the string based on the length
+        /// </summary>
+        /// <param name="sValue">string value</param>
+        /// <param name="length">Total Length</param>
+        /// <param name="type">Format type 1- before,2-After</param>
+        /// <returns></returns>
         public string StringFormatWithoutPipe(string sValue, int length, int type = 0)
         {
             string result = string.Empty;
@@ -188,8 +231,9 @@ namespace TNCSCAPI
                     sFormattedValue = "0.00";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                AuditLog.WriteError("Decimalformat : " + ex.Message + " " + ex.StackTrace);
                 throw;
             }
             return sFormattedValue;
@@ -311,16 +355,49 @@ namespace TNCSCAPI
         {
             try
             {
-                DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                return dt.ToString("dd-MMM-yyyy");
+                date = date.Replace("-", "/");
+                if (date.Contains("00:00:00"))
+                {
+                    date = date.Replace("00:00:00", "");
+                    date = date.Trim();
+                    DateTime dt = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    return dt.ToString("dd-MMM-yyyy");
+                }
+                else
+                {
+                    DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    return dt.ToString("dd-MMM-yyyy");
+                }
             }
             catch (Exception ex)
             {
-                AuditLog.WriteError("FormatDate : " + ex.Message);
+                AuditLog.WriteError("FormatDate : " + ex.Message + " " + ex.StackTrace);
                 return " ";
+
             }
 
         }
+
+        /// <summary>
+        /// Change the Date Format dd-MM-yyyy
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>Format dd-MM-yyyy</returns>
+        public string FormatDirectDate(string date)
+        {
+            try
+            {                
+                return Convert.ToDateTime(date).ToString("dd/MM/yyyy");
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("FormatDirectDate : " + ex.Message + " " + ex.StackTrace);
+                return " ";
+
+            }
+
+        }
+
 
         /// <summary>
         /// Change the Date Format dd-MM-yyyy
@@ -331,12 +408,13 @@ namespace TNCSCAPI
         {
             try
             {
+                date = date.Replace("-", "/");
                 DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                 return dt.ToString("dd-MM-yyyy");
             }
             catch (Exception ex)
             {
-                AuditLog.WriteError("FormatDate : " + ex.Message);
+                AuditLog.WriteError("FormatIndianDate : " + ex.Message);
                 return " ";
             }
 
@@ -351,12 +429,13 @@ namespace TNCSCAPI
         {
             try
             {
+                date = date.Replace("-", "/");
                 DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                 return dt.ToString("hh:mm:ss tt");
             }
             catch (Exception ex)
             {
-                AuditLog.WriteError("FormatDate : " + ex.Message);
+                AuditLog.WriteError("GetTime : " + ex.Message);
                 return " ";
             }
 

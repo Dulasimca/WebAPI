@@ -28,5 +28,25 @@ namespace TNCSCAPI.Controllers
                 ds.Dispose();
             }
         }
+
+        [HttpGet("{id}")]
+        public string Get(string Date,string RCode,string GCode)
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            DataSet ds = new DataSet();
+            try
+            {
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@Date", Date));
+                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+                ds = manageSQLConnection.GetDataSetValues("GetDailyCBData", sqlParameters);
+                return JsonConvert.SerializeObject(ds);
+            }
+            finally
+            {
+                ds.Dispose();
+            }
+        }
     }
 }
