@@ -1,21 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using TNCSCAPI.Controllers.Reports.QuantityAccount;
 
 namespace TNCSCAPI.ManageAllReports.QA
 {
-    public class ManageQAIssues
+    public class ManageQAIssuesAllScheme
     {
         ManageReport report = new ManageReport();
-        public void GenerateQAIssues(DataSet ds, QuantityAccountEntity quantityAccount)
+        public void GenerateQAIssues(DataSet ds, QuantityAccountEntity quantityAccount,string GlobalFileName)
         {
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             try
             {
-                fileName = quantityAccount.GCode + GlobalVariable.QuantityAccountIssues;
+                fileName = quantityAccount.GCode + GlobalFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
                 report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
                 subF_Path = fPath + "//" + quantityAccount.UserId; //ManageReport.GetDateForFolder();
@@ -75,31 +77,29 @@ namespace TNCSCAPI.ManageAllReports.QA
             int i = 0;
             //Add header values
             int count = dataSet.Tables[0].Columns.Count;
-            int length = (count * 20)+ count + 18;
+            int length = (count * 15) + count + 64;
             streamWriter.WriteLine("-" + report.AddLine(length));
             streamWriter.Write(" ");
             foreach (DataColumn dataColumn in dataSet.Tables[0].Columns)
             {
-                streamWriter.Write(report.StringFormat(dataColumn.ColumnName, i == 0 ? 23 : 20, i == 0 ? 2 : 1));
+                streamWriter.Write(report.StringFormat(dataColumn.ColumnName, (i == 0 || i==1) ? 23 : 15, (i == 0 || i == 1) ? 2 : 1));
                 i = 1;
             }
             streamWriter.Write("         Total    |");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("-" + report.AddLine(length));
-              foreach (DataRow item in dataSet.Tables[0].Rows)
+            foreach (DataRow item in dataSet.Tables[0].Rows)
             {
-                i = 0;
                 decimal Total = 0;
                 streamWriter.Write(" ");
                 for (int k = 0; k < count; k++)
                 {
                     var result = report.StringFormatWithEmpty(Convert.ToString(item[k]));
-                    streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 23 : 20, i == 0 ? 2 : 1));
-                    if (i > 0)
+                    streamWriter.Write(report.StringFormat(result.Item1, (i == 0 || i == 1) ? 23 : 15, (i == 0 || i == 1) ? 2 : 1));
+                    if (k > 1)
                     {
                         Total = Total + (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
                     }
-                    i = 1;
                 }
                 //Total
                 streamWriter.Write(report.StringFormat(Convert.ToString(Total), 18, 1));

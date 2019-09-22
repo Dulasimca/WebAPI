@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Threading.Tasks;
+using TNCSCAPI.Controllers.Reports.Stack;
 
 namespace TNCSCAPI.ManageAllReports.Stack
 {
@@ -13,7 +15,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
         private string TStockNo { get; set; }
         ManageReport report = new ManageReport();
 
-        public List<StackCardEntity> ManageStackBalance(DataSet dataSet)
+        public List<StackCardEntity> ManageStackBalance(DataSet dataSet, StackEntity stackEntity)
         {
             try
             {
@@ -64,38 +66,40 @@ namespace TNCSCAPI.ManageAllReports.Stack
                         {
                             SDate = Convert.ToDateTime(dtReceipt.Rows[irow][0]);
                             dataRows = dataSet.Tables[0].Select("Dates >= '" + fDate + "' and dates < '" + SDate + "'");
-
                         }
+                        stackCard.ClosingBalance = Convert.ToString(dClosingBalance);
+                        stackCardEntities.Add(stackCard);
                         //check the Issues details.
                         foreach (DataRow ndr in dataRows)
                         {
                             dClosingBalance = dClosingBalance - Convert.ToDecimal(ndr["TOTAL"]);
                             iIssuesBags = iIssuesBags + Convert.ToInt32(ndr["NoPacking"]);
                             dIssuesQuantity = dIssuesQuantity + Convert.ToDecimal(ndr["TOTAL"]);
-                            if (ifirst == 0)
-                            {
-                                stackCard.IssuesBags = Convert.ToString(ndr["NoPacking"]);
-                                stackCard.IssuesQuantity = Convert.ToString(ndr["TOTAL"]);
-                                stackCard.ClosingBalance = Convert.ToString(dClosingBalance);
-                                stackCardEntities.Add(stackCard);
-                            }
-                            else
-                            {
-                                StackCardEntity nstackCard = new StackCardEntity();
-                                nstackCard.AckDate = Convert.ToString(ndr["Dates"]);
-                                nstackCard.IssuesBags = Convert.ToString(ndr["NoPacking"]);
-                                nstackCard.IssuesQuantity = Convert.ToString(ndr["TOTAL"]);
-                                nstackCard.ClosingBalance = Convert.ToString(dClosingBalance);
-                                stackCardEntities.Add(nstackCard);
-                            }
-                            ifirst = 1;
+                            //Check Date Match
+                            StackCardEntity nstackCard = new StackCardEntity();
+                            nstackCard.AckDate = Convert.ToString(ndr["Dates"]);
+                            nstackCard.IssuesBags = Convert.ToString(ndr["NoPacking"]);
+                            nstackCard.IssuesQuantity = Convert.ToString(ndr["TOTAL"]);
+                            nstackCard.ClosingBalance = Convert.ToString(dClosingBalance);
+                            stackCardEntities.Add(nstackCard);
+                            //if (ifirst == 0)
+                            //{
+                            //    stackCard.IssuesBags = Convert.ToString(ndr["NoPacking"]);
+                            //    stackCard.IssuesQuantity = Convert.ToString(ndr["TOTAL"]);
+                            //    stackCard.ClosingBalance = Convert.ToString(dClosingBalance);
+                            //    stackCardEntities.Add(stackCard);
+                            //}
+                            //else
+                            //{
+
+                            //}
+                           // ifirst = 1;
                         }
                         irow++;
-                        if (ifirst == 0)
-                        {
-                            stackCard.ClosingBalance = Convert.ToString(dClosingBalance);
-                            stackCardEntities.Add(stackCard);
-                        }
+                        //if (ifirst == 0)
+                        //{
+                           
+                        //}
                     }
                     
                     //Add Total values
@@ -107,6 +111,11 @@ namespace TNCSCAPI.ManageAllReports.Stack
                     TstackCard.IssuesQuantity = Convert.ToString(dIssuesQuantity);
                     TstackCard.ClosingBalance = Convert.ToString(dClosingBalance);
                     stackCardEntities.Add(TstackCard);
+                    // Generate Report
+                    ManageStackCardPrint manageStackCard = new ManageStackCardPrint();
+                   // manageStackCard.GenerateStackCard(stackCardEntities, stackEntity);
+                   Task.Run(() => manageStackCard.GenerateStackCard(stackCardEntities, stackEntity));
+
                 }
                 return stackCardEntities;
             }
@@ -182,63 +191,6 @@ namespace TNCSCAPI.ManageAllReports.Stack
                 AuditLog.WriteError(ex.Message);
                 return null;
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="entity"></param>
-        public void GenerateStackCardDetailsReport(CommonEntity entity)
-        {
-            AuditLog.WriteError("GenerateHullingReport");
-            string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
-            StreamWriter streamWriter = null;
-            try
-            {
-                GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
-                RName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
-                fileName = entity.GCode + GlobalVariable.StackCardDetailsReportFileName;
-                fPath = GlobalVariable.ReportPath + "Reports";
-                report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
-                subF_Path = fPath + "//" + entity.UserName; //ManageReport.GetDateForFolder();
-                report.CreateFolderIfnotExists(subF_Path);
-                //delete file if exists
-                filePath = subF_Path + "//" + fileName + ".txt";
-                report.DeleteFileIfExists(filePath);
-
-                streamWriter = new StreamWriter(filePath, true);
-                // DateWiseStockReceiptRegister(streamWriter, entity);
-
-                List<StackCardEntity> stackCardList = new List<StackCardEntity>();
-                stackCardList = report.ConvertDataTableToList<StackCardEntity>(entity.dataSet.Tables[0]);
-                streamWriter.Flush();
-            }
-            catch (Exception ex)
-            {
-                AuditLog.WriteError(ex.Message + " " + ex.StackTrace);
-            }
-            finally
-            {
-                streamWriter.Close();
-                fPath = string.Empty; fileName = string.Empty;
-                streamWriter = null;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="date"></param>
-        public void AddHeader(StreamWriter sw, string date)
-        {
-            sw.WriteLine("                                  TAMILNADU CIVIL SUPPLIES CORPORATION           Region :   " + RName);
-            sw.WriteLine("          Commodity:" + Commodity + "           Godown : " + GName + "          Stack.No :" + TStockNo);
-            sw.WriteLine(" ");
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("S.NO|  RECEIPT                                  | ISSUES                                                  |");
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("    |  DATE           BAGS      QUANTITY        |  DATE           BAGS      QUANTITY          COL.BAL     |");
         }
 
 

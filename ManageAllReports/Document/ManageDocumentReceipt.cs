@@ -175,6 +175,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
             streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockReceipt.Remarks, 103, 2)+"|");
+            report.AddMoreContent(streamWriter, stockReceipt.Remarks, 103, 3);
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             string receiptDateTime = stockReceipt.SRDate + " "+ report.GetCurrentTime(dateTime);
             streamWriter.WriteLine(" Prepared DateTime:"+ receiptDateTime + "       Printing DateTime:"+DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss"));

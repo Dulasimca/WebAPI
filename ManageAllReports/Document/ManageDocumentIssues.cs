@@ -88,12 +88,24 @@ namespace TNCSCAPI.ManageAllReports.Document
 
             streamWriter.Write("|ISSUING GODOWN :   ");
             streamWriter.Write(report.StringFormatWithoutPipe(stockIssuesEntity.GodownName, 21, 2));
-            streamWriter.Write(report.StringFormatWithoutPipe("TO WHOM ISSUED:", 25, 1));
-            streamWriter.Write(report.StringFormatWithoutPipe(stockIssuesEntity.ReceiverName, 41, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe("TO WHOM ISSUED:", 15, 1));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockIssuesEntity.ReceiverName, 51, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
+            try
+            {
+                streamWriter.Write("|                                         ");
+                streamWriter.Write(report.StringFormatWithoutPipe("ISSUER CODE  :", 15, 1));
+                streamWriter.Write(report.StringFormatWithoutPipe(stockIssuesEntity.IssuerCode, 51, 2));
+                streamWriter.Write("|");
+                streamWriter.WriteLine(" ");
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message);
+            }
+           
 
-            streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
             streamWriter.WriteLine("||SNo|  STACK NO  |    COMMODITY                  |  SCHEME      |UNIT WEIGHT  |NO.OFUNITS|   NET Wt/Nos|MOI% |");
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
@@ -167,7 +179,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockIssuesEntity"></param>
         private void AddFooter(StreamWriter streamWriter, DocumentStockIssuesEntity stockIssuesEntity)
         {
-            streamWriter.WriteLine("|LORRY NO      :" + report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity.LorryNo), 17, 2) + "TC NAME       : -                                                           |");
+            streamWriter.WriteLine("|LORRY NO      :" + report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity.LorryNo), 17, 2) + "TC NAME       : "+ report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity.TransporterName), 60, 2) + "|");
             streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account             |");
             streamWriter.WriteLine("|                                                                                                             |");
@@ -175,7 +187,8 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|DEPOSITOR OR HIS REPRESENTATIVE                                               GODOWN INCHARGE                |");
             streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|REMARKS                                                                                                      |");
-            streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockIssuesEntity.Remarks,106,2) + "|");
+            streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockIssuesEntity.Remarks,105,2) + "|");
+            report.AddMoreContent(streamWriter, stockIssuesEntity.Remarks, 105, 3);
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine((char)12);
         }

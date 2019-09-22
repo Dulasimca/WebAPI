@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data;
+using System.Linq;
 
 namespace TNCSCAPI.ManageAllReports.StockStatement
 {
@@ -12,7 +11,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
         {
             float _BookBalanceWeight = 0, _PhysicalBalanceWeight = 0, _CumulitiveShortage = 0, _Shortage = 0;
             float _receiptuptoYesterday = 0, _receipttotay = 0, _issuesuptoYesterday = 0,
-                _issuestoday = 0, _otherIssuesuptoYesterday = 0, _otherIssuestoday = 0,
+                _issuestoday = 0, _otherIssuesuptoYesterday = 0, _otherIssuestoday = 0, _writeOFFAll = 0,
                 _openingBookBalance = 0, _closingBookBalance = 0, _phycialbalance = 0;
             string _itemCode = string.Empty;
             string _ITDescription = string.Empty;
@@ -21,8 +20,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             {
                 ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
                 DataSet dataSetMaster = new DataSet();
-              
-               dataSetMaster = manageSQLConnection.GetDataSetValues("GetMasterDataToProcessCB");
+
+                dataSetMaster = manageSQLConnection.GetDataSetValues("GetMasterDataToProcessCB");
                 if (dataSetMaster.Tables.Count > 0)
                 {
                     foreach (DataRow item in dataSetMaster.Tables[1].Rows) // item master details.
@@ -51,75 +50,83 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                         receiptUptoYesterday = manageSQLConnection.GetDataSetValues("GetReceiptUptoYesterdayByDate", sqlParameters);
                         //foreach (DataRow godown in dataSetMaster.Tables[2].Rows) // godown details.
                         //{
-                            
-                            //get opening balance for particualr item.
-                            DataRow[] openingBalance = dataSetMaster.Tables[0].Select("GodownCode='" + stockDetailsEntity.GodownCode + "' and CommodityCode='" + stockDetailsEntity.ItemCode + "'");
 
-                            DataRow[] receiptuptoYesterday = receiptUptoYesterday.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                            DataRow[] receipttotay = todayReceipt.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                            DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                            DataRow[] issuestoday = todayIssues.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                            DataRow[] otherIssuesuptoYesterday = issuesUptoYesterday.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'"); ;
-                            DataRow[] otherIssuestoday = todayIssues.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        //get opening balance for particualr item.
+                        DataRow[] openingBalance = dataSetMaster.Tables[0].Select("GodownCode='" + stockDetailsEntity.GodownCode + "' and CommodityCode='" + stockDetailsEntity.ItemCode + "'");
 
+                        DataRow[] receiptuptoYesterday = receiptUptoYesterday.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        DataRow[] receipttotay = todayReceipt.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        DataRow[] issuestoday = todayIssues.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        DataRow[] otherIssuesuptoYesterday = issuesUptoYesterday.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        DataRow[] otherIssuestoday = todayIssues.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+
+                        DataRow[] writeOFFuptoYesterday = issuesUptoYesterday.Tables[2].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        
                         _BookBalanceWeight = 0;
-                            _PhysicalBalanceWeight = 0;
-                            _CumulitiveShortage = 0;
-                            _Shortage = 0;
-                            _receiptuptoYesterday = 0;
-                            _receipttotay = 0;
-                            _issuesuptoYesterday = 0;
-                            _issuestoday = 0;
-                            _otherIssuesuptoYesterday = 0;
-                            _otherIssuestoday = 0;
-                            _openingBookBalance = 0;
-                            _closingBookBalance = 0;
-                            _phycialbalance = 0;
-                            if (openingBalance != null && openingBalance.Count() > 0)
-                            {
-                                _BookBalanceWeight = float.Parse(Convert.ToString(openingBalance[0]["BookBalanceWeight"]));
-                                _PhysicalBalanceWeight = float.Parse(Convert.ToString(openingBalance[0]["PhysicalBalanceWeight"]));
-                                _CumulitiveShortage = float.Parse(Convert.ToString(openingBalance[0]["CumulitiveShortage"]));
-                                _Shortage = float.Parse(Convert.ToString(openingBalance[0]["WriteOff"]));
-                            }
-                            if (receiptuptoYesterday != null && receiptuptoYesterday.Count() > 0)
-                            {
-                                _receiptuptoYesterday = float.Parse(Convert.ToString(receiptuptoYesterday[0]["TOTAL"]));
-                            }
-                            if (receipttotay != null && receipttotay.Count() > 0)
-                            {
-                                _receipttotay = float.Parse(Convert.ToString(receipttotay[0]["TOTAL"]));
-                            }
-                            if (issuesuptoYesterday != null && issuesuptoYesterday.Count() > 0)
-                            {
-                                _issuesuptoYesterday = float.Parse(Convert.ToString(issuesuptoYesterday[0]["TOTAL"]));
-                            }
-                            if (issuestoday != null && issuestoday.Count() > 0)
-                            {
-                                _issuestoday = float.Parse(Convert.ToString(issuestoday[0]["TOTAL"]));
-                            }
-                            if (otherIssuesuptoYesterday != null && otherIssuesuptoYesterday.Count() > 0)
-                            {
-                                _otherIssuesuptoYesterday = float.Parse(Convert.ToString(otherIssuesuptoYesterday[0]["TOTAL"]));
-                            }
-                            if (otherIssuestoday != null && otherIssuestoday.Count() > 0)
-                            {
-                                _otherIssuestoday = float.Parse(Convert.ToString(otherIssuestoday[0]["TOTAL"]));
-                            }
-                            _openingBookBalance = (_BookBalanceWeight + _receiptuptoYesterday) - (_issuesuptoYesterday + _otherIssuesuptoYesterday);
-                            _closingBookBalance = (_openingBookBalance + _receipttotay) - (_issuestoday + _otherIssuestoday);
-                            _phycialbalance = _closingBookBalance - (_CumulitiveShortage + _Shortage);
-                            stockDetailsEntity.OpeningBalance = _openingBookBalance;
-                            stockDetailsEntity.ClosingBalance = _closingBookBalance;
-                            stockDetailsEntity.PhycialBalance = _phycialbalance;
-                            stockDetailsEntity.CSBalance = _CumulitiveShortage;
-                            stockDetailsEntity.Shortage = _Shortage;
-                            stockDetailsEntity.TotalReceipt = _receipttotay;
-                            stockDetailsEntity.IssueSales = _issuestoday;
-                            stockDetailsEntity.IssueOthers = _otherIssuestoday;
-                            stockDetailsEntity.LastUpdated = DateTime.Now;
-                            stockDetailsEntity.Remarks = string.Empty;
-                            stockDetailsEntity.Flag = true;
+                        _PhysicalBalanceWeight = 0;
+                        _CumulitiveShortage = 0;
+                        _Shortage = 0;
+                        _receiptuptoYesterday = 0;
+                        _receipttotay = 0;
+                        _issuesuptoYesterday = 0;
+                        _issuestoday = 0;
+                        _otherIssuesuptoYesterday = 0;
+                        _otherIssuestoday = 0;
+                        _openingBookBalance = 0;
+                        _closingBookBalance = 0;
+                        _phycialbalance = 0;
+                        _writeOFFAll = 0;
+                        if (openingBalance != null && openingBalance.Count() > 0)
+                        {
+                            _BookBalanceWeight = float.Parse(Convert.ToString(openingBalance[0]["BookBalanceWeight"]));
+                            _PhysicalBalanceWeight = float.Parse(Convert.ToString(openingBalance[0]["PhysicalBalanceWeight"]));
+                            _CumulitiveShortage = float.Parse(Convert.ToString(openingBalance[0]["CumulitiveShortage"]));
+                            _Shortage = float.Parse(Convert.ToString(openingBalance[0]["WriteOff"]));
+                        }
+                        if (receiptuptoYesterday != null && receiptuptoYesterday.Count() > 0)
+                        {
+                            _receiptuptoYesterday = float.Parse(Convert.ToString(receiptuptoYesterday[0]["TOTAL"]));
+                        }
+                        if (receipttotay != null && receipttotay.Count() > 0)
+                        {
+                            _receipttotay = float.Parse(Convert.ToString(receipttotay[0]["TOTAL"]));
+                        }
+                        if (issuesuptoYesterday != null && issuesuptoYesterday.Count() > 0)
+                        {
+                            _issuesuptoYesterday = float.Parse(Convert.ToString(issuesuptoYesterday[0]["TOTAL"]));
+                        }
+                        if (issuestoday != null && issuestoday.Count() > 0)
+                        {
+                            _issuestoday = float.Parse(Convert.ToString(issuestoday[0]["TOTAL"]));
+                        }
+                        if (otherIssuesuptoYesterday != null && otherIssuesuptoYesterday.Count() > 0)
+                        {
+                            _otherIssuesuptoYesterday = float.Parse(Convert.ToString(otherIssuesuptoYesterday[0]["TOTAL"]));
+                        }
+                        if (otherIssuestoday != null && otherIssuestoday.Count() > 0)
+                        {
+                            _otherIssuestoday = float.Parse(Convert.ToString(otherIssuestoday[0]["TOTAL"]));
+                        }
+                        if (writeOFFuptoYesterday.Count() > 0)
+                        {
+                            _writeOFFAll= float.Parse(Convert.ToString(writeOFFuptoYesterday[0]["TOTAL"]));
+                        }
+                        _openingBookBalance = (_BookBalanceWeight + _receiptuptoYesterday) - (_issuesuptoYesterday + _otherIssuesuptoYesterday);
+                        _closingBookBalance = (_openingBookBalance + _receipttotay) - (_issuestoday + _otherIssuestoday);
+                        _CumulitiveShortage = _CumulitiveShortage - _writeOFFAll;
+                        _phycialbalance = _closingBookBalance - (_CumulitiveShortage + _Shortage);
+                        stockDetailsEntity.OpeningBalance = _openingBookBalance;
+                        stockDetailsEntity.ClosingBalance = _closingBookBalance;
+                        stockDetailsEntity.PhycialBalance = _phycialbalance;
+                        stockDetailsEntity.CSBalance = _CumulitiveShortage;
+                        stockDetailsEntity.Shortage = _Shortage;
+                        stockDetailsEntity.TotalReceipt = _receipttotay;
+                        stockDetailsEntity.IssueSales = _issuestoday;
+                        stockDetailsEntity.IssueOthers = _otherIssuestoday;
+                        stockDetailsEntity.LastUpdated = DateTime.Now;
+                        stockDetailsEntity.Remarks = string.Empty;
+                        stockDetailsEntity.Flag = true;
                         // InsertData(stockDetailsEntity);
                         //}
                         dailyStockDetailsEntities.Add(stockDetailsEntity);
@@ -128,7 +135,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             }
             catch (Exception ex)
             {
-              AuditLog.WriteError(" Process Daily Stock " + ex.Message);
+                AuditLog.WriteError(" Process Daily Stock " + ex.Message);
             }
             return dailyStockDetailsEntities;
         }

@@ -53,7 +53,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", stackEntity.TStockNo.Trim()));
                 ds = manageSQLConnection.GetDataSetValues("GetStackCardDetailsbyId", sqlParameters);
                 //Calculate the 
-                var result= manageStackCard.ManageStackBalance(ds);
+                var result= manageStackCard.ManageStackBalance(ds, stackEntity);
                 return JsonConvert.SerializeObject(result);
             }
             return string.Empty;
@@ -66,5 +66,11 @@ namespace TNCSCAPI.Controllers.Reports.Stack
         public string StackDate { get; set; }
         public string TStockNo { get; set; }
         public int Type { get; set; }
+
+        public string GName { get; set; }
+        public string RName { get; set; }
+        public string ITName { get; set; }
+        public string UserName { get; set; }
+
     }
 }

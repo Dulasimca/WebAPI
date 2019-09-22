@@ -503,6 +503,27 @@ namespace TNCSCAPI
             return isAvailable;
         }
 
+
+        /// <summary>
+        /// Change the Date Format dd-MM-yyyy
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>Format dd-MM-yyyy</returns>
+        public string GetDays(string FromDate,string ToDate)
+        {
+            try
+            {
+                TimeSpan different = Convert.ToDateTime(ToDate) - Convert.ToDateTime(FromDate);
+                return different.Days.ToString();
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GetDays : " + ex.Message);
+                return " ";
+            }
+
+        }
+
         /// <summary>
         ///  Check the Data availability
         /// </summary>

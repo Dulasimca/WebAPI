@@ -100,7 +100,7 @@ namespace TNCSCAPI
                         sqlCommand.Dispose();
 
                         sqlCommand = new SqlCommand();
-                        sqlCommand.Transaction = objTrans;
+                       sqlCommand.Transaction = objTrans;
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertSIItemDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -157,7 +157,7 @@ namespace TNCSCAPI
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
-                    objTrans.Rollback();
+                   objTrans.Rollback();
                     return new Tuple<bool, string,string>(false, GlobalVariable.ErrorMessage,"");
                 }
                 finally
