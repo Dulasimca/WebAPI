@@ -89,12 +89,12 @@ namespace TNCSCAPI.ManageAllReports
             string fromWhomRcd = string.Empty;
             bool CheckRepeatValue = false;
             bool isDataAvailable = false;
-            AddHeader(sw, entity);
-           foreach (DataRow date in dateList.Rows)
+            foreach (DataRow date in dateList.Rows)
             {
                 isDataAvailable = true;
                 count = 11;
                 string ackNoNext = string.Empty;
+                AddHeader(sw, entity);
                 DataRow[] data = entity.dataSet.Tables[0].Select("Date='" + date["Date"] + "'");
                 foreach (DataRow row in data)
                 {
