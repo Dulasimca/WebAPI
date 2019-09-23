@@ -54,13 +54,11 @@ namespace TNCSCAPI.ManageAllReports.Document
         {
             streamWriter.WriteLine("|==========================================================================================================|");
             streamWriter.WriteLine("|                                                                                                          |");
-            streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|                                       TAMILNADU CIVIL SUPPLIES CORPORATION                               |");
             streamWriter.Write("|                                              ");
             streamWriter.Write(manageReport.StringFormatWithoutPipe("REGION : ", 9, 1));
             streamWriter.Write(manageReport.StringFormat(deliveryOrderEntity.RegionName, 50, 2));
             streamWriter.WriteLine("");
-            streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|                                      DELIVERY ORDER                                                      |");
             streamWriter.WriteLine("|==========================================================================================================|");
@@ -166,7 +164,6 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.WriteLine(" ");
                 streamWriter.WriteLine("||--------------------------------------------------------------------------------------|                  |");
             }
-            streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|==========================================================================================================|");
         }
 
@@ -238,7 +235,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.WriteLine(" ");
                 dTotal = dTotal + Convert.ToDouble(item.MarginAmount);
             }
-            if (i == 1)
+            if (i > 0)
             {
                 streamWriter.WriteLine("||------|-------------------------|-------------------|---------------------|-----------|-------------|    |");
                 streamWriter.Write("|                                                                            TOTAL      |");
@@ -255,6 +252,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockReceipt"></param>
         public void AddFooter(StreamWriter streamWriter, DocumentDeliveryOrderEntity deliveryOrderList)
         {
+            ManageReport report = new ManageReport();
             streamWriter.WriteLine("|**(Pre.AmtBal+AmtPay)-(TotalValue+Others)  = Balance >>> For Credit                                       |");
             streamWriter.WriteLine("|**(Pre.AmtBal+TotalValue+others)-(Amtpaid) = Balance >>> For Debit                                        |");
             streamWriter.WriteLine("|                                                                                                          |");
@@ -262,6 +260,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
             streamWriter.WriteLine("|   " + manageReport.StringFormatWithoutPipe(deliveryOrderList.Remarks, 102, 2) + "|");
+            report.AddMoreContent(streamWriter, deliveryOrderList.Remarks, 102, 3);//Add content next line.
             streamWriter.WriteLine("|==========================================================================================================|");
             streamWriter.WriteLine((char)12);
         }

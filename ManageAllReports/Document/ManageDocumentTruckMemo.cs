@@ -9,7 +9,6 @@ namespace TNCSCAPI.ManageAllReports.Document
         ManageReport report = new ManageReport();
         public void GenerateTruckMemo(DocumentStockTransferDetails truckMemoList)
         {
-            AuditLog.WriteError("GenerateTruckMemoRegister");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             bool isDuplicate = false;
@@ -138,7 +137,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("|LORRY NO: ");
             streamWriter.Write(report.StringFormatWithoutPipe(transferDetails.LorryNo, 23, 2));
             streamWriter.Write("TC NAME   : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(transferDetails.TransactionName, 59, 2) + "|");
+            streamWriter.Write(report.StringFormatWithoutPipe(transferDetails.documentSTTDetails[0].TransporterName, 59, 2) + "|");
             streamWriter.WriteLine(" ");
             streamWriter.Write("|MODE OF WEIGHMENT : ");
             streamWriter.Write(report.StringFormatWithoutPipe(GetWTCode(transferDetails), 85, 2));
@@ -159,7 +158,8 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|GODOWN INCHARGE                                                        SIGNATURE OF THE TC REPRESENTATIVE |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
-            streamWriter.WriteLine("|   " + report.StringFormatWithoutPipe(GetRemarks(transferDetails), 103, 2) + "|");
+            streamWriter.WriteLine("|   " + report.StringFormatWithoutPipe(GetRemarks(transferDetails), 102, 2) + "|");
+            report.AddMoreContent(streamWriter, GetRemarks(transferDetails), 102, 1);//Add content next line.
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine((char)12);
         }

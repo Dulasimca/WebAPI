@@ -12,7 +12,7 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReceiptForQuantityAccountController : ControllerBase
+    public class IssuesForQuantityACAllSchemeSocietyController : ControllerBase
     {
         [HttpPost("{id}")]
         public string Post(QuantityAccountEntity accountEntity)
@@ -23,10 +23,10 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", accountEntity.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", accountEntity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", accountEntity.GCode));
-            ds = manageSQLConnection.GetDataSetValues("GetReceiptForQuantityAC", sqlParameters);
+            ds = manageSQLConnection.GetDataSetValues("GetIssuesForQuantityACAllSchemeSociety", sqlParameters);
             //Generate the report.
-            ManageQAReceipt manageQAReceipt = new ManageQAReceipt();
-            Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity,GlobalVariable.QuantityAccountReceipt));
+            ManageQAIssuesAllScheme manageQAReceipt = new ManageQAIssuesAllScheme();
+            Task.Run(() => manageQAReceipt.GenerateQAIssues(ds, accountEntity, GlobalVariable.QAIssuesForAllSchemeSociety));
             return JsonConvert.SerializeObject(ds.Tables[0]);
 
         }

@@ -17,13 +17,20 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockTruckMemoController : ControllerBase
     {
         [HttpPost("{id}")]
-        public Tuple<bool,string> Post(DocumentStockTransferDetails documentStockTransfer = null)
+        public Tuple<bool,string,string> Post(DocumentStockTransferDetails documentStockTransfer = null)
         {
             if (documentStockTransfer.Type == 2)
             {
                 ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
                 documentTruckMemo.GenerateTruckMemo(documentStockTransfer);
-                return new Tuple<bool, string>(true, "Print Generated Successfully");
+                if(documentStockTransfer.IssueSlip=="N" || string.IsNullOrEmpty(documentStockTransfer.IssueSlip))
+                {
+                    ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@STNo", documentStockTransfer.STNo));
+                    manageSQLConnection.UpdateValues("UpdateStockTransferIssueslip", sqlParameters);
+                }
+                return new Tuple<bool, string,string>(true, "Print Generated Successfully", documentStockTransfer.STNo);
             }
             else
             {
@@ -39,7 +46,7 @@ namespace TNCSCAPI.Controllers.Documents
                 }
                 else
                 {
-                    return new Tuple<bool, string>(false, "Permission not Granted");
+                    return new Tuple<bool, string,string>(false, "Permission not Granted","");
                 }
             }
         }
@@ -63,6 +70,15 @@ namespace TNCSCAPI.Controllers.Documents
                 ds = manageSQLConnection.GetDataSetValues("GetStockTransferDetailsBySTNO", sqlParameters);
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
+
+        [HttpPut("{id}")]
+        public bool Put(PrintEntity entity)
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@STNo", entity.DOCNumber));
+            return manageSQLConnection.UpdateValues("UpdateStockTransferIssueslip", sqlParameters);
         }
 
     }

@@ -39,6 +39,7 @@ namespace TNCSCAPI.Controllers.Reports.Others
                     Todate = commodity.ToDate,
                     UserName = commodity.UserName
                 };
+              
                 Task.Run(() => commodityIssueMemo.GenerateCommodityIssueMemoReport(entity)); //Generate the Report
             }
 

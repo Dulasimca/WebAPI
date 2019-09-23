@@ -20,7 +20,7 @@ namespace TNCSCAPI.ManageSQL
         /// </summary>
         /// <param name="deliveryOrderEntity">Delivery order details entity</param>
         /// <returns></returns>
-        public Tuple<bool, string> InsertTruckMemoEntry(DocumentStockTransferDetails documentStockTransferDetails)
+        public Tuple<bool, string,string> InsertTruckMemoEntry(DocumentStockTransferDetails documentStockTransferDetails)
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, STNo = string.Empty;
@@ -160,14 +160,14 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
                     objTrans.Commit();
-                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage + STNo);
+                    return new Tuple<bool, string,string>(true, GlobalVariable.SavedMessage + STNo, STNo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
+                    return new Tuple<bool, string,string>(false, GlobalVariable.ErrorMessage, "");
                 }
                 finally
                 {

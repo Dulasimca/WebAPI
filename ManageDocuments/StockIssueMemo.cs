@@ -8,7 +8,7 @@ namespace TNCSCAPI.ManageDocuments
 {
     public class StockIssueMemo
     {
-        public Tuple<bool,string> InsertStockIssueData (DocumentStockIssuesEntity stockIssueList)
+        public Tuple<bool,string,string> InsertStockIssueData (DocumentStockIssuesEntity stockIssueList)
         {
            ManageSQLForIssues manageSQLForIssuesConnection = new ManageSQLForIssues();
            var result = manageSQLForIssuesConnection.InsertIssuesEntry(stockIssueList);

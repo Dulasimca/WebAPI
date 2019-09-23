@@ -44,13 +44,15 @@ namespace TNCSCAPI.Controllers.Documents
             {
                 ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
                 ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-                documentReceipt.GenerateReceipt(stockReceipt);
+                  documentReceipt.GenerateReceipt(stockReceipt);
                 //update print
-                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                sqlParameters.Add(new KeyValuePair<string, string>("@SRNo", stockReceipt.SRNo));
-                 manageSQLConnection.UpdateValues("UpdateSRDetailsUnLoading", sqlParameters);
-
-                return new Tuple<bool, string,string>(true, "Print Generated Sucessfully","");
+                if (stockReceipt.UnLoadingSlip == "N" || string.IsNullOrEmpty(stockReceipt.UnLoadingSlip))
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@SRNo", stockReceipt.SRNo));
+                    manageSQLConnection.UpdateValues("UpdateSRDetailsUnLoading", sqlParameters);
+                }
+                return new Tuple<bool,string,string>(true, "Print Generated Sucessfully","");
             }
             else
             {

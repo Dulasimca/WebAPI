@@ -92,6 +92,7 @@ namespace TNCSCAPI.Models.Documents
         public string RegionName { get; set; }
         public string TransactionType { get; set; }
         public string ReceiverName { get; set; }
+        public string IssuerCode { get; set; }
         public string UserID { get; set; }
 
         public int Type { get; set; }

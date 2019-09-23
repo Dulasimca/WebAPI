@@ -67,13 +67,24 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("");
             streamWriter.WriteLine("");
             streamWriter.Write(" Rupees ");
-            string Rupees = ConvertNumbertoWords(Convert.ToInt64(chequeEntity.Total));
+            string Rupees = string.Empty;
+            try
+            {
+                string[] split = chequeEntity.Total.Split('.');
+                Rupees = ConvertNumbertoWords(Convert.ToInt64(split[0].ToString()));
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message+" " + ex.StackTrace);
+          
+            }
+            
             Rupees = Rupees != "ZERO" ? Rupees + " ONLY" : Rupees;
             streamWriter.Write(report.StringFormatWithoutPipe(Rupees, 68, 2));
             streamWriter.WriteLine("");
             streamWriter.WriteLine(" by Cash/DD/Cheque ");
             streamWriter.WriteLine("------------------------------------------------------------------------------");
-            streamWriter.WriteLine("DD/Cheque No.      Date               Bank                      Amount ");
+            streamWriter.WriteLine(" DD/Cheque No.      Date               Bank                      Amount");
             streamWriter.WriteLine("------------------------------------------------------------------------------");
         }
 
@@ -88,6 +99,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             foreach (var item in chequeEntity.DDChequeItems)
             {
                 i = i + 1;
+                streamWriter.Write(" ");
                 streamWriter.Write(report.StringFormat(item.PaymentType + " " + item.ChequeNo + " ", 16, 2));
                 streamWriter.Write(report.StringFormat(report.FormatIndianDate(item.ChequeDate) + " ", 10, 2));
                 streamWriter.Write(report.StringFormat(item.Bank + " ", 30, 2));
@@ -104,6 +116,10 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockReceipt"></param>
         public void AddFooter(StreamWriter streamWriter, DDChequeEntity chequeEntity)
         {
+            streamWriter.WriteLine("------------------------------------------------------------------------------");
+            streamWriter.Write("                                                    Total |");
+            streamWriter.Write(report.StringFormat(chequeEntity.Total, 14, 1));
+            streamWriter.WriteLine(" ");
             streamWriter.WriteLine("------------------------------------------------------------------------------");
             streamWriter.WriteLine(report.StringFormatWithoutPipe(chequeEntity.Details, 55, 2));
             report.AddMoreContent(streamWriter, chequeEntity.Details, 55, 1);//Add content next line.

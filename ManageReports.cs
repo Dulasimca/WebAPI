@@ -356,8 +356,18 @@ namespace TNCSCAPI
             try
             {
                 date = date.Replace("-", "/");
-                DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                return dt.ToString("dd-MMM-yyyy");
+                if (date.Contains("00:00:00"))
+                {
+                    date = date.Replace("00:00:00", "");
+                    date = date.Trim();
+                    DateTime dt = DateTime.ParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    return dt.ToString("dd-MMM-yyyy");
+                }
+                else
+                {
+                    DateTime dt = DateTime.ParseExact(date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    return dt.ToString("dd-MMM-yyyy");
+                }
             }
             catch (Exception ex)
             {
@@ -381,7 +391,7 @@ namespace TNCSCAPI
             }
             catch (Exception ex)
             {
-                AuditLog.WriteError("FormatDate : " + ex.Message + " " + ex.StackTrace);
+                AuditLog.WriteError("FormatDirectDate : " + ex.Message + " " + ex.StackTrace);
                 return " ";
 
             }
@@ -404,7 +414,7 @@ namespace TNCSCAPI
             }
             catch (Exception ex)
             {
-                AuditLog.WriteError("FormatDate : " + ex.Message);
+                AuditLog.WriteError("FormatIndianDate : " + ex.Message);
                 return " ";
             }
 
@@ -425,7 +435,7 @@ namespace TNCSCAPI
             }
             catch (Exception ex)
             {
-                AuditLog.WriteError("FormatDate : " + ex.Message);
+                AuditLog.WriteError("GetTime : " + ex.Message);
                 return " ";
             }
 
@@ -491,6 +501,27 @@ namespace TNCSCAPI
                 AuditLog.WriteError("CheckData : " + ex.Message + " : " + ex.StackTrace);
             }
             return isAvailable;
+        }
+
+
+        /// <summary>
+        /// Change the Date Format dd-MM-yyyy
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>Format dd-MM-yyyy</returns>
+        public string GetDays(string FromDate,string ToDate)
+        {
+            try
+            {
+                TimeSpan different = Convert.ToDateTime(ToDate) - Convert.ToDateTime(FromDate);
+                return different.Days.ToString();
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GetDays : " + ex.Message);
+                return " ";
+            }
+
         }
 
         /// <summary>

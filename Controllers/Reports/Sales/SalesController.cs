@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using TNCSCAPI.ManageSQL;
+using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.Controllers.Reports.Sales
 {
@@ -27,8 +28,19 @@ namespace TNCSCAPI.Controllers.Reports.Sales
             ds = manageSQLConnection.GetDataSetValues("Getissuememo", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-
-    }
+        [HttpGet("{id}")]
+        public string Get(string Fdate, string ToDate, string GCode)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", Fdate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", GCode)); 
+             ds = manageSQLConnection.GetDataSetValues("getIssuememoabstract", sqlParameters);
+            return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
+}
 
     public class IssueMemoEntity
     {
