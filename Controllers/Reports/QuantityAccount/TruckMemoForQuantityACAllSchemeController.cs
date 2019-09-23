@@ -12,7 +12,7 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReceiptForQuantityACAllSchemeController : ControllerBase
+    public class TruckMemoForQuantityACAllSchemeController : ControllerBase
     {
         [HttpPost("{id}")]
         public string Post(QuantityAccountEntity accountEntity)
@@ -23,10 +23,10 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", accountEntity.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", accountEntity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", accountEntity.GCode));
-            ds = manageSQLConnection.GetDataSetValues("GetReceiptForQuantityACAllScheme", sqlParameters);
+            ds = manageSQLConnection.GetDataSetValues("GetTruckMemoForQuantityAC", sqlParameters);
             //Generate the report.
             ManageQAReceipt manageQAReceipt = new ManageQAReceipt();
-            Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity,GlobalVariable.QAReceiptForAllScheme, "- Receipt Abstract -"));
+            Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity, GlobalVariable.QAReceiptForAllScheme, "- Truck Memo Abstract -"));
             return JsonConvert.SerializeObject(ds.Tables[0]);
 
         }

@@ -8,7 +8,7 @@ namespace TNCSCAPI.ManageAllReports.QA
     public class ManageQAReceipt
     {
         ManageReport report = new ManageReport();
-        public void GenerateQAReceipt(DataSet ds, QuantityAccountEntity quantityAccount,string GlobalFileName)
+        public void GenerateQAReceipt(DataSet ds, QuantityAccountEntity quantityAccount,string GlobalFileName,string reportName)
         {
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
@@ -24,7 +24,7 @@ namespace TNCSCAPI.ManageAllReports.QA
                 report.DeleteFileIfExists(filePath);
                 //  isDuplicate = ReceiptId == "0" ? false : true;
                 streamWriter = new StreamWriter(filePath, true);
-                AddDocHeaderForReceipt(streamWriter, quantityAccount);
+                AddDocHeaderForReceipt(streamWriter, quantityAccount, reportName);
                 AddDetails(streamWriter, ds);
                 //AddFooter(streamWriter, chequeEntity);
             }
@@ -47,13 +47,13 @@ namespace TNCSCAPI.ManageAllReports.QA
         /// <param name="streamWriter">Stream writer to write the text file.</param>
         /// <param name="stockReceipt"></param>
         /// <param name="isDuplicate"></param>
-        public void AddDocHeaderForReceipt(StreamWriter streamWriter, QuantityAccountEntity quantityAccount)
+        public void AddDocHeaderForReceipt(StreamWriter streamWriter, QuantityAccountEntity quantityAccount, string reportName)
         {
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("                          TAMILNADU CIVIL SUPPLIES CORPORATION ");
             streamWriter.Write("       ");
             streamWriter.Write(report.StringFormatWithoutPipe(quantityAccount.RName, 30, 1));
-            streamWriter.Write(report.StringFormatWithoutPipe("- Receipt Abstract -", 22, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(reportName, 22, 2));
             streamWriter.Write(report.StringFormatWithoutPipe(quantityAccount.GName, 30, 2));
             streamWriter.WriteLine("");
             streamWriter.Write(" Date From.: "); //"R00002                             DATE: 03/Jan/2011");

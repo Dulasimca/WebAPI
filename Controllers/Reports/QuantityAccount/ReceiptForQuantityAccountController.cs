@@ -26,7 +26,7 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
             ds = manageSQLConnection.GetDataSetValues("GetReceiptForQuantityAC", sqlParameters);
             //Generate the report.
             ManageQAReceipt manageQAReceipt = new ManageQAReceipt();
-            Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity,GlobalVariable.QuantityAccountReceipt));
+            Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity,GlobalVariable.QuantityAccountReceipt, "- Receipt Abstract -"));
             return JsonConvert.SerializeObject(ds.Tables[0]);
 
         }
