@@ -29,13 +29,13 @@ namespace TNCSCAPI.Controllers.Reports.Sales
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
         [HttpGet("{id}")]
-        public string Get(string Fdate, string ToDate, string GCode)
+        public string Get(string Fdate, string Tdate, string GCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", Fdate));
-            sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", Tdate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", GCode)); 
              ds = manageSQLConnection.GetDataSetValues("getIssuememoabstract", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);

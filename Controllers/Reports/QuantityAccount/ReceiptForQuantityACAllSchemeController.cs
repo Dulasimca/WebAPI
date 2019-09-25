@@ -25,9 +25,14 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", accountEntity.GCode));
             ds = manageSQLConnection.GetDataSetValues("GetReceiptForQuantityACAllScheme", sqlParameters);
             //Generate the report.
-            ManageQAReceipt manageQAReceipt = new ManageQAReceipt();
-            Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity,GlobalVariable.QAReceiptForAllScheme, "- Receipt Abstract -"));
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                ManageQAReceipt manageQAReceipt = new ManageQAReceipt();
+                Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity, GlobalVariable.QAReceiptForAllScheme, "- Receipt Abstract -"));
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            return JsonConvert.SerializeObject(string.Empty);
 
         }
     }

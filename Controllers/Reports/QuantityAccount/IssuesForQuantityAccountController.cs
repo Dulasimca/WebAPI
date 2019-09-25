@@ -25,10 +25,15 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", accountEntity.GCode));
             ds = manageSQLConnection.GetDataSetValues("GetIssuesForQuantityAC", sqlParameters);
             //Generate the report.
-            ManageQAIssues manageQAIssues = new ManageQAIssues();
-            Task.Run(()=>manageQAIssues.GenerateQAIssues(ds, accountEntity));
-            return JsonConvert.SerializeObject(ds.Tables[0]);
-          
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                ManageQAIssues manageQAIssues = new ManageQAIssues();
+                Task.Run(() => manageQAIssues.GenerateQAIssues(ds, accountEntity));
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            return JsonConvert.SerializeObject(string.Empty);
+
         }
     }
 

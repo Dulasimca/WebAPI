@@ -18,7 +18,7 @@ namespace TNCSCAPI.Models
         {
             try
             {
-                return list.Where(x => x.parentId == parent).Select(x => new Menu
+                return list.Where(x => x.parentId == parent).OrderBy(a => a.ID).Select(x => new Menu
                 {
                     ID = x.ID,
                     label = x.label,
