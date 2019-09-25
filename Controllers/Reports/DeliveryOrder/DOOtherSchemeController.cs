@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
 {
@@ -11,5 +13,18 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
     [ApiController]
     public class DOOtherSchemeController : ControllerBase
     {
+        [HttpPost("{id}")]
+        public string Post(DeliveryOrderSchemeWiseEntity SchemeWise)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", SchemeWise.FromDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", SchemeWise.ToDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", SchemeWise.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Schcode", SchemeWise.SchCode));
+            ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrdersOtherScheme", sqlParameters);
+            return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
     }
 }

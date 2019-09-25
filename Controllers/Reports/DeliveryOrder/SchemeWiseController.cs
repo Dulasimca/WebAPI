@@ -23,7 +23,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", SchemeWise.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", SchemeWise.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", SchemeWise.GCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", SchemeWise.SCode));
+         //   sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", SchemeWise.SCode));
             ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrdersAllScheme", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
@@ -33,7 +33,8 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
-        public string SCode { get; set; }
+        public string GName { get; set; }
+        public string RName { get; set; }
         public string SchCode { get; set; }
         public string UserID { get; set; }
     }
