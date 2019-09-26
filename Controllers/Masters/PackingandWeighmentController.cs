@@ -26,7 +26,7 @@ namespace TNCSCAPI.Controllers.Masters
                 {
                     return JsonConvert.SerializeObject(ds);
                 }
-                return string.Empty;
+                return JsonConvert.SerializeObject(string.Empty);
             }
             finally
             {

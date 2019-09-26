@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using Newtonsoft.Json;
-using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SchemeWiseController
+    public class DOAnnapornaController : ControllerBase
     {
         [HttpPost("{id}")]
         public string Post(DeliveryOrderSchemeWiseEntity SchemeWise)
@@ -23,19 +22,8 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", SchemeWise.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", SchemeWise.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", SchemeWise.GCode));
-         //   sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", SchemeWise.SCode));
-            ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrdersAllScheme", sqlParameters);
+            ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrderschemeAnnapoorna", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-    }
-    public class DeliveryOrderSchemeWiseEntity
-    {
-        public string FromDate { get; set; }
-        public string ToDate { get; set; }
-        public string GCode { get; set; }
-        public string GName { get; set; }
-        public string RName { get; set; }
-        public string SchCode { get; set; }
-        public string UserID { get; set; }
     }
 }

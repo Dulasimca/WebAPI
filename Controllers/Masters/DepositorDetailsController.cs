@@ -29,7 +29,7 @@ namespace TNCSCAPI.Controllers.Masters
             {
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
-            return string.Empty;
+            return JsonConvert.SerializeObject(string.Empty);
         }
     }
 }

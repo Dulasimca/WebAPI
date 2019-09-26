@@ -28,6 +28,7 @@
         public const string QAIssuesForAllSchemeCRS = "ISQACRS";
         public const string QAIssuesForAllSchemeSociety = "ISQASOCIETY";
         public const string QAReceiptForAllScheme = "REQASCHEME";
+        public const string QATruckMemoForAllScheme = "TMQASCHEME";
 
         public const string HullingDetailsReportFileName = "";
         public const string SchemeReceiptReportFileName = "";
