@@ -58,6 +58,17 @@ namespace TNCSCAPI.Controllers.Reports.Stack
             }
             return string.Empty;
         }
+
+        [HttpDelete("{id}")]
+        public bool Delete(string RowId, string GCode)
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RowId", RowId));
+            return manageSQLConnection.UpdateValues("DeleteStackDetails", sqlParameters);
+            //Calculate the 
+        }
     }
     public class StackEntity
     {
