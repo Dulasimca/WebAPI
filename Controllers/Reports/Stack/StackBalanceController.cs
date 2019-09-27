@@ -56,6 +56,19 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 var result= manageStackCard.ManageStackBalance(ds, stackEntity);
                 return JsonConvert.SerializeObject(result);
             }
+            else if (stackEntity.Type == 5)
+            {
+                ManageStackCard manageStackCard = new ManageStackCard();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stackEntity.GCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", stackEntity.ICode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stackEntity.StackDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", stackEntity.StackStatus));
+                ds = manageSQLConnection.GetDataSetValues("GetStackCardDetailsbyCommodity", sqlParameters);
+                //Calculate the 
+                var result = manageStackCard.ManageStackBalance(ds, stackEntity);
+                return JsonConvert.SerializeObject(result);
+            }
             return string.Empty;
         }
 
@@ -76,6 +89,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
         public string ICode { get; set; }
         public string StackDate { get; set; }
         public string TStockNo { get; set; }
+        public string StackStatus { get; set; }
         public int Type { get; set; }
 
         public string GName { get; set; }
