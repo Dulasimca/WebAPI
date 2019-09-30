@@ -2,6 +2,7 @@
 using System.IO;
 using TNCSCAPI.Models.Documents;
 
+
 namespace TNCSCAPI.ManageAllReports.Document
 {
     public class ManageDDCheque
@@ -70,17 +71,19 @@ namespace TNCSCAPI.ManageAllReports.Document
             string Rupees = string.Empty;
             try
             {
-                string[] split = chequeEntity.Total.Split('.');
-                Rupees = ConvertNumbertoWords(Convert.ToInt64(split[0].ToString()));
+                NumberToWordConvertion numberToWord = new NumberToWordConvertion();
+                //string[] split = chequeEntity.Total.Split('.');
+                Rupees = numberToWord.GetNumberToWord(chequeEntity.Total);
+                // ConvertNumbertoWords(Convert.ToInt64(split[0].ToString()));
             }
             catch (Exception ex)
             {
                 AuditLog.WriteError(ex.Message+" " + ex.StackTrace);
           
             }
-            
-            Rupees = Rupees != "ZERO" ? Rupees + " ONLY" : Rupees;
             streamWriter.Write(report.StringFormatWithoutPipe(Rupees, 68, 2));
+            streamWriter.WriteLine("");
+            report.AddMoreContent(streamWriter, Rupees, 68, 1);//Add content next line.
             streamWriter.WriteLine("");
             streamWriter.WriteLine(" by Cash/DD/Cheque ");
             streamWriter.WriteLine("------------------------------------------------------------------------------");
@@ -135,51 +138,51 @@ namespace TNCSCAPI.ManageAllReports.Document
 
         }
 
-        public string ConvertNumbertoWords(long number)
-        {
-            if (number == 0) return "ZERO";
-            if (number < 0) return "minus " + ConvertNumbertoWords(Math.Abs(number));
-            string words = string.Empty;
-            if ((number / 1000000) > 0)
-            {
-                words += ConvertNumbertoWords(number / 100000) + " LAKHS ";
-                number %= 1000000;
-            }
-            if ((number / 1000) > 0)
-            {
-                words += ConvertNumbertoWords(number / 1000) + " THOUSAND ";
-                number %= 1000;
-            }
-            if ((number / 100) > 0)
-            {
-                words += ConvertNumbertoWords(number / 100) + " HUNDRED ";
-                number %= 100;
-            }
-            //if ((number / 10) > 0)  
-            //{  
-            // words += ConvertNumbertoWords(number / 10) + " RUPEES ";  
-            // number %= 10;  
-            //}  
-            if (number > 0)
-            {
-                if (words != "") words += "AND ";
-                var unitsMap = new[]
-                {
-            "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "ELEVEN", "TWELVE", "THIRTEEN", "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN", "EIGHTEEN", "NINETEEN"
-        };
-                var tensMap = new[]
-                {
-            "ZERO", "TEN", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY"
-        };
-                if (number < 20) words += unitsMap[number];
-                else
-                {
-                    words += tensMap[number / 10];
-                    if ((number % 10) > 0) words += " " + unitsMap[number % 10];
-                }
-            }
-            return words;
-        }
+        //public string ConvertNumbertoWords(long number)
+        //{
+        //    if (number == 0) return "ZERO";
+        //    if (number < 0) return "minus " + ConvertNumbertoWords(Math.Abs(number));
+        //    string words = string.Empty;
+        //    if ((number / 100000) > 0)
+        //    {
+        //        words += ConvertNumbertoWords(number / 100000) + " LAKHS ";
+        //        number %= 100000;
+        //    }
+        //    if ((number / 1000) > 0)
+        //    {
+        //        words += ConvertNumbertoWords(number / 1000) + " THOUSAND ";
+        //        number %= 1000;
+        //    }
+        //    if ((number / 100) > 0)
+        //    {
+        //        words += ConvertNumbertoWords(number / 100) + " HUNDRED ";
+        //        number %= 100;
+        //    }
+        //    //if ((number / 10) > 0)  
+        //    //{  
+        //    // words += ConvertNumbertoWords(number / 10) + " RUPEES ";  
+        //    // number %= 10;  
+        //    //}  
+        //    if (number > 0)
+        //    {
+        //        if (words != "") words += "AND ";
+        //        var unitsMap = new[]
+        //        {
+        //    "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN", "ELEVEN", "TWELVE", "THIRTEEN", "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN", "EIGHTEEN", "NINETEEN"
+        //};
+        //        var tensMap = new[]
+        //        {
+        //    "ZERO", "TEN", "TWENTY", "THIRTY", "FORTY", "FIFTY", "SIXTY", "SEVENTY", "EIGHTY", "NINETY"
+        //};
+        //        if (number < 20) words += unitsMap[number];
+        //        else
+        //        {
+        //            words += tensMap[number / 10];
+        //            if ((number % 10) > 0) words += " " + unitsMap[number % 10];
+        //        }
+        //    }
+        //    return words;
+        //}
 
     }
 }
