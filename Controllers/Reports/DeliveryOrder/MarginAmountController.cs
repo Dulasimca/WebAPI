@@ -22,7 +22,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", marginAmount.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", marginAmount.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", marginAmount.GCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", marginAmount.SCode));
+           // sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", marginAmount.SCode));
              ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrderMarginAmount", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
@@ -33,6 +33,6 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
-        public string SCode { get; set; }
+       // public string SCode { get; set; }
     }
 }
