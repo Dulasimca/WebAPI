@@ -50,8 +50,8 @@ namespace TNCSCAPI.Controllers.Reports.Register
                         UserName = issuerParameter.UserName
 
                     };
-                   stockIssues.GenerateStockIssuesRegister(entity);
-                   // Task.Run(() => stockIssues.GenerateStockIssuesRegister(entity)); //Generate the Report
+                  // stockIssues.GenerateStockIssuesRegister(entity);
+                     Task.Run(() => stockIssues.GenerateStockIssuesRegister(entity)); //Generate the Report
                 }
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);

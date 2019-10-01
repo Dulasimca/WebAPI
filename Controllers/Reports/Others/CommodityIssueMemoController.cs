@@ -25,10 +25,13 @@ namespace TNCSCAPI.Controllers.Reports.Others
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", commodity.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@ITCode", commodity.TRCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", commodity.RCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@IssuedToGodown", Convert.ToString(commodity.IssueToGodown)));
+            sqlParameters.Add(new KeyValuePair<string, string>("@IssuedToDepositor", Convert.ToString(commodity.IssueToDepositor)));
             ds = manageSQLConnection.GetDataSetValues("GetCommodityIssueMemo", sqlParameters);
 
             CommodityIssueMemo commodityIssueMemo = new CommodityIssueMemo();
             ManageReport manageReport = new ManageReport();
+            //filter condotions
             if (manageReport.CheckDataAvailable(ds))
             {
                 CommonEntity entity = new CommonEntity
@@ -39,8 +42,8 @@ namespace TNCSCAPI.Controllers.Reports.Others
                     Todate = commodity.ToDate,
                     UserName = commodity.UserName
                 };
-              
-                Task.Run(() => commodityIssueMemo.GenerateCommodityIssueMemoReport(entity)); //Generate the Report
+               // commodityIssueMemo.GenerateCommodityIssueMemoReport(entity);
+               Task.Run(() => commodityIssueMemo.GenerateCommodityIssueMemoReport(entity)); //Generate the Report
             }
 
             return JsonConvert.SerializeObject(ds.Tables[0]);

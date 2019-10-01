@@ -21,7 +21,7 @@ namespace TNCSCAPI.ManageAllReports
         /// <param name="entity"></param>
         public void GenerateCommodityReceiptReport(CommonEntity entity)
         {
-            AuditLog.WriteError("GenerateCommodityReceiptReport");
+            
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             try
@@ -83,19 +83,21 @@ namespace TNCSCAPI.ManageAllReports
         public void DateWiseCommodityReceiptReport(StreamWriter sw, CommonEntity entity)
         {
             int count = 10;
-            var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Date");
+            var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Commodity");
             int i = 1;
             string ackNo = string.Empty;
             string fromWhomRcd = string.Empty;
-            bool CheckRepeatValue = false;
             bool isDataAvailable = false;
+            decimal Qty = 0;
+            int Bags = 0;
+            count = 11;
             foreach (DataRow date in dateList.Rows)
             {
                 isDataAvailable = true;
-                count = 11;
+               
                 string ackNoNext = string.Empty;
                 AddHeader(sw, entity);
-                DataRow[] data = entity.dataSet.Tables[0].Select("Date='" + date["Date"] + "'");
+                DataRow[] data = entity.dataSet.Tables[0].Select("Commodity='" + date["Commodity"] + "'");
                 foreach (DataRow row in data)
                 {
                     if (count >= 50)
@@ -108,32 +110,37 @@ namespace TNCSCAPI.ManageAllReports
                     }
                     ackNoNext = row["Ackno"].ToString();
                     fromWhomRcd = Convert.ToString(row["RecdFrom"]).Trim();
-                    if (ackNo == ackNoNext)
-                    {
-                        CheckRepeatValue = true;
-                    }
-                    else
-                    {
-                        CheckRepeatValue = false;
-                        ackNo = ackNoNext;
-                    }
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? i.ToString() : " ", 4, 2));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? ackNoNext : " ", 11, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Date"].ToString() : " ", 10, 1));
+                   
+                    sw.Write(report.StringFormat( i.ToString(), 4, 2));
+                    sw.Write(report.StringFormat(ackNoNext , 11, 1));
+                    sw.Write(report.StringFormat( row["Date"].ToString() , 10, 1));
                     sw.Write(report.StringFormat(row["Commodity"].ToString(), 16, 2));
                     sw.Write(report.StringFormat(row["Bags_No"].ToString(), 8, 1));
                     sw.Write(report.StringFormat(row["Quantity"].ToString(), 17, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? fromWhomRcd : " ", 21, 2));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Lorryno"].ToString() : " ", 11, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["TruckMemoNo"].ToString() : " ", 15, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Truckmemodate"].ToString() : " ", 11, 1));
+                    sw.Write(report.StringFormat( fromWhomRcd , 21, 2));
+                    sw.Write(report.StringFormat( row["Lorryno"].ToString(), 11, 1));
+                    sw.Write(report.StringFormat( row["TruckMemoNo"].ToString() , 15, 1));
+                    sw.Write(report.StringFormat( row["Truckmemodate"].ToString(), 11, 1));
                     sw.Write(report.StringFormat(row["Orderno"].ToString(), 11, 2));
                     sw.Write(report.StringFormat("", 8, 1));
                     sw.Write(report.StringFormat("", 7, 1));
                     sw.WriteLine("");
-                    i = CheckRepeatValue == false ? i + 1 : i;
+                    Bags += !string.IsNullOrEmpty(Convert.ToString(row["Bags_No"])) ? Convert.ToInt32(row["Bags_No"].ToString()) : 0;
+                    Qty += !string.IsNullOrEmpty(Convert.ToString(row["Bags_No"])) ? Convert.ToDecimal(row["Bags_No"].ToString()) : 0;
+                    i =i + 1;
+                    count++;
                 }
+                sw.WriteLine(" ");
+                sw.Write(report.StringFormat("", 4, 2));
+                sw.Write(report.StringFormat("  Total ", 11, 1));
+                sw.Write(report.StringFormatWithoutPipe(" ", 10, 1));
+                sw.Write(report.StringFormatWithoutPipe(" ", 16, 2));
+                sw.Write(report.StringFormatWithoutPipe(Bags.ToString(), 8, 1));
+                sw.Write(report.StringFormatWithoutPipe(Qty.ToString(), 17, 1));
+                sw.WriteLine(" ");
                 sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                //Total 
+
                 sw.WriteLine((char)12);
             }
             if (!isDataAvailable)

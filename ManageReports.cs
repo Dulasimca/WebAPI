@@ -386,8 +386,12 @@ namespace TNCSCAPI
         public string FormatDirectDate(string date)
         {
             try
-            {                
-                return Convert.ToDateTime(date).ToString("dd/MM/yyyy");
+            {  
+                if(!string.IsNullOrEmpty(date))
+                {
+                    return Convert.ToDateTime(date).ToString("dd/MM/yyyy");
+                }
+                return " ";
             }
             catch (Exception ex)
             {

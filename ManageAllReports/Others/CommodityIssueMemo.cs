@@ -19,7 +19,6 @@ namespace TNCSCAPI.ManageAllReports
         /// <param name="entity"></param>
         public void GenerateCommodityIssueMemoReport(CommonEntity entity)
         {
-            AuditLog.WriteError("GenerateCommodityIssueMemoReport");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             try
@@ -80,21 +79,14 @@ namespace TNCSCAPI.ManageAllReports
         /// <param name="entity"></param>
         public void DateWiseCommodityIssueMemoReport(StreamWriter sw, CommonEntity entity)
         {
-            int count = 10;
-            var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Issue_Date");
-            int i = 1;
-            string SINo = string.Empty;
-            string issuedTo = string.Empty;
-            bool CheckRepeatValue = false;
-            bool isDataAvailable = false;
-            foreach (DataRow date in dateList.Rows)
+            try
             {
-                isDataAvailable = true;
-                count = 11;
-                string SINoNext = string.Empty;
+                int count = 10;
+                // var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Issue_Date");
+                int i = 1;
+                string issuedTo = string.Empty;
                 AddHeader(sw, entity);
-                DataRow[] data = entity.dataSet.Tables[0].Select("Date='" + date["Issue_Date"] + "'");
-                foreach (DataRow row in data)
+                foreach (DataRow row in entity.dataSet.Tables[0].Rows)
                 {
                     if (count >= 50)
                     {
@@ -104,38 +96,27 @@ namespace TNCSCAPI.ManageAllReports
                         sw.WriteLine((char)12);
                         AddHeader(sw, entity);
                     }
-                    SINoNext = row["Issue_Memono"].ToString();
-                    issuedTo = Convert.ToString(row["RecdFrom"]).Trim();
-                    if (SINo == SINoNext)
-                    {
-                        CheckRepeatValue = true;
-                    }
-                    else
-                    {
-                        CheckRepeatValue = false;
-                        SINo = SINoNext;
-                    }
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? i.ToString() : " ", 4, 2));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? SINoNext : " ", 16, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Issue_Date"].ToString() : " ", 12, 1));
+                    issuedTo = Convert.ToString(row["Issuedto"]).Trim();
+                    sw.Write(report.StringFormat(i.ToString(), 4, 2));
+                    sw.Write(report.StringFormat(row["Issue_Memono"].ToString(), 16, 1));
+                    sw.Write(report.StringFormat(row["Issue_Date"].ToString(), 12, 1));
                     sw.Write(report.StringFormat(row["Commodity"].ToString(), 17, 2));
                     sw.Write(report.StringFormat(row["Quantity"].ToString(), 18, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? issuedTo : " ", 24, 2));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Lorryno"].ToString() : " ", 11, 1));
+                    sw.Write(report.StringFormat(issuedTo, 24, 2));
+                    sw.Write(report.StringFormat(row["Lorryno"].ToString(), 11, 1));
                     sw.WriteLine("");
-                    i = CheckRepeatValue == false ? i + 1 : i;
+                    sw.WriteLine(" ");
+                    i = i + 1;
+                    count = count + 2;
                 }
                 sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.WriteLine((char)12);
             }
-            if (!isDataAvailable)
+            catch (Exception ex )
             {
-                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
-                sw.WriteLine((char)12);
+                AuditLog.WriteError(ex.Message);
             }
-
         }
-
     }
 }
 public class CommodityIssueMemoEntity

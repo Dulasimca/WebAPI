@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using TNCSCAPI.Controllers.Reports.Stack;
 
@@ -193,6 +194,128 @@ namespace TNCSCAPI.ManageAllReports.Stack
             }
         }
 
+        public List<StackCardRegisterEntity> ManageStackCardRegister(DataSet dataSet, StackEntity stackEntity)
+        {
+            try
+            {
+                ManageReport report = new ManageReport();
+                List<StackCardRegisterEntity> stackCardEntities = new List<StackCardRegisterEntity>();
+                DataTable dtIssues = new DataTable();
+                DataTable dtReceipt = new DataTable();
+                DataTable dtObStack = new DataTable();
+                DataTable dtWriteOFF = new DataTable();
+                //DateTime fDate = default(DateTime);
+                //DateTime SDate = default(DateTime);
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                if (dataSet.Tables.Count > 1)
+                {
+                    dtIssues = dataSet.Tables[0];
+                    dtReceipt = dataSet.Tables[1];
+                    dtObStack = dataSet.Tables[2];
+                    dtWriteOFF = dataSet.Tables[3];
+                    string sStackCard = string.Empty;
+                    foreach (DataRow item in dtObStack.Rows)
+                    {
+                        StackCardRegisterEntity stackCardRegister = new StackCardRegisterEntity();
+                        sStackCard = Convert.ToString(item["StockNo"]);
+
+                        //Filter particular stack card only
+                        DataRow[] dataRowsIssues = dtIssues.Select("StockNo = '" + sStackCard+"'");
+                        DataRow[] dataRowsReceipt = dtReceipt.Select("StockNo = '" + sStackCard + "'");
+                        DataRow[] dataRowsWriteOff = dtWriteOFF.Select("StockNo = '" + sStackCard + "'");
+
+                        List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                        sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stackEntity.GCode));
+                        sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", sStackCard));
+                        sqlParameters.Add(new KeyValuePair<string, string>("@ShortYear", stackEntity.StackDate));
+                        DataSet dsGUGR = manageSQLConnection.GetDataSetValues("GetGUGRbyStackNo", sqlParameters);
+
+                        stackCardRegister.StackCard = sStackCard;
+                        stackCardRegister.OpeningBag= Convert.ToString(item["NoPacking"]);
+                        stackCardRegister.OpeningQty = Convert.ToString(item["TOTAL"]);
+
+                        if(dsGUGR.Tables.Count>1)
+                        {
+                            if(dsGUGR.Tables[0].Rows.Count>0) //GU
+                            {
+                                stackCardRegister.GU = Convert.ToString(dsGUGR.Tables[0].Rows[0]["NoPacking"]);
+                            }
+                            else
+                            {
+                                stackCardRegister.GU = "0";
+                            }
+                            if (dsGUGR.Tables[1].Rows.Count > 0) //GR
+                            {
+                                stackCardRegister.GR = Convert.ToString(dsGUGR.Tables[1].Rows[0]["NoPacking"]);
+                            }
+                            else
+                            {
+                                stackCardRegister.GR = "0";
+                            }
+                            if (dsGUGR.Tables[2].Rows.Count > 0) //StackDate and Status
+                            {
+                                stackCardRegister.FromDate = report.FormatDirectDate(Convert.ToString(dsGUGR.Tables[2].Rows[0]["ObStackDate"]));
+                                stackCardRegister.ToDate = report.FormatDirectDate(Convert.ToString(dsGUGR.Tables[2].Rows[0]["ClsStackDate"]));
+                                stackCardRegister.StackStatus = Convert.ToString(dsGUGR.Tables[2].Rows[0]["Status"]);
+                            }
+                        }
+
+                        if (dataRowsReceipt != null && dataRowsReceipt.Count() > 0)
+                        {
+                            stackCardRegister.ReceiptBag = Convert.ToString(dataRowsReceipt[0]["NoPacking"]);
+                            stackCardRegister.ReceiptQty = Convert.ToString(dataRowsReceipt[0]["TOTAL"]);
+                        }
+                        else
+                        {
+                            stackCardRegister.ReceiptBag = "0";
+                            stackCardRegister.ReceiptQty = "0";
+                        }
+
+                        if (dataRowsIssues != null && dataRowsIssues.Count() > 0)
+                        {
+                            stackCardRegister.IssuesBag = Convert.ToString(dataRowsIssues[0]["NoPacking"]);
+                            stackCardRegister.IssuesQty = Convert.ToString(dataRowsIssues[0]["TOTAL"]);
+                        }
+                        else
+                        {
+                            stackCardRegister.IssuesBag = "0";
+                            stackCardRegister.IssuesQty = "0";
+                        }
+
+                        if (dataRowsWriteOff != null && dataRowsWriteOff.Count() > 0)
+                        {
+                            stackCardRegister.WriteOff = Convert.ToString(dataRowsWriteOff[0]["TOTAL"]);
+                        }
+                        else
+                        {
+                            stackCardRegister.WriteOff = "0";
+                        }
+
+                        //Balance 
+                        int totalReceiptBag = Convert.ToInt32(stackCardRegister.OpeningBag) + Convert.ToInt32(stackCardRegister.ReceiptBag) + Convert.ToInt32(stackCardRegister.GU);
+                        int totalIssuesBag =   Convert.ToInt32(stackCardRegister.IssuesBag) + Convert.ToInt32(stackCardRegister.GR);
+
+                        decimal totalReceiptQty = Convert.ToDecimal(stackCardRegister.OpeningQty) + Convert.ToDecimal(stackCardRegister.ReceiptQty);
+                        decimal totalIssuesQty = Convert.ToDecimal(stackCardRegister.IssuesQty);
+                        
+                        stackCardRegister.BalanceBag = Convert.ToString(totalReceiptBag- totalIssuesBag);
+                        stackCardRegister.BalanceQty = Convert.ToString(totalReceiptQty - totalIssuesQty);
+                        stackCardEntities.Add(stackCardRegister);
+                    }
+
+                }
+                AuditLog.WriteError("Print start");
+                StackCardRegisterPrint stackCardRegisterPrint = new StackCardRegisterPrint();
+                stackCardRegisterPrint.GenerateStackCardRegister(stackCardEntities, stackEntity);
+                AuditLog.WriteError("Print End");
+                return stackCardEntities;
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("ManageStackBalance : " + ex.Message +" "+ ex.StackTrace);
+                return null;
+            }
+        }
 
     }
 
@@ -217,5 +340,23 @@ namespace TNCSCAPI.ManageAllReports.Stack
         public string IssuesBags { get; set; }
         public string IssuesQuantity { get; set; }
         public string ClosingBalance { get; set; }
+    }
+    public class StackCardRegisterEntity
+    {
+        public string StackCard { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
+        public string OpeningBag { get; set; }
+        public string OpeningQty { get; set; }
+        public string ReceiptBag { get; set; }
+        public string GU { get; set; }
+        public string ReceiptQty { get; set; }
+        public string IssuesBag { get; set; }
+        public string GR { get; set; }
+        public string IssuesQty { get; set; }
+        public string BalanceBag { get; set; }
+        public string BalanceQty { get; set; }
+        public string StackStatus { get; set; }
+        public string WriteOff { get; set; }
     }
 }

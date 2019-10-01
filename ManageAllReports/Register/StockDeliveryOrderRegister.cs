@@ -260,11 +260,10 @@ namespace TNCSCAPI.ManageAllReports
             int iCount = 11;
             // Gets the group by values based on ths column Commodity,Scheme
             var myResultItemandScheme = from a in dORegEntities
-                                        group a by new { a.Commodity, a.Scheme } into gValue
+                                        group a by new { a.Commodity, a.Scheme,a.Rate_Rs } into gValue
                                         select new
                                         {
                                             Netwt_Kgs = gValue.Sum(s => s.Netwt_Kgs),
-                                            Rate_Rs = gValue.Sum(s => s.Rate_Rs),
                                             Itemamount = gValue.Sum(s => s.Itemamount),
                                             GroupByNames = gValue.Key
                                         };
@@ -283,7 +282,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 20, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Scheme, 17, 2));
                 sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 17, 1));
-                sw.Write(report.StringFormat(report.Decimalformat(item.Rate_Rs.ToString()), 17, 1));
+                sw.Write(report.StringFormat(report.Decimalformat(item.GroupByNames.Rate_Rs.ToString()), 17, 1));
                 sw.Write(report.StringFormat(report.Decimalformat(item.Itemamount.ToString()), 20, 1));
                 iCount++;
                 sw.WriteLine("");
@@ -305,11 +304,10 @@ namespace TNCSCAPI.ManageAllReports
                 int iCount = 11;
                 // Gets the group by values based on ths column Commodity,Scheme
                 var myResultItem = from a in dORegEntities
-                                   group a by new { a.Commodity } into gValue
+                                   group a by new { a.Commodity,a.Rate_Rs } into gValue
                                    select new
                                    {
                                        Netwt_Kgs = gValue.Sum(s => s.Netwt_Kgs),
-                                       Rate_Rs = gValue.Sum(s => s.Rate_Rs),
                                        Itemamount = gValue.Sum(s => s.Itemamount),
                                        GroupByNames = gValue.Key
                                    };
@@ -328,7 +326,7 @@ namespace TNCSCAPI.ManageAllReports
                     }
                     sw.Write(report.StringFormat(item.GroupByNames.Commodity, 20, 2));
                     sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 17, 1));
-                    sw.Write(report.StringFormat(report.Decimalformat(item.Rate_Rs.ToString()), 17, 1));
+                    sw.Write(report.StringFormat(report.Decimalformat(item.GroupByNames.Rate_Rs.ToString()), 17, 1));
                     sw.Write(report.StringFormat(report.Decimalformat(item.Itemamount.ToString()), 20, 1));
                     dAmount = dAmount + item.Itemamount;
                     iCount++;

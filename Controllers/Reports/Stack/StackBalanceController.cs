@@ -22,6 +22,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", stackEntity.ICode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stackEntity.StackDate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", stackEntity.TStockNo));
+                sqlParameters.Add(new KeyValuePair<string, string>("@DocNo", stackEntity.DocNo));
                 ds = manageSQLConnection.GetDataSetValues("GetStackBalance", sqlParameters);
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
@@ -62,11 +63,11 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stackEntity.GCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", stackEntity.ICode));
-                sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stackEntity.StackDate));
-                sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", stackEntity.StackStatus));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ShortYear", stackEntity.StackDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Status", stackEntity.StackStatus));
                 ds = manageSQLConnection.GetDataSetValues("GetStackCardDetailsbyCommodity", sqlParameters);
                 //Calculate the 
-                var result = manageStackCard.ManageStackBalance(ds, stackEntity);
+                var result = manageStackCard.ManageStackCardRegister(ds, stackEntity);
                 return JsonConvert.SerializeObject(result);
             }
             return string.Empty;
@@ -96,6 +97,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
         public string RName { get; set; }
         public string ITName { get; set; }
         public string UserName { get; set; }
+        public string DocNo { get; set; }
 
     }
 }

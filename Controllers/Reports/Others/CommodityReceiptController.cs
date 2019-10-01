@@ -52,5 +52,7 @@ namespace TNCSCAPI.Controllers.Reports
         public string TRCode { get; set; }
         public string ITCode { get; set; }
         public string UserName { get; set; }
+        public int IssueToGodown { get; set; }
+        public int IssueToDepositor { get; set; }
     }
 }

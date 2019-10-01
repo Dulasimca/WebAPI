@@ -68,7 +68,7 @@ namespace TNCSCAPI.ManageAllReports
         {
             int count = 10;
             var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Issue_Date");
-            int i = 0;
+            int i = 1;
             string issueMemo = string.Empty;
             string fromWhomRcd = string.Empty;
             bool CheckRepeatValue = false;

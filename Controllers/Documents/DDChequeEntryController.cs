@@ -48,6 +48,7 @@ namespace TNCSCAPI.Controllers.Documents
             {
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@vrno", value));
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
                 ds = manageSQLConnection.GetDataSetValues("GetDDChequeDetails", sqlParameters);
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
