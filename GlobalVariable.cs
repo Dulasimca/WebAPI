@@ -3,8 +3,13 @@
     public class GlobalVariable
     {
         //Testing connection
+
         public const string ConnectionString = "data source=180.179.49.72;initial catalog=TNCSCSCM;user id = sqladmin; password =sql@svc&ac!72;";
         public const string ReportPath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//";
+
+        //public const string ConnectionString = "data source=localhost;initial catalog=TNCSCSCM;user id = sqladmin; password =sql@svc&ac!72;";
+        //public const string ReportPath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//";
+
 
         //Live connection
         //public const string ConnectionString = "data source=localhost;initial catalog=TNCSCSCM;user id = sqladmin; password =sql@svc&ac!34;";

@@ -86,15 +86,15 @@ namespace TNCSCAPI.ManageAllReports
             int count = 10;
             var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Date");
             int i = 1;
-            string ackNo = string.Empty;
-            string fromWhomRcd = string.Empty;
+            string SINO = string.Empty;
+            string issuedTo = string.Empty;
             bool CheckRepeatValue = false;
             bool isDataAvailable = false;
             foreach (DataRow date in dateList.Rows)
             {
                 isDataAvailable = true;
                 count = 11;
-                string ackNoNext = string.Empty;
+                string SINONext = string.Empty;
                 AddHeader(sw, entity);
                 DataRow[] data = entity.dataSet.Tables[0].Select("Date='" + date["Date"] + "'");
                 foreach (DataRow row in data)
@@ -107,30 +107,23 @@ namespace TNCSCAPI.ManageAllReports
                         sw.WriteLine((char)12);
                         AddHeader(sw, entity);
                     }
-                    ackNoNext = row["Ackno"].ToString();
-                    fromWhomRcd = Convert.ToString(row["RecdFrom"]).Trim();
-                    if (ackNo == ackNoNext)
+                    SINONext = row["Issue_Memono"].ToString();
+                    issuedTo = Convert.ToString(row["RecdFrom"]).Trim();
+                    if (SINO == SINONext)
                     {
                         CheckRepeatValue = true;
                     }
                     else
                     {
                         CheckRepeatValue = false;
-                        ackNo = ackNoNext;
+                        SINO = SINONext;
                     }
                     sw.Write(report.StringFormat(CheckRepeatValue == false ? i.ToString() : " ", 4, 2));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? ackNoNext : " ", 11, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Date"].ToString() : " ", 10, 1));
+                    sw.Write(report.StringFormat(CheckRepeatValue == false ? SINONext : " ", 14, 1));
+                    sw.Write(report.StringFormat(row["Issue_Date"].ToString(), 10, 1));
                     sw.Write(report.StringFormat(row["Commodity"].ToString(), 16, 2));
-                    sw.Write(report.StringFormat(row["Bags_No"].ToString(), 8, 1));
-                    sw.Write(report.StringFormat(row["Quantity"].ToString(), 17, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? fromWhomRcd : " ", 21, 2));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Lorryno"].ToString() : " ", 11, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["TruckMemoNo"].ToString() : " ", 15, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Truckmemodate"].ToString() : " ", 11, 1));
-                    sw.Write(report.StringFormat(row["Orderno"].ToString(), 11, 2));
-                    sw.Write(report.StringFormat("", 8, 1));
-                    sw.Write(report.StringFormat("", 7, 1));
+                    sw.Write(report.StringFormat(row["Quantity"].ToString(), 20, 1));
+                    sw.Write(report.StringFormat(CheckRepeatValue == false ? issuedTo : " ", 23, 2));
                     sw.WriteLine("");
                     i = CheckRepeatValue == false ? i + 1 : i;
                 }
@@ -151,15 +144,10 @@ namespace TNCSCAPI.ManageAllReports
         public string Region { get; set; }
         public string Godownname { get; set; }
         public string Scheme { get; set; }
-        public string Ackno { get; set; }
-        public DateTime Date { get; set; }
-        public int Bags_No { get; set; }
+        public string Issue_Memono { get; set; }
+        public DateTime Issue_Date { get; set; }
         public string Commodity { get; set; }
-        public string TruckMemoNo { get; set; }
         public double Quantity { get; set; }
-        public string Lorryno { get; set; }
-        public DateTime Truckmemodate { get; set; }
-        public string Orderno { get; set; }
-        public string RecdFrom { get; set; }
+        public string Issuedto { get; set; }
     }
 }
