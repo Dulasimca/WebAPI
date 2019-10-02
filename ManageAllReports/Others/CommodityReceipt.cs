@@ -130,7 +130,6 @@ namespace TNCSCAPI.ManageAllReports
                     i =i + 1;
                     count++;
                 }
-                sw.WriteLine(" ");
                 sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.Write(report.StringFormat("", 4, 2));
                 sw.Write(report.StringFormat("  Total ", 11, 1));
