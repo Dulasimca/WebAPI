@@ -35,7 +35,8 @@ namespace TNCSCAPI.Controllers.Reports
                     GCode = commodity.GCode,
                     FromDate = commodity.FDate,
                     Todate = commodity.ToDate,
-                    UserName = commodity.UserName
+                    UserName = commodity.UserName,
+                  //  SchemeName = commodity.SchemeName,
                 };
                 Task.Run(() => commodityReceipt.GenerateCommodityReceiptReport(entity)); //Generate the Report
             }

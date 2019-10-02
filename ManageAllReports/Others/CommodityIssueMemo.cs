@@ -66,10 +66,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine("                                        Issue Memo Datewise Details of - Commodity    Godown : " + GName);
             sw.WriteLine(" ");
             sw.WriteLine("          From:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate));
-            sw.WriteLine("--------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("S.No|  I.MEMO NO     |Date        |Commodity        |NET Weight(Kgs)   |ISSUED TO               |Lorry No   |");
-            sw.WriteLine("--------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("    |                |            |                 |                  |                        |           |");
+            sw.WriteLine("--------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("S.No   I.MEMO NO      Date         Commodity         NET Weight(Kgs)    ISSUED TO                 Lorry No   ");
+            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
         }
 
         /// <summary>
@@ -92,24 +91,24 @@ namespace TNCSCAPI.ManageAllReports
                     {
                         //Add header again
                         count = 11;
-                        sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                        sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
                         sw.WriteLine((char)12);
                         AddHeader(sw, entity);
                     }
                     issuedTo = Convert.ToString(row["Issuedto"]).Trim();
-                    sw.Write(report.StringFormat(i.ToString(), 4, 2));
-                    sw.Write(report.StringFormat(row["Issue_Memono"].ToString(), 16, 1));
-                    sw.Write(report.StringFormat(row["Issue_Date"].ToString(), 12, 1));
-                    sw.Write(report.StringFormat(row["Commodity"].ToString(), 17, 2));
-                    sw.Write(report.StringFormat(row["Quantity"].ToString(), 18, 1));
-                    sw.Write(report.StringFormat(issuedTo, 24, 2));
-                    sw.Write(report.StringFormat(row["Lorryno"].ToString(), 11, 1));
+                    sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
+                    sw.Write(report.StringFormatWithoutPipe(row["Issue_Memono"].ToString(), 16, 1));
+                    sw.Write(report.StringFormatWithoutPipe(row["Issue_Date"].ToString(), 10, 1) + "  ");
+                    sw.Write(report.StringFormatWithoutPipe(row["Commodity"].ToString(), 17, 2));
+                    sw.Write(report.StringFormatWithoutPipe(row["Quantity"].ToString(), 18, 1));
+                    sw.Write(report.StringFormatWithoutPipe(issuedTo, 24, 2));
+                    sw.Write(report.StringFormatWithoutPipe(row["Lorryno"].ToString(), 11, 1));
                     sw.WriteLine("");
                     sw.WriteLine(" ");
                     i = i + 1;
                     count = count + 2;
                 }
-                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
                 sw.WriteLine((char)12);
             }
             catch (Exception ex )

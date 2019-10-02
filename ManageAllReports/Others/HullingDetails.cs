@@ -37,7 +37,7 @@ namespace TNCSCAPI.ManageAllReports
                 report.DeleteFileIfExists(filePath);
 
                 streamWriter = new StreamWriter(filePath, true);
-                // DateWiseStockReceiptRegister(streamWriter, entity);
+               // DateWiseStockReceiptRegister(streamWriter, entity);
 
                 List<HullingReportEntity> hullingReportList = new List<HullingReportEntity>();
                 hullingReportList = report.ConvertDataTableToList<HullingReportEntity>(entity.dataSet.Tables[0]);

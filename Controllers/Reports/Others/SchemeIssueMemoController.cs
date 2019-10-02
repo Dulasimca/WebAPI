@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.Controllers.Reports.Others
 {
@@ -24,6 +25,20 @@ namespace TNCSCAPI.Controllers.Reports.Others
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", commodity.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@ScCode", commodity.TRCode));
             ds = manageSQLConnection.GetDataSetValues("GetSchemeIssueMemo", sqlParameters);
+            SchemeIssueMemo schemeIssue = new SchemeIssueMemo();
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = commodity.GCode,
+                    FromDate = commodity.FDate,
+                    Todate = commodity.ToDate,
+                    UserName = commodity.UserName
+                };
+                Task.Run(() => schemeIssue.GenerateSchemeIssueMemoReport(entity)); //Generate the Report
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }

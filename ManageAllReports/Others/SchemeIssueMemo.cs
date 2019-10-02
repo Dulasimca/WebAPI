@@ -29,6 +29,7 @@ namespace TNCSCAPI.ManageAllReports
             {
                 GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
                 RName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
+                SCName = entity.dataSet.Tables[0].Rows[0]["Scheme"].ToString();
                 fileName = entity.GCode + GlobalVariable.SchemeIssueMemoReportFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
                 report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
@@ -40,9 +41,8 @@ namespace TNCSCAPI.ManageAllReports
 
                 streamWriter = new StreamWriter(filePath, true);
                 DateWiseSchemeIssueMemoReport(streamWriter, entity);
-
-                List<SchemeIssueList> schemeIssueList = new List<SchemeIssueList>();
-                schemeIssueList = report.ConvertDataTableToList<SchemeIssueList>(entity.dataSet.Tables[0]);
+                //List<SchemeIssueList> schemeIssueList = new List<SchemeIssueList>();
+                //schemeIssueList = report.ConvertDataTableToList<SchemeIssueList>(entity.dataSet.Tables[0]);
                 streamWriter.Flush();
 
             }
@@ -65,15 +65,14 @@ namespace TNCSCAPI.ManageAllReports
         /// <param name="date"></param>
         public void AddHeader(StreamWriter sw, CommonEntity entity)
         {
-            sw.WriteLine("                                    TAMILNADU CIVIL SUPPLIES CORPORATION                       " + RName);
+            sw.WriteLine("               TAMILNADU CIVIL SUPPLIES CORPORATION            " + RName);
             sw.WriteLine(" ");
-            sw.WriteLine("                             Issue memo Date wise Details of " + SCName + "Scheme   Godown : " + GName);
+            sw.WriteLine("             Issue memo Date wise Details of " + SCName + " Scheme   Godown : " + GName);
             sw.WriteLine(" ");
             sw.WriteLine("          From:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate));
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("S.No|  I.MEMO.NO   |Date      |   Commodity    |  Net Weight(Kgs)  |     Issued To         |");
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("    |              |          |                |                   |                       |");
+            sw.WriteLine("---------------------------------------------------------------------------------------------------");
+            sw.WriteLine("S.No   I.MEMO.NO    Date          Commodity       Net Weight(Kgs)        Issued To          ");
+            sw.WriteLine("---------------------------------------------------------------------------------------------------");
         }
 
         /// <summary>
@@ -83,56 +82,43 @@ namespace TNCSCAPI.ManageAllReports
         /// <param name="entity"></param>
         public void DateWiseSchemeIssueMemoReport(StreamWriter sw, CommonEntity entity)
         {
-            int count = 10;
-            var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Date");
+            int count = 11;
+          //  var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Date");
             int i = 1;
             string SINO = string.Empty;
-            string issuedTo = string.Empty;
-            bool CheckRepeatValue = false;
             bool isDataAvailable = false;
-            foreach (DataRow date in dateList.Rows)
-            {
+            //foreach (DataRow date in dateList.Rows)
+            //{
                 isDataAvailable = true;
-                count = 11;
-                string SINONext = string.Empty;
                 AddHeader(sw, entity);
-                DataRow[] data = entity.dataSet.Tables[0].Select("Date='" + date["Date"] + "'");
-                foreach (DataRow row in data)
+               // DataRow[] data = entity.dataSet.Tables[0].Select("Date='" + date["Date"] + "'");
+                foreach (DataRow row in entity.dataSet.Tables[0].Rows)
                 {
                     if (count >= 50)
                     {
                         //Add header again
                         count = 11;
-                        sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                        sw.WriteLine("---------------------------------------------------------------------------------------------------");
                         sw.WriteLine((char)12);
                         AddHeader(sw, entity);
                     }
-                    SINONext = row["Issue_Memono"].ToString();
-                    issuedTo = Convert.ToString(row["RecdFrom"]).Trim();
-                    if (SINO == SINONext)
-                    {
-                        CheckRepeatValue = true;
-                    }
-                    else
-                    {
-                        CheckRepeatValue = false;
-                        SINO = SINONext;
-                    }
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? i.ToString() : " ", 4, 2));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? SINONext : " ", 14, 1));
-                    sw.Write(report.StringFormat(row["Issue_Date"].ToString(), 10, 1));
-                    sw.Write(report.StringFormat(row["Commodity"].ToString(), 16, 2));
-                    sw.Write(report.StringFormat(row["Quantity"].ToString(), 20, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? issuedTo : " ", 23, 2));
+                    sw.Write(report.StringFormatWithoutPipe( i.ToString() , 4, 2));
+                    sw.Write(report.StringFormatWithoutPipe(row["Issue_Memono"].ToString(), 14, 2));
+                    sw.Write(report.StringFormatWithoutPipe(row["Issue_Date"].ToString(), 10, 2));
+                    sw.Write(report.StringFormatWithoutPipe(row["Commodity"].ToString(), 16, 2));
+                    sw.Write(report.StringFormatWithoutPipe(row["Quantity"].ToString(), 20, 1));
+                    sw.Write(report.StringFormatWithoutPipe(Convert.ToString(row["Issuedto"]).Trim(), 23, 2));
                     sw.WriteLine("");
-                    i = CheckRepeatValue == false ? i + 1 : i;
+                    sw.WriteLine(" ");
+                    i = i + 1;
+                    count++;
                 }
-                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                sw.WriteLine("---------------------------------------------------------------------------------------------------");
                 sw.WriteLine((char)12);
-            }
+            //}
             if (!isDataAvailable)
             {
-                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                sw.WriteLine("---------------------------------------------------------------------------------------------------");
                 sw.WriteLine((char)12);
             }
 
