@@ -38,6 +38,8 @@
         public const string CommodityIssueMemoReportFileName = "COMISS";
         public const string SchemeIssueMemoReportFileName = "SCHEMEISS";
 
+        public const string DOAllSchemeReportFileName = "DOALLSCH";
+
 
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
