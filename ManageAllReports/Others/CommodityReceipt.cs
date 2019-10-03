@@ -126,7 +126,7 @@ namespace TNCSCAPI.ManageAllReports
                     sw.Write(report.StringFormat("", 7, 1));
                     sw.WriteLine("");
                     Bags += !string.IsNullOrEmpty(Convert.ToString(row["Bags_No"])) ? Convert.ToInt32(row["Bags_No"].ToString()) : 0;
-                    Qty += !string.IsNullOrEmpty(Convert.ToString(row["Bags_No"])) ? Convert.ToDecimal(row["Bags_No"].ToString()) : 0;
+                    Qty += !string.IsNullOrEmpty(Convert.ToString(row["Quantity"])) ? Convert.ToDecimal(row["Quantity"].ToString()) : 0;
                     i =i + 1;
                     count++;
                 }
