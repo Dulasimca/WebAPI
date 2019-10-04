@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Newtonsoft.Json;
 using TNCSCAPI.ManageAllReports;
+using TNCSCAPI.ManageAllReports.DeliveryOrder;
 
 namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
 {
@@ -25,6 +26,23 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", SchemeWise.GCode));
          //   sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", SchemeWise.SCode));
             ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrdersAllScheme", sqlParameters);
+            ManageDOAllScheme manageDOAllScheme = new ManageDOAllScheme();
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = SchemeWise.GCode,
+                    FromDate = SchemeWise.FromDate,
+                    Todate = SchemeWise.ToDate,
+                    UserName = SchemeWise.UserID,
+                    GName = SchemeWise.GName,
+                    RName = SchemeWise.RName
+                    //  SchemeName = commodity.SchemeName,
+                };
+                Task.Run(() => manageDOAllScheme.GenerateDOAllSchemeReport(entity)); //Generate the Report
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }
