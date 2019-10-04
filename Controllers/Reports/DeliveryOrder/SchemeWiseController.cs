@@ -26,7 +26,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", SchemeWise.GCode));
          //   sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", SchemeWise.SCode));
             ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrdersAllScheme", sqlParameters);
-            ManageDOAllScheme manageDemand = new ManageDOAllScheme();
+            ManageDOAllScheme manageDOAllScheme = new ManageDOAllScheme();
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))
             {
@@ -40,8 +40,8 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
                     GName = SchemeWise.GName,
                     RName = SchemeWise.RName
                 };
-                manageDemand.GenerateDOAllSchemeReport(entity);
-                //Task.Run(() => manageDemand.GenerateDOAllSchemeReport(entity)); //Generate the Report
+                manageDOAllScheme.GenerateDOAllSchemeReport(entity);
+                //Task.Run(() => manageDOAllScheme.GenerateDOAllSchemeReport(entity)); //Generate the Report
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
