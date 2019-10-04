@@ -23,19 +23,19 @@ namespace TNCSCAPI.Controllers.Reports.DDCheque
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", oCREntity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", oCREntity.GCode));
             ds = manageSQLConnection.GetDataSetValues("GetOCRReport", sqlParameters);
-           //  ManageReport manageReport = new ManageReport();
-            //if (manageReport.CheckDataAvailable(ds))
-            //{
-            //    CommonEntity entity = new CommonEntity
-            //    {
-            //        dataSet = ds,
-            //        GCode = reportParameter.GCode,
-            //        FromDate = reportParameter.FromDate,
-            //        Todate = reportParameter.ToDate,
-            //        UserName = reportParameter.UserName
-            //    };
-            //    Task.Run(() => stockDeliveryOrder.GenerateDeliveryOrderForRegister(entity)); //Generate the Report
-            //}
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                //CommonEntity entity = new CommonEntity
+                //{
+                //    dataSet = ds,
+                //    GCode = reportParameter.GCode,
+                //    FromDate = reportParameter.FromDate,
+                //    Todate = reportParameter.ToDate,
+                //    UserName = reportParameter.UserName
+                //};
+                //Task.Run(() => stockDeliveryOrder.GenerateDeliveryOrderForRegister(entity)); //Generate the Report
+            }
 
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }

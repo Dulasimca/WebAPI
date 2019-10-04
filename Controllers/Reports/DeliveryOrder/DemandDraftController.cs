@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Newtonsoft.Json;
 using TNCSCAPI.ManageAllReports;
+using TNCSCAPI.ManageAllReports.DeliveryOrder;
 
 namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
 {
@@ -24,6 +25,24 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", demandDraft.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", demandDraft.GCode));
             ds = manageSQLConnection.GetDataSetValues("Get_demanddraftdetails", sqlParameters);
+            ManageDemandDraft manageDemand = new ManageDemandDraft();
+            ManageReport manageReport = new ManageReport();
+            //filter condotions
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = demandDraft.GCode,
+                    FromDate = demandDraft.FromDate,
+                    Todate = demandDraft.ToDate,
+                    UserName = demandDraft.UserName,
+                    GName= demandDraft.GName,
+                    RName= demandDraft.RName
+                };
+                // commodityIssueMemo.GenerateCommodityIssueMemoReport(entity);
+                Task.Run(() => manageDemand.GenerateDemandDraftReport(entity)); //Generate the Report
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
         }
@@ -33,6 +52,8 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
-      public string UserName { get; set; }
+        public string UserName { get; set; }
+        public string GName { get; set; }
+        public string RName { get; set; }
     }
 }

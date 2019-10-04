@@ -378,6 +378,8 @@ namespace TNCSCAPI.ManageAllReports
         public string FromDate { get; set; }
         public string Todate { get; set; }
         public string UserName { get; set; }
+        public string GName { get; set; }
+        public string RName { get; set; }
     }
    
 }

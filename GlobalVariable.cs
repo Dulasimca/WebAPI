@@ -39,6 +39,9 @@
         public const string SchemeIssueMemoReportFileName = "SCHEMEISS";
 
         public const string DOAllSchemeReportFileName = "DOALLSCH";
+        public const string DODemandDraftDateFileName = "DODDDATE";
+        public const string DODemandDraftBankFileName = "DODDBANK";
+        public const string OCRReportFileName = "OCRREG";
 
 
         public const string SavedMessage = "Saved Successfully! : ";

@@ -115,7 +115,7 @@ namespace TNCSCAPI
         /// </summary>
         /// <param name="sValue">string value</param>
         /// <param name="length">Total Length</param>
-        /// <param name="type">Format type 1- before,2-After</param>
+        /// <param name="type">Format type 1- before right allignment,2-After Left allignment</param>
         /// <returns></returns>
         public string StringFormatWithoutPipe(string sValue, int length, int type = 0)
         {
