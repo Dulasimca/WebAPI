@@ -13,6 +13,83 @@ namespace TNCSCAPI.ManageAllReports
         private string FromDate { get; set; }
         private string ToDate { get; set; }
         ManageReport report = new ManageReport();
+
+        public DataTable ManageDORegister(DataSet ds)
+        {
+
+            try
+            {
+                if (ds.Tables.Count > 1)
+                {
+                    DataTable ndt = ds.Tables[0].Clone();
+                    var dataTableForDO = ds.Tables[0].DefaultView.ToTable(true, "Dono");
+                    foreach (DataRow item in dataTableForDO.Rows)
+                    {
+                        DataRow[] dataRowForDODET = ds.Tables[0].Select("Dono='" + Convert.ToString(item["Dono"]) + "'");
+                        DataRow[] dataRowForPayment = ds.Tables[1].Select("Dono='" + Convert.ToString(item["Dono"]) + "'");
+                        int detCount = dataRowForDODET.Count();
+                        int payCount = dataRowForPayment.Count();
+                        if (payCount == 0)
+                        {
+                            foreach (DataRow dr in dataRowForDODET)
+                            {
+                                ndt.ImportRow(dr);
+                                ndt.AcceptChanges();
+                            }
+                        }
+                        else if (detCount >= payCount)
+                        {
+                            int i = 0;
+                            foreach (DataRow dr in dataRowForDODET)
+                            {
+                                if (i < payCount)
+                                {
+                                    dr["Cheque_DD"] = Convert.ToString(dataRowForPayment[i]["Cheque_DD"]);
+                                    dr["PaymentAmount"] = Convert.ToString(dataRowForPayment[i]["PaymentAmount"]);
+                                    ndt.ImportRow(dr);
+                                }
+                                else
+                                {
+                                    ndt.ImportRow(dr);
+                                }
+                                ndt.AcceptChanges();
+                                i++;
+                            }
+                        }
+                        else if (payCount > detCount)
+                        {
+                            int i = 0;
+                            foreach (DataRow dr in dataRowForDODET)
+                            {
+                                if (i < payCount)
+                                {
+                                    dr["Cheque_DD"] = Convert.ToString(dataRowForPayment[i]["Cheque_DD"]);
+                                    dr["PaymentAmount"] = Convert.ToString(dataRowForPayment[i]["PaymentAmount"]);
+                                    ndt.ImportRow(dr);
+                                }
+                                else
+                                {
+                                    ndt.ImportRow(dr);
+                                }
+                                ndt.AcceptChanges();
+                                i++;
+                            }
+                        }
+                    }
+                    return ndt;
+
+                }
+                return ds.Tables[0];
+
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(" ManageDORegister :  " + ex.Message + " " + ex.StackTrace);
+            }
+
+            return null;
+        }
+
         public void GenerateDeliveryOrderForRegister(CommonEntity entity)
         {
             string fPath = string.Empty, sPath = string.Empty, sFileName = string.Empty;
@@ -20,8 +97,8 @@ namespace TNCSCAPI.ManageAllReports
             StreamWriter sw = null;
             try
             {
-                GName = entity.dataSet.Tables[0].Rows[0]["Godown"].ToString();
-                Regioncode = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
+                GName = entity.dataTable.Rows[0]["Godown"].ToString();
+                Regioncode = entity.dataTable.Rows[0]["Region"].ToString();
                 sFileName = entity.GCode + GlobalVariable.StockDORegisterFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
                 report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
@@ -36,21 +113,20 @@ namespace TNCSCAPI.ManageAllReports
                 WriteDORegForDateWise(sw, entity);
                 // sw.WriteLine((char)12);
                 List<DORegEntity> dORegEntities = new List<DORegEntity>();
-                dORegEntities = report.ConvertDataTableToList<DORegEntity>(entity.dataSet.Tables[0]);
+                dORegEntities = report.ConvertDataTableToList<DORegEntity>(entity.dataTable);
 
                 WriteDORegforSocityandScheme(sw, dORegEntities, entity);
 
                 WriteDORegforItemandScheme(sw, dORegEntities, entity);
 
                 WriteDORegforItem(sw, dORegEntities, entity);
-                sw.Flush();               
+                sw.Flush();
                 //send mail to corresponding godown.
 
             }
             catch (Exception ex)
             {
                 AuditLog.WriteError("GenerateDeliveryOrderForRegister " + ex.Message + " : " + ex.StackTrace);
-                throw ex;
             }
             finally
             {
@@ -92,9 +168,7 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine("Delivery Order Date:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "           Godown : " + GName + "          Region :" + Regioncode);
             sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------|");
             sw.WriteLine("  SOCIETY                                     |ITEMS               |SCHEME           |Wt (Kgs/Nos)     |RATE             |AMOUNT              |");
-            //sw.WriteLine("                                              |                    |                 |                 |                 |                    |");
             sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------|");
-            //sw.WriteLine("                                              |                    |                 |                 |                 |                    |");
         }
 
         /// <summary>
@@ -110,9 +184,7 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine("Delivery Order Date:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "           Godown : " + GName + "          Region :" + Regioncode);
             sw.WriteLine("-----------------------------------------------------------------------------------------------|");
             sw.WriteLine("ITEMS               |SCHEME           |Wt (Kgs/Nos)     |RATE             |AMOUNT              |");
-            //sw.WriteLine("                                              |                    |                 |                 |                 |                    |");
             sw.WriteLine("-----------------------------------------------------------------------------------------------|");
-            //sw.WriteLine("                                              |                    |                 |                 |                 |                    |");
         }
 
         /// <summary>
@@ -122,15 +194,13 @@ namespace TNCSCAPI.ManageAllReports
         /// <param name="entity">Common Entity</param>
         public void AddHeaderforAbstractItem(StreamWriter sw, CommonEntity entity)
         {
-            sw.WriteLine("                          Delivery Order Register Commodity and Rate Wise Abstract          Report Date :   " + ManageReport.GetCurrentDate());
+            sw.WriteLine("   Delivery Order Register Commodity and Rate Wise Abstract          Report Date :   " + ManageReport.GetCurrentDate());
             sw.WriteLine(" ");
             sw.WriteLine(" ");
-            sw.WriteLine("Delivery Order Date:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "           Godown : " + GName + "          Region :" + Regioncode);
+            sw.WriteLine("DO Date:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "  Godown : " + GName + "          Region :" + Regioncode);
             sw.WriteLine("-----------------------------------------------------------------------------|");
             sw.WriteLine("ITEMS               |Wt (Kgs/Nos)     |RATE             |AMOUNT              |");
-            //sw.WriteLine("                                              |                    |                 |                 |                 |                    |");
             sw.WriteLine("-----------------------------------------------------------------------------|");
-            //sw.WriteLine("                                              |                    |                 |                 |                 |                    |");
         }
 
         /// <summary>
@@ -141,7 +211,7 @@ namespace TNCSCAPI.ManageAllReports
         public void WriteDORegForDateWise(StreamWriter sw, CommonEntity entity)
         {
             int iCount = 10;
-            var distinctDate = entity.dataSet.Tables[0].DefaultView.ToTable(true, "DeliveryOrderDate");
+            var distinctDate = entity.dataTable.DefaultView.ToTable(true, "DeliveryOrderDate");
             //Date wise DO report
             int i = 1;
             string sIssuer = string.Empty;
@@ -151,7 +221,7 @@ namespace TNCSCAPI.ManageAllReports
             {
                 iCount = 11;
                 string sDoNo1 = string.Empty;
-                DataRow[] datas = entity.dataSet.Tables[0].Select("DeliveryOrderDate='" + dateValue["DeliveryOrderDate"] + "'");
+                DataRow[] datas = entity.dataTable.Select("DeliveryOrderDate='" + dateValue["DeliveryOrderDate"] + "'");
                 AddHeader(sw, Convert.ToString(dateValue["DeliveryOrderDate"]));
                 foreach (DataRow dr in datas)
                 {
@@ -175,15 +245,15 @@ namespace TNCSCAPI.ManageAllReports
                         sDoNo = sDoNo1;
                     }
                     sIssuer = Convert.ToString(dr["To_Whom_Issued"]).Trim();
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? i.ToString():" ", 4, 2));
+                    sw.Write(report.StringFormat(CheckRepeatValue == false ? i.ToString() : " ", 4, 2));
                     sw.Write(report.StringFormat(CheckRepeatValue == false ? sDoNo1 : " ", 11, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? report.Decimalformat(Convert.ToString(dr["Totals"])) :"-", 17, 1));
+                    sw.Write(report.StringFormat(CheckRepeatValue == false ? report.Decimalformat(Convert.ToString(dr["Totals"])) : "-", 17, 1));
                     sw.Write(report.StringFormat(CheckRepeatValue == false ? sIssuer : " ", 15, 2));
                     sw.Write(report.StringFormat(dr["Cheque_DD"].ToString(), 11, 2));
                     sw.Write(report.StringFormat(report.Decimalformat(dr["PaymentAmount"].ToString()), 15, 1));
                     sw.Write(report.StringFormat(dr["Scheme"].ToString(), 13, 2));
                     sw.Write(report.StringFormat(dr["Commodity"].ToString(), 14, 2));
-                    sw.Write(report.StringFormat(dr["Netwt_Kgs"].ToString(), 11, 1));
+                    sw.Write(report.StringFormat(report.DecimalformatForWeight(dr["Netwt_Kgs"].ToString()), 11, 1));
                     sw.Write(report.StringFormat(report.Decimalformat(dr["Rate_Rs"].ToString()), 14, 1));
                     sw.Write(report.StringFormat(report.Decimalformat(dr["Itemamount"].ToString()), 15, 1));
                     sw.Write(report.StringFormat(report.Decimalformat(dr["PreviousAmount"].ToString()), 15, 1));
@@ -196,7 +266,7 @@ namespace TNCSCAPI.ManageAllReports
                     {
                         addedLines = report.AddMoreContent(sw, sIssuer, 15, 35);
                     }
-                    
+
                     sw.WriteLine("    |           |                 |               |           |               |             |              |           |              |               |               |             |              |            |");
                     iCount = iCount + 2 + addedLines;
                     i = CheckRepeatValue == false ? i + 1 : i;
@@ -217,7 +287,7 @@ namespace TNCSCAPI.ManageAllReports
             int iCount = 11;
             // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
             var myResult = from a in dORegEntities
-                           group a by new { a.To_Whom_Issued, a.Commodity, a.Scheme,a.Rate_Rs } into gValue
+                           group a by new { a.To_Whom_Issued, a.Commodity, a.Scheme, a.Rate_Rs } into gValue
                            select new
                            {
                                Netwt_Kgs = gValue.Sum(s => s.Netwt_Kgs),
@@ -239,7 +309,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormat(item.GroupByNames.To_Whom_Issued, 46, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 20, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Scheme, 17, 2));
-                sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 17, 1));
+                sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 17, 1));
                 sw.Write(report.StringFormat(report.Decimalformat(item.GroupByNames.Rate_Rs.ToString()), 17, 1));
                 sw.Write(report.StringFormat(report.Decimalformat(item.Itemamount.ToString()), 20, 1));
                 iCount++;
@@ -260,7 +330,7 @@ namespace TNCSCAPI.ManageAllReports
             int iCount = 11;
             // Gets the group by values based on ths column Commodity,Scheme
             var myResultItemandScheme = from a in dORegEntities
-                                        group a by new { a.Commodity, a.Scheme,a.Rate_Rs } into gValue
+                                        group a by new { a.Commodity, a.Scheme, a.Rate_Rs } into gValue
                                         select new
                                         {
                                             Netwt_Kgs = gValue.Sum(s => s.Netwt_Kgs),
@@ -281,7 +351,7 @@ namespace TNCSCAPI.ManageAllReports
                 }
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 20, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Scheme, 17, 2));
-                sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 17, 1));
+                sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 17, 1));
                 sw.Write(report.StringFormat(report.Decimalformat(item.GroupByNames.Rate_Rs.ToString()), 17, 1));
                 sw.Write(report.StringFormat(report.Decimalformat(item.Itemamount.ToString()), 20, 1));
                 iCount++;
@@ -304,7 +374,7 @@ namespace TNCSCAPI.ManageAllReports
                 int iCount = 11;
                 // Gets the group by values based on ths column Commodity,Scheme
                 var myResultItem = from a in dORegEntities
-                                   group a by new { a.Commodity,a.Rate_Rs } into gValue
+                                   group a by new { a.Commodity, a.Rate_Rs } into gValue
                                    select new
                                    {
                                        Netwt_Kgs = gValue.Sum(s => s.Netwt_Kgs),
@@ -325,7 +395,7 @@ namespace TNCSCAPI.ManageAllReports
                         AddHeaderforAbstractItem(sw, entity);
                     }
                     sw.Write(report.StringFormat(item.GroupByNames.Commodity, 20, 2));
-                    sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 17, 1));
+                    sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 17, 1));
                     sw.Write(report.StringFormat(report.Decimalformat(item.GroupByNames.Rate_Rs.ToString()), 17, 1));
                     sw.Write(report.StringFormat(report.Decimalformat(item.Itemamount.ToString()), 20, 1));
                     dAmount = dAmount + item.Itemamount;
@@ -333,10 +403,10 @@ namespace TNCSCAPI.ManageAllReports
                     sw.WriteLine("");
                 }
                 // Add toal values
+                sw.WriteLine("-----------------------------------------------------------------------------|");
+                sw.Write("                                        Total Amount    |");
+                sw.Write(report.StringFormat(report.Decimalformat(dAmount.ToString()), 20, 1));
                 sw.WriteLine("");
-                sw.Write(report.StringFormat("Total Amount", 17, 2));                
-                sw.Write(report.StringFormat(report.Decimalformat(dAmount.ToString()), 37, 1));
-                sw.Write("");
                 sw.WriteLine("-----------------------------------------------------------------------------|");
                 sw.WriteLine((char)12);
             }
@@ -344,10 +414,10 @@ namespace TNCSCAPI.ManageAllReports
             {
                 AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
             }
-           
+
         }
 
-       
+
     }
 
     public class DORegEntity
@@ -380,6 +450,7 @@ namespace TNCSCAPI.ManageAllReports
         public string UserName { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }
+        public DataTable dataTable { get; set; }
     }
-   
+
 }

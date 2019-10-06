@@ -77,12 +77,12 @@ namespace TNCSCAPI
         public string AddLine(int length)
         {
             string addvalues = string.Empty;
-           try
+            try
             {
-                    for (int i = 0; i < length; i++)
-                    {
-                        addvalues = addvalues + "-";
-                    }
+                for (int i = 0; i < length; i++)
+                {
+                    addvalues = addvalues + "-";
+                }
             }
             catch (Exception ex)
             {
@@ -92,24 +92,24 @@ namespace TNCSCAPI
 
         }
 
-        public Tuple<string,bool> StringFormatWithEmpty(string svalue)
+        public Tuple<string, bool> StringFormatWithEmpty(string svalue)
         {
             try
             {
-                if(!string.IsNullOrEmpty(svalue) && svalue!=null)
+                if (!string.IsNullOrEmpty(svalue) && svalue != null)
                 {
-                    return new Tuple<string, bool>(svalue,true);
+                    return new Tuple<string, bool>(svalue, true);
                 }
-                return new Tuple<string, bool>(" ", false); 
+                return new Tuple<string, bool>(" ", false);
             }
             catch (Exception ex)
             {
                 AuditLog.WriteError("StringFormatWithEmpty : " + ex.Message + " " + ex.InnerException);
-                return new Tuple<string, bool>(" ", false); 
+                return new Tuple<string, bool>(" ", false);
             }
         }
 
-      
+
         /// <summary>
         /// Format the string based on the length
         /// </summary>
@@ -215,6 +215,14 @@ namespace TNCSCAPI
                         if (length == 1)
                         {
                             sFormattedValue = sValues + "0";
+                        }
+                        else if (length == 2)
+                        {
+                            sFormattedValue = sValues;
+                        }
+                        else if (length > 2)
+                        {
+                            sFormattedValue = Convert.ToString(split[0]) + "." + Convert.ToString(split[1]).Substring(0, 2);
                         }
                         else
                         {
@@ -325,7 +333,7 @@ namespace TNCSCAPI
             {
                 AuditLog.WriteError("DeleteFileIfExists " + ex.Message);
             }
-           
+
         }
 
         /// <summary>
@@ -386,8 +394,8 @@ namespace TNCSCAPI
         public string FormatDirectDate(string date)
         {
             try
-            {  
-                if(!string.IsNullOrEmpty(date))
+            {
+                if (!string.IsNullOrEmpty(date))
                 {
                     return Convert.ToDateTime(date).ToString("dd/MM/yyyy");
                 }
@@ -513,7 +521,7 @@ namespace TNCSCAPI
         /// </summary>
         /// <param name="date"></param>
         /// <returns>Format dd-MM-yyyy</returns>
-        public string GetDays(string FromDate,string ToDate)
+        public string GetDays(string FromDate, string ToDate)
         {
             try
             {
@@ -638,6 +646,24 @@ namespace TNCSCAPI
                 }
             }
             return numberofLines;
+        }
+
+        public DataTable ConvertDataRowToTable(DataRow[] dataRows, DataTable ndt)
+        {
+            DataTable dt = ndt.Clone();
+            try
+            {
+                foreach (DataRow item in dataRows)
+                {
+                    dt.ImportRow(item);
+                    dt.AcceptChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(" ConvertDataRowToTable : " + ex.Message + " " + ex.StackTrace);
+            }
+            return dt;
         }
     }
 }

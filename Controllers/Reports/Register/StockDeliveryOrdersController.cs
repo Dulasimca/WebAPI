@@ -26,11 +26,13 @@ namespace TNCSCAPI.Controllers.Reports.Register
             ds = manageSQLConnection.GetDataSetValues("StockDeliveryOrderForRegister", sqlParameters);
             StockDeliveryOrderRegister stockDeliveryOrder = new StockDeliveryOrderRegister();
             ManageReport manageReport = new ManageReport();
-            if (manageReport.CheckDataAvailable(ds))
+            DataTable dt = new DataTable();
+             dt = stockDeliveryOrder.ManageDORegister(ds);
+            if (manageReport.CheckDataAvailable(dt))
             {
                 CommonEntity entity = new CommonEntity
                 {
-                    dataSet = ds,
+                    dataTable = dt,
                     GCode = reportParameter.GCode,
                     FromDate = reportParameter.FromDate,
                     Todate = reportParameter.ToDate,
@@ -39,7 +41,7 @@ namespace TNCSCAPI.Controllers.Reports.Register
                 Task.Run(() => stockDeliveryOrder.GenerateDeliveryOrderForRegister(entity)); //Generate the Report
             }
 
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            return JsonConvert.SerializeObject(dt);
         }
     }
 }

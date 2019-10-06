@@ -1,28 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace TNCSCAPI.ManageAllReports.DeliveryOrder
 {
-
-    public class ManageDOAllScheme
+    public class ManageDOSPLPDS
     {
-
         ManageReport report = new ManageReport();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="entity"></param>
-        public void GenerateDOAllSchemeReport(CommonEntity entity)
+        public void GenerateDOSPLPDSScheme(CommonEntity entity)
         {
 
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             try
             {
-                fileName = entity.GCode + GlobalVariable.DOAllSchemeReportFileName;
+                fileName = entity.GCode + GlobalVariable.DOSPLPDSReportFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
                 report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
                 subF_Path = fPath + "//" + entity.UserName; //ManageReport.GetDateForFolder();
@@ -56,15 +56,14 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
         /// <param name="date"></param>
         public void AddHeader(StreamWriter sw, CommonEntity entity)
         {
-            sw.WriteLine("                            TAMILNADU CIVIL SUPPLIES CORPORATION          " + entity.RName);
-            sw.WriteLine(" ");
-            sw.WriteLine("              Godown : " + entity.GName + "Delivery Order Details Society Wise with Issue Details");
-            sw.WriteLine(" ");
-            sw.WriteLine("          D.Ord Date:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate));
+            sw.WriteLine("   TAMILNADU CIVIL SUPPLIES CORPORATION          " + entity.RName);
+            sw.WriteLine("   Godown : " + entity.GName + "Delivery Order Details Society Wise with Issue Details For SPL PDS ");
+            sw.WriteLine("   D.Ord Date:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate));
             sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("D.O.No     D.O.Date  COMMODITY   SCHEME             NET.WT      Rate       C.AMOUNT  NC.AMOUNT     AMOUNT");
+            sw.WriteLine("D.O.No     D.O.Date  COMMODITY      SCHEME          NET.WT      Rate       C.AMOUNT  NC.AMOUNT     AMOUNT");
             sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -175,7 +174,6 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                     sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
 
                     //Check Collections 
-                    CheckPayment(sw,entity, coop);
                     sw.WriteLine((char)12);
                 }
                 if (!isDataAvailable)
@@ -189,48 +187,5 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                 AuditLog.WriteError(ex.Message);
             }
         }
-
-        public void CheckPayment(StreamWriter sw, CommonEntity entity, string coop)
-        {
-
-            DataTable dataTable = new DataTable();
-            dataTable = entity.dataSet.Tables[1];
-            DataRow[] drRows = entity.dataSet.Tables[1].Select("Coop='"+ coop + "'");
-            int count = drRows.Count();
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-            if (count > 0)
-            {
-                sw.Write(report.StringFormatWithoutPipe("", 11, 2));
-                sw.Write(report.StringFormatWithoutPipe("", 10, 2));
-                sw.Write(report.StringFormatWithoutPipe("", 15, 2));
-                sw.Write(report.StringFormatWithoutPipe(" ", 11, 1));
-                sw.Write(report.StringFormatWithoutPipe("Collection Amount", 23, 1));
-                sw.Write(report.StringFormatWithoutPipe(" ", 10, 1));
-                sw.Write(report.StringFormatWithoutPipe(" ", 11, 1));
-                sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Convert.ToString(drRows[0]["PaymentAmount"])), 11, 1));
-                sw.WriteLine("");
-            }
-            else
-            {
-                sw.WriteLine("        Payment not Found    ");
-            }
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-        }
-    }
-
-    public class DOAllSchemeList
-    {
-        public string Regionname { get; set; }
-        public string Godownname { get; set; }
-        public string Dono { get; set; }
-        public DateTime Dodate { get; set; }
-        public string Commodity { get; set; }
-        public string Scheme { get; set; }
-        public string Coop { get; set; }
-        public double Quantity { get; set; }
-        public float Rate { get; set; }
-        public double Amount { get; set; }
-        public string C_Nc { get; set; }
-        public string Tyname { get; set; }
     }
 }

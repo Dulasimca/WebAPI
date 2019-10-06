@@ -40,8 +40,8 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
                     GName = SchemeWise.GName,
                     RName = SchemeWise.RName
                 };
-                manageDOAllScheme.GenerateDOAllSchemeReport(entity);
-                //Task.Run(() => manageDOAllScheme.GenerateDOAllSchemeReport(entity)); //Generate the Report
+               // manageDOAllScheme.GenerateDOAllSchemeReport(entity);
+                Task.Run(() => manageDOAllScheme.GenerateDOAllSchemeReport(entity)); //Generate the Report
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }

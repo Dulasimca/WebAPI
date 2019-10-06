@@ -37,8 +37,8 @@ namespace TNCSCAPI.ManageAllReports
                 streamWriter = new StreamWriter(filePath, true);
                 DateWiseCommodityIssueMemoReport(streamWriter, entity);
 
-                List<CommodityIssueMemoEntity> commodityIssueList = new List<CommodityIssueMemoEntity>();
-                commodityIssueList = report.ConvertDataTableToList<CommodityIssueMemoEntity>(entity.dataSet.Tables[0]);
+                //List<CommodityIssueMemoEntity> commodityIssueList = new List<CommodityIssueMemoEntity>();
+                //commodityIssueList = report.ConvertDataTableToList<CommodityIssueMemoEntity>(entity.dataSet.Tables[0]);
                 streamWriter.Flush();
 
             }

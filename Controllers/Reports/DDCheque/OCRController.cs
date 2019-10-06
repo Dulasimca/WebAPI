@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports;
+using TNCSCAPI.ManageAllReports.DDCheque;
 
 namespace TNCSCAPI.Controllers.Reports.DDCheque
 {
@@ -26,15 +25,18 @@ namespace TNCSCAPI.Controllers.Reports.DDCheque
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))
             {
-                //CommonEntity entity = new CommonEntity
-                //{
-                //    dataSet = ds,
-                //    GCode = reportParameter.GCode,
-                //    FromDate = reportParameter.FromDate,
-                //    Todate = reportParameter.ToDate,
-                //    UserName = reportParameter.UserName
-                //};
-                //Task.Run(() => stockDeliveryOrder.GenerateDeliveryOrderForRegister(entity)); //Generate the Report
+                ManageOCRReport manageOCR = new ManageOCRReport();
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = oCREntity.GCode,
+                    FromDate = oCREntity.FromDate,
+                    Todate = oCREntity.ToDate,
+                    UserName = oCREntity.UserID,
+                    GName = oCREntity.GName,
+                    RName = oCREntity.RName
+                };
+                Task.Run(() => manageOCR.GenerateOCRReport(entity)); //Generate the Report
             }
 
             return JsonConvert.SerializeObject(ds.Tables[0]);

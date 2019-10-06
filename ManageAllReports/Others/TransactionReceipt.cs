@@ -57,33 +57,21 @@ namespace TNCSCAPI.ManageAllReports
         public void WriteTransactionForAbstract(StreamWriter sw, CommonEntity entity)
         {
             int iCount = 10;
-            var distinctDate = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Date");
+            var distinctCommodity = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Commodity");
             //Date wise DO report
-            int i = 1;
-            string sIssuer = string.Empty;
             string sDoNo = string.Empty;
-            foreach (DataRow dateValue in distinctDate.Rows)
+            string sCommodity = string.Empty;
+            decimal dTotal = 0;
+            AddHeaderForTransactionReceipt(sw, entity);
+            foreach (DataRow dateValue in distinctCommodity.Rows)
             {
                 iCount = 11;
                 bool CheckRepeatValue = false;
-                string sCommodity = string.Empty;
-                DataRow[] datas = entity.dataSet.Tables[0].Select("Date='" + dateValue["Date"] + "'");
+                sCommodity = string.Empty;
+                sDoNo = string.Empty;
+                DataRow[] datas = entity.dataSet.Tables[0].Select("Commodity='" + dateValue["Commodity"] + "'");
 
-                List<TransactionReceiptEntity> transactionReceiptEntities = new List<TransactionReceiptEntity>();
-                transactionReceiptEntities = report.ConvertDataRowToList<TransactionReceiptEntity>(datas);
-
-                // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
-                var myResult = from a in transactionReceiptEntities
-                               group a by new {  a.Commodity,a.Date,a.Transaction } into gValue
-                               select new
-                               {
-                                   NetWt = gValue.Sum(s => s.Quantity),
-                                   GroupByNames = gValue.Key
-                               };
-
-                AddHeaderForTransactionReceipt(sw, entity);
-
-                foreach (var item in myResult)
+                foreach (var item in datas)
                 {
                     if (iCount >= 50)
                     {
@@ -93,7 +81,7 @@ namespace TNCSCAPI.ManageAllReports
                         sw.WriteLine((char)12);
                         AddHeaderForTransactionReceipt(sw, entity);
                     }
-                    sCommodity = item.GroupByNames.Commodity;
+                    sCommodity = Convert.ToString(item["Commodity"]);
                     if (sDoNo == sCommodity)
                     {
                         CheckRepeatValue = true;
@@ -104,17 +92,23 @@ namespace TNCSCAPI.ManageAllReports
                         sDoNo = sCommodity;
                     }
 
-                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? sCommodity : " ", 32, 2));
-                    sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Date.ToString(), 10, 2));
-                    sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Transaction, 21, 2));
-                    sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.NetWt.ToString()), 13, 1));
+                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? sCommodity : " ", 34, 2));
+                    sw.Write(report.StringFormatWithoutPipe(item["Date"].ToString(), 10, 2));
+                    sw.Write(report.StringFormatWithoutPipe(item["Trans_action"].ToString(), 21, 2));
+                    sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item["Quantity"].ToString()), 15, 1));
                     sw.WriteLine("");
                     iCount = iCount + 1;
-                    i = CheckRepeatValue == false ? i + 1 : i;
+                    dTotal += Convert.ToDecimal(item["Quantity"].ToString());
                 }
                 sw.WriteLine("-------------------------------------------------------------------------------");
-                sw.WriteLine((char)12);
+                sw.Write(report.StringFormatWithoutPipe(" ", 34, 2));
+                sw.Write(report.StringFormatWithoutPipe("", 10, 2));
+                sw.Write(report.StringFormatWithoutPipe("", 21, 2));
+                sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(dTotal.ToString()), 15, 1));
+                sw.WriteLine("");
             }
+            sw.WriteLine("-------------------------------------------------------------------------------");
+            sw.WriteLine((char)12);
         }
 
         /// <summary>

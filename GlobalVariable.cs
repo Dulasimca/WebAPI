@@ -41,6 +41,15 @@
         public const string DOAllSchemeReportFileName = "DOALLSCH";
         public const string DODemandDraftDateFileName = "DODDDATE";
         public const string DODemandDraftBankFileName = "DODDBANK";
+
+        public const string DOMarginReportFileName = "DOMARGIN";
+        public const string DOOAPReportFileName = "DOOAP";
+        public const string DOAnnapornaReportFileName = "DOANNA";
+        public const string DOOthersReportFileName = "DOOTHERS";
+        public const string DOSPLPDSReportFileName = "DOSPLPDS";
+        public const string DOSocietyReportFileName = "DOSOCIETY";
+
+
         public const string OCRReportFileName = "OCRREG";
 
 
