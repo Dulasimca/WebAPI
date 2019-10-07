@@ -74,6 +74,38 @@ namespace TNCSCAPI.ManageAllReports
                                 ndt.AcceptChanges();
                                 i++;
                             }
+                            // i = i - 1;
+                            if (payCount > i)
+                            {
+                                try
+                                {
+                                    
+                                    for (int j = i; j >= payCount - i; j++)
+                                    {
+                                        DataRow dataRow = dataRowForDODET[0];
+                                        dataRow["Totals"] = "0";
+                                        dataRow["Scheme"] = "";
+                                        dataRow["Commodity"] = "";
+                                        dataRow["Netwt_Kgs"] = "0";
+                                        dataRow["Rate_Rs"] = "0";
+                                        dataRow["Itemamount"] = "0";
+                                        dataRow["PreviousAmount"] = "0";
+                                        dataRow["Adjusted"] = "0";
+                                        dataRow["Balance"] = "0";
+                                        dataRow["MarginAmount"] = "0";
+                                        dataRow["Cheque_DD"] = Convert.ToString(dataRowForPayment[j]["Cheque_DD"]);
+                                        dataRow["PaymentAmount"] = Convert.ToString(dataRowForPayment[j]["PaymentAmount"]);
+                                        ndt.ImportRow(dataRow);
+                                        ndt.AcceptChanges();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    AuditLog.WriteError("PayCount is more than Itemcount : " + ex.Message +" " + ex.StackTrace);
+                                }
+                                
+                            }
+                            //Totals,Scheme,Commodity,Netwt_Kgs,Rate_Rs,Itemamount,PreviousAmount,Adjusted,Balance,MarginAmount
                         }
                     }
                     return ndt;

@@ -51,7 +51,7 @@
 
 
         public const string OCRReportFileName = "OCRREG";
-
+        public const string GSTFileName = "GST";
 
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
