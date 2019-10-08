@@ -35,7 +35,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
                     GCode = SchemeWise.GCode,
                     FromDate = SchemeWise.FromDate,
                     Todate = SchemeWise.ToDate,
-                    UserName = SchemeWise.UserID,
+                    UserName = SchemeWise.UserName,
                     GName = SchemeWise.GName,
                     RName = SchemeWise.RName
                 };

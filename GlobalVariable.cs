@@ -34,9 +34,10 @@
         public const string HullingDetailsReportFileName = "HULREG";
         public const string SchemeReceiptReportFileName = "SCREC";
         public const string CommodityReceiptReportFileName = "COMREC";
-
+        public const string WriteOFFReportFileName = "WOFF";
         public const string CommodityIssueMemoReportFileName = "COMISS";
         public const string SchemeIssueMemoReportFileName = "SCHEMEISS";
+        public const string TransactionReceiptFileName = "TRREC";
 
         public const string DOAllSchemeReportFileName = "DOALLSCH";
         public const string DODemandDraftDateFileName = "DODDDATE";

@@ -36,7 +36,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
                     GCode = SchemeWise.GCode,
                     FromDate = SchemeWise.FromDate,
                     Todate = SchemeWise.ToDate,
-                    UserName = SchemeWise.UserID,
+                    UserName = SchemeWise.UserName,
                     GName = SchemeWise.GName,
                     RName = SchemeWise.RName
                 };
@@ -54,6 +54,6 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
         public string GName { get; set; }
         public string RName { get; set; }
         public string SchCode { get; set; }
-        public string UserID { get; set; }
+        public string UserName { get; set; }
     }
 }

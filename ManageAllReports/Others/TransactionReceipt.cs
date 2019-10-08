@@ -28,7 +28,7 @@ namespace TNCSCAPI.ManageAllReports
             {
                 GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
                 RegionName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
-                sFileName = entity.GCode + GlobalVariable.StockTruckMemoRegisterFileName;
+                sFileName = entity.GCode + GlobalVariable.TransactionReceiptFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
                 report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
                 sPath = fPath + "//" + entity.UserName; //ManageReport.GetDateForFolder();
@@ -77,7 +77,7 @@ namespace TNCSCAPI.ManageAllReports
                     {
                         //Add header again
                         iCount = 11;
-                        sw.WriteLine("-------------------------------------------------------------------------------");
+                        sw.WriteLine("------------------------------------------------------------------------------------");
                         sw.WriteLine((char)12);
                         AddHeaderForTransactionReceipt(sw, entity);
                     }
@@ -91,7 +91,7 @@ namespace TNCSCAPI.ManageAllReports
                         CheckRepeatValue = false;
                         sDoNo = sCommodity;
                     }
-
+                    sw.Write(" ");
                     sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? sCommodity : " ", 34, 2));
                     sw.Write(report.StringFormatWithoutPipe(item["Date"].ToString(), 10, 2));
                     sw.Write(report.StringFormatWithoutPipe(item["Trans_action"].ToString(), 21, 2));
@@ -100,14 +100,17 @@ namespace TNCSCAPI.ManageAllReports
                     iCount = iCount + 1;
                     dTotal += Convert.ToDecimal(item["Quantity"].ToString());
                 }
-                sw.WriteLine("-------------------------------------------------------------------------------");
+                sw.WriteLine("------------------------------------------------------------------------------------");
+                sw.Write(" ");
                 sw.Write(report.StringFormatWithoutPipe(" ", 34, 2));
                 sw.Write(report.StringFormatWithoutPipe("", 10, 2));
                 sw.Write(report.StringFormatWithoutPipe("", 21, 2));
                 sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(dTotal.ToString()), 15, 1));
                 sw.WriteLine("");
+                sw.WriteLine("------------------------------------------------------------------------------------");
+
             }
-            sw.WriteLine("-------------------------------------------------------------------------------");
+            sw.WriteLine("------------------------------------------------------------------------------------");
             sw.WriteLine((char)12);
         }
 
@@ -122,10 +125,10 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine("      Receipt Date Wise Abstract Details of " + GName+ " Godown");
             sw.WriteLine(" ");
-            sw.WriteLine("From: " + report.FormatDate(entity.FromDate) + " to "+ report.FormatDate(entity.Todate) + "    Weight in Kilo Grams");
-            sw.WriteLine("-------------------------------------------------------------------------------");
-            sw.WriteLine("Commodity                          Date       Transaction        Net Weight    ");
-            sw.WriteLine("-------------------------------------------------------------------------------");
+            sw.WriteLine(" From: " + report.FormatDate(entity.FromDate) + " to "+ report.FormatDate(entity.Todate) + "    Weight in Kilo Grams");
+            sw.WriteLine("------------------------------------------------------------------------------------");
+            sw.WriteLine(" Commodity                          Date       Transaction        Net Weight    ");
+            sw.WriteLine("------------------------------------------------------------------------------------");
 
         }
 

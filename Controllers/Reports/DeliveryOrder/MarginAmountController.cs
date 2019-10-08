@@ -35,7 +35,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
                     GCode = marginAmount.GCode,
                     FromDate = marginAmount.FromDate,
                     Todate = marginAmount.ToDate,
-                    UserName = marginAmount.UserID,
+                    UserName = marginAmount.UserName,
                     GName = marginAmount.GName,
                     RName = marginAmount.RName
                 };
