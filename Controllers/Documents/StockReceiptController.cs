@@ -63,6 +63,18 @@ namespace TNCSCAPI.Controllers.Documents
                 ManageReport manageReport = new ManageReport();
                 if (manageReport.CheckDataAvailable(result))
                 {
+                    if(stockReceipt.SRNo.Trim() != "0")
+                    {
+                        List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
+                        sqlParameters1.Add(new KeyValuePair<string, string>("@Type","1"));
+                        sqlParameters1.Add(new KeyValuePair<string, string>("@DocNumber", stockReceipt.SRNo.Trim()));
+                        var result1 = manageSQLConnection.GetDataSetValues("CheckDocumentEdit", sqlParameters1);
+                        if (!manageReport.CheckDataAvailable(result1))
+                        {
+                            return new Tuple<bool, string, string>(false,GlobalVariable.DocumentEditPermission, "");
+                        }
+                        // CheckDocumentEdit
+                    }
                     StockReceipt receipt = new StockReceipt();
                     return receipt.InsertReceiptData(stockReceipt);
                 }
