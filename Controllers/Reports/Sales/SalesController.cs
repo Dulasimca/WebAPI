@@ -33,10 +33,12 @@ namespace TNCSCAPI.Controllers.Reports.Sales
             {
                 
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issueMemoDetails.GCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@society", issueMemoDetails.SCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@type", issueMemoDetails.TCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", issueMemoDetails.Fdate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", issueMemoDetails.Tdate));
-                sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issueMemoDetails.GCode));
-                ds = manageSQLConnection.GetDataSetValues("getIssuememoabstract", sqlParameters);
+                ds = manageSQLConnection.GetDataSetValues("GetIssuememoAbstract", sqlParameters);
                 
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
