@@ -14,13 +14,14 @@ namespace TNCSCAPI.Controllers.Reports.Transfer
     public class TruckTransitController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string FDate, string ToDate)
+        public string Get(string FDate, string ToDate, string GCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@FDate", FDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
             ds = manageSQLConnection.GetDataSetValues("GetTransitdetails", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
