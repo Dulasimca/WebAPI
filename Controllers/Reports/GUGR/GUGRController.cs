@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using TNCSCAPI.Models;
 using System.Data;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports;
+using TNCSCAPI.ManageAllReports.GunnyReport;
 
 namespace TNCSCAPI.Controllers.Reports.GUGR
 {
@@ -25,6 +27,22 @@ namespace TNCSCAPI.Controllers.Reports.GUGR
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", reportParameter.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Type", reportParameter.Type));
             ds = manageSQLConnection.GetDataSetValues("GETGRGU", sqlParameters);
+            ManageGUGR manageGUGR = new ManageGUGR();
+            ManageReport manageReport = new ManageReport();
+            //filter condotions
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = reportParameter.GCode,
+                    FromDate = reportParameter.FromDate,
+                    Todate = reportParameter.ToDate,
+                    UserName = reportParameter.UserName
+                };
+                // commodityIssueMemo.GenerateCommodityIssueMemoReport(entity);
+                Task.Run(() => manageGUGR.GenerateGUGRReport(entity, reportParameter)); //Generate the Report
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }

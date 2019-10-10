@@ -56,5 +56,6 @@ namespace TNCSCAPI.Controllers.Masters
         public string Jrtype { get; set; }
         public string RCode { get; set; }
         public string GCode { get; set; }
+        public string roleId { get; set; }
     }
 }
