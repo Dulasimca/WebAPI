@@ -41,8 +41,9 @@ namespace TNCSCAPI.ManageAllReports
 
                 streamWriter = new StreamWriter(filePath, true);
                 DateWiseSchemeIssueMemoReport(streamWriter, entity);
-                //List<SchemeIssueList> schemeIssueList = new List<SchemeIssueList>();
-                //schemeIssueList = report.ConvertDataTableToList<SchemeIssueList>(entity.dataSet.Tables[0]);
+                List<SchemeIssueList> schemeIssueList = new List<SchemeIssueList>();
+                schemeIssueList = report.ConvertDataTableToList<SchemeIssueList>(entity.dataSet.Tables[0]);
+                StockIssuesCommoditywiseAbstract(streamWriter, schemeIssueList, entity);
                 streamWriter.Flush();
 
             }
@@ -75,6 +76,59 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine("---------------------------------------------------------------------------------------------------");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="date"></param>
+        public void AddAbstractHeader(StreamWriter sw, CommonEntity entity)
+        {
+            sw.WriteLine("          TAMILNADU CIVIL SUPPLIES CORPORATION                       " + RName);
+            sw.WriteLine(" ");
+            sw.WriteLine("      Issue memo Abstract Details of " + SCName + " Scheme   Godown : " + GName);
+            sw.WriteLine(" ");
+            sw.WriteLine(" From:" + report.FormatDate(entity.FromDate) + "     To : " + report.FormatDate(entity.Todate));
+            sw.WriteLine("--------------------------------------------------------");
+            sw.WriteLine("    Commodity                    Net Weight(Kgs)   ");
+            sw.WriteLine("--------------------------------------------------------");
+        }
+
+        /// <summary>
+        /// Add Commodity wise abstract details 
+        /// </summary>
+        /// <param name="sw">Streamwriter</param>
+        /// <param name="stockIssues">Stock issues entity</param>
+        /// <param name="entity">Common entity</param>
+        public void StockIssuesCommoditywiseAbstract(StreamWriter sw, List<SchemeIssueList> stockReceipt, CommonEntity entity)
+        {
+            int count = 11;
+            string weighmentType = string.Empty;
+            var resultSet = from d in stockReceipt
+                            group d by new { d.Commodity } into groupedData
+                            select new
+                            {
+                                NetWt = groupedData.Sum(s => s.Quantity),
+                                GroupByNames = groupedData.Key
+                            };
+            AddAbstractHeader(sw, entity);
+            foreach (var item in resultSet)
+            {
+                if (count >= 50)
+                {
+                    count = 11;
+                    sw.WriteLine("--------------------------------------------------------");
+                    sw.WriteLine((char)12);
+                    AddAbstractHeader(sw, entity);
+                }
+                sw.Write(" ");
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 31, 2));
+                sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.NetWt.ToString()), 18, 2));
+                sw.WriteLine(" ");
+                count = count + 2;
+            }
+            sw.WriteLine("--------------------------------------------------------");
+            sw.WriteLine((char)12);
+        }
         /// <summary>
         /// 
         /// </summary>

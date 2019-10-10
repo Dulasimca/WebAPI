@@ -41,6 +41,18 @@ namespace TNCSCAPI.Controllers.Documents
                 ManageReport manageReport = new ManageReport();
                 if (manageReport.CheckDataAvailable(result))
                 {
+                    if (documentStockTransfer.STNo.Trim() != "0")
+                    {
+                        List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
+                        sqlParameters1.Add(new KeyValuePair<string, string>("@Type", "3"));
+                        sqlParameters1.Add(new KeyValuePair<string, string>("@DocNumber", documentStockTransfer.STNo.Trim()));
+                        var result1 = manageSQLConnection.GetDataSetValues("CheckDocumentEdit", sqlParameters1);
+                        if (!manageReport.CheckDataAvailable(result1))
+                        {
+                            return new Tuple<bool, string, string>(false, GlobalVariable.DocumentEditPermission, "");
+                        }
+                        // CheckDocumentEdit
+                    }
                     ManageTruckMemo manageTruck = new ManageTruckMemo();
                     return manageTruck.InsertTruckMemoEntry(documentStockTransfer);
                 }

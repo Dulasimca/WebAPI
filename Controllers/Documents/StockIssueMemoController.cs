@@ -41,6 +41,18 @@ namespace TNCSCAPI.Controllers.Documents
                 ManageReport manageReport = new ManageReport();
                 if (manageReport.CheckDataAvailable(result))
                 {
+                    if (documentStockIssuesEntity.SINo.Trim() != "0")
+                    {
+                        List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
+                        sqlParameters1.Add(new KeyValuePair<string, string>("@Type", "2"));
+                        sqlParameters1.Add(new KeyValuePair<string, string>("@DocNumber", documentStockIssuesEntity.SINo.Trim()));
+                        var result1 = manageSQLConnection.GetDataSetValues("CheckDocumentEdit", sqlParameters1);
+                        if (!manageReport.CheckDataAvailable(result1))
+                        {
+                            return new Tuple<bool, string, string>(false, GlobalVariable.DocumentEditPermission, "");
+                        }
+                        // CheckDocumentEdit
+                    }
                     StockIssueMemo stockIssueMemo = new StockIssueMemo();
                     return stockIssueMemo.InsertStockIssueData(documentStockIssuesEntity);
                 }
