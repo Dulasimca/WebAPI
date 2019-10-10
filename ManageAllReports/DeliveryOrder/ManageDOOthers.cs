@@ -100,6 +100,11 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                     GrandTotal_C = 0;
                     GrandTotal_NC = 0;
                     GrandTotal = 0;
+                    Rate = 0;
+                    Toatal_C_Amount = 0;
+                    Total_NC_Amount = 0;
+                    Amount = 0;
+                    Qty = 0;
                     isDataAvailable = true;
 
                     string doNoNext = string.Empty;
