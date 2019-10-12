@@ -39,8 +39,8 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
                     GName = societyAbstract.GName,
                     RName = societyAbstract.RName
                 };
-                manageDOSociety.GenerateDOSocietyScheme(entity);
-              //  Task.Run(() => manageDOSociety.GenerateDOSocietyScheme(entity)); //Generate the Report
+               // manageDOSociety.GenerateDOSocietyScheme(entity);
+                Task.Run(() => manageDOSociety.GenerateDOSocietyScheme(entity)); //Generate the Report
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }

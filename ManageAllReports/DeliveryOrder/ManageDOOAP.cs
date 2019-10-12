@@ -96,9 +96,18 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
 
                 foreach (DataRow date in dateList.Rows)
                 {
-                    GrandTotal_C = 0;
-                    GrandTotal_NC = 0;
-                    GrandTotal = 0;
+                     Qty = 0;
+                     Rate = 0;
+                     C_Amount = 0;
+                     NC_Amount = 0;
+                    Amount = 0;
+
+                    Toatal_C_Amount = 0;
+                     Total_NC_Amount = 0;
+
+                     GrandTotal_C = 0;
+                     GrandTotal_NC = 0;
+                     GrandTotal = 0;
                     isDataAvailable = true;
 
                     string doNoNext = string.Empty;
@@ -111,9 +120,18 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
 
                     foreach (DataRow item in distinctCommodity.Rows)
                     {
+                        Qty = 0;
+                        Rate = 0;
+                        C_Amount = 0;
+                        NC_Amount = 0;
+                        Amount = 0;
+                        Toatal_C_Amount = 0;
+                        Total_NC_Amount = 0;
                         DataRow[] ndata = entity.dataSet.Tables[0].Select("Coop='" + coop + "' and Comodity='" + Convert.ToString(item["Comodity"]) + "'");
                         foreach (DataRow row in ndata)
                         {
+                            C_Amount = 0;
+                            NC_Amount = 0;
                             if (count >= 50)
                             {
                                 //Add header again

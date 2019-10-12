@@ -11,7 +11,7 @@ namespace TNCSCAPI.Controllers.Documents
     public class DocumentCorrectionController : ControllerBase
     {
         [HttpPost("{id}")]
-        public bool Post(DocCorrectionEntity docCorrectionEntity = null)
+        public Tuple<bool, string> Post(DocCorrectionEntity docCorrectionEntity = null)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             if (docCorrectionEntity.Type == 1)
@@ -23,32 +23,58 @@ namespace TNCSCAPI.Controllers.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@RegionCode", docCorrectionEntity.RCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", docCorrectionEntity.GCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Reason", docCorrectionEntity.Reason));
-                return manageSQLConnection.InsertData("InsertDocumentCorrection", sqlParameters);
+                var result = manageSQLConnection.InsertData("InsertDocumentCorrection", sqlParameters);
+                if (result)
+                {
+                    return new Tuple<bool, string>(true, "Request sent!");
+                }
+                else
+                {
+                    return new Tuple<bool, string>(false, "Please contact Administrator");
+                }
             }
-            return false;
+            else
+            {
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@Id", docCorrectionEntity.Id.ToString()));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ApproverRoleID", docCorrectionEntity.ApproverRoleID.ToString()));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ApproverReason", docCorrectionEntity.ApproverReason.ToString()));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ApprovalStatus", docCorrectionEntity.ApprovalStatus.ToString()));
+                var result = manageSQLConnection.UpdateValues("UpdateDocumentCorrection", sqlParameters);
+                if (result)
+                {
+                    return new Tuple<bool, string>(true, docCorrectionEntity.ApprovalStatus == 1 ? "Approved!" : "Rejected!");
+                }
+                else
+                {
+                    return new Tuple<bool, string>(false, "Please contact Administrator");
+                }
+            }
+            // return new Tuple<bool, string>(false, "Please contact Administrator");
         }
 
         [HttpGet("{id}")]
-        public string Get(string DocNo, int Type)
+        public string Get(string Value, string Code, int Type)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            if (Type == 1)
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@Value", Value));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", Code));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+            ds = manageSQLConnection.GetDataSetValues("GetDocumentCorrection", sqlParameters);
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
             {
-                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", DocNo));
-                ds = manageSQLConnection.GetDataSetValues("GetDocumentCorrection", sqlParameters);
-                ManageReport manageReport = new ManageReport();
-                if (manageReport.CheckDataAvailable(ds))
-                {
-                    return JsonConvert.SerializeObject(ds.Tables[0]);
-                }
+                return JsonConvert.SerializeObject(ds.Tables[0]);
             }
-            return  JsonConvert.SerializeObject(""); 
+
+            return JsonConvert.SerializeObject("");
         }
     }
     public class DocCorrectionEntity
     {
+        public int Id { get; set; }
         public int Type { get; set; }
         public string DocNo { get; set; }
         public int RoleId { get; set; }
@@ -65,4 +91,3 @@ namespace TNCSCAPI.Controllers.Documents
     }
 }
 
- 

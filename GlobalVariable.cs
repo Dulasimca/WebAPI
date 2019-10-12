@@ -55,6 +55,9 @@
         public const string OCRReportFileName = "OCRREG";
         public const string GSTFileName = "GST";
 
+        public const string GUReportFileName = "GU";
+        public const string GRReportFileName = "GR";
+
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
         public const string DocumentEditPermission = " Document Edit Permission is not Granted. Please Contact Administrator! ";
