@@ -40,8 +40,9 @@ namespace TNCSCAPI.ManageAllReports.GunnyReport
                 streamWriter = new StreamWriter(filePath, true);
                 DateWiseCommodityWiseGUGRReport(streamWriter, entity);
 
-                List<GUList> guList = new List<GUList>();
-                guList = report.ConvertDataTableToList<GUList>(entity.dataSet.Tables[0]);
+                //List<GUList> guList = new List<GUList>();
+                //guList = report.ConvertDataTableToList<GUList>(entity.dataSet.Tables[0]);
+
                 streamWriter.Flush();
 
             }
