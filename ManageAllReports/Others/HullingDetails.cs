@@ -118,7 +118,7 @@ namespace TNCSCAPI.ManageAllReports
                 //sIssuer = Convert.ToString(dr["DepositorName"]).Trim();
                 sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
                 sw.Write(report.StringFormatWithoutPipe(dr["SRNo"].ToString(), 18, 2));
-                sw.Write(report.StringFormatWithoutPipe( report.FormatDirectDate(dr["SRDate"].ToString()), 16, 2));
+                sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(dr["SRDate"].ToString()), 16, 2));
                 sw.Write(report.StringFormatWithoutPipe(Convert.ToString(dr["DepositorName"]).Trim(), 37, 2));
                 sw.Write(report.StringFormatWithoutPipe(dr["ITDescription"].ToString(), 26, 2));
                 sw.Write(report.StringFormatWithoutPipe(dr["NoPacking"].ToString(), 12, 1));

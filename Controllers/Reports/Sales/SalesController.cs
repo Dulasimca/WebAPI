@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Newtonsoft.Json;
 using TNCSCAPI.ManageAllReports;
+using TNCSCAPI.ManageAllReports.Sales;
 
 namespace TNCSCAPI.Controllers.Reports.Sales
 {
@@ -28,6 +29,22 @@ namespace TNCSCAPI.Controllers.Reports.Sales
                 sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", issueMemoDetails.Fdate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", issueMemoDetails.Tdate));
                 ds = manageSQLConnection.GetDataSetValues("Getissuememo", sqlParameters);
+                SalesIssueMemo salesIssueMemo = new SalesIssueMemo();
+                ManageReport manageReport = new ManageReport();
+                //DataTable dt = new DataTable();
+                if(manageReport.CheckDataAvailable(ds))
+                {
+                    CommonEntity entity = new CommonEntity
+                    {
+                        dataSet = ds,
+                        GCode = issueMemoDetails.GCode,
+                        FromDate = issueMemoDetails.Fdate,
+                        Todate = issueMemoDetails.Tdate,
+                        UserName = issueMemoDetails.UserName,
+                    };
+                    Task.Run(() => salesIssueMemo.GenerateCustomerDetail(entity));
+                }
+                return JsonConvert.SerializeObject(ds.Tables[0]);
             }
             else if (issueMemoDetails.Type == 2)
             {
@@ -43,18 +60,6 @@ namespace TNCSCAPI.Controllers.Reports.Sales
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-        //[HttpGet("{id}")]
-        //public string Get(string Fdate, string Tdate, string GCode)
-        //{
-        //    DataSet ds = new DataSet();
-        //    ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-        //    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-        //    sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", Fdate));
-        //    sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", Tdate));
-        //    sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", GCode)); 
-        //     ds = manageSQLConnection.GetDataSetValues("getIssuememoabstract", sqlParameters);
-        //    return JsonConvert.SerializeObject(ds.Tables[0]);
-        //}
 }
 
     public class IssueMemoEntity
