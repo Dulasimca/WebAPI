@@ -64,5 +64,11 @@
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
         public const string DocumentEditPermission = " Document Edit Permission is not Granted. Please Contact Administrator! ";
+
+        //FSSAI description
+        public const string FSSAI1 = "  1. Received the Stock within FSSAI Limits / Uniform Specifications";
+        public const string FSSAI2 = "  2. Received the Stock in Pest Free Conditions";
+        public const string FSSAI3 = "  3. Received Jointly Signed Sealed Samples Satisfied with Good Quality and Quantity";
+        public const string FSSAISign =  "                   Sign. of the Authorised Person. ";
     }
 }

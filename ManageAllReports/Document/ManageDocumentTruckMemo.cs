@@ -151,15 +151,15 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write(report.StringFormatWithoutPipe(GetRRNo(transferDetails), 31, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
-            streamWriter.WriteLine("|                                                                                                          |");
-            streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account          |");
-            streamWriter.WriteLine("|                                                                                                          |");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI1, 105, 2) + "|");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI2, 105, 2) + "|");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI3, 105, 2) + "|");
             streamWriter.WriteLine("|                                                                       NAME OF TC                         |");
             streamWriter.WriteLine("|                                                                                                          |");
-            streamWriter.WriteLine("|GODOWN INCHARGE                                                        SIGNATURE OF THE TC REPRESENTATIVE |");
+            streamWriter.WriteLine("|GODOWN INCHARGE                                                        Sign. of the Authorised Person.    |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
             streamWriter.WriteLine("|   " + report.StringFormatWithoutPipe(GetRemarks(transferDetails), 102, 2) + "|");
-            report.AddMoreContent(streamWriter, GetRemarks(transferDetails), 102, 1);//Add content next line.
+            report.AddMoreContent(streamWriter, GetRemarks(transferDetails), 102, 3);//Add content next line.
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine((char)12);
         }

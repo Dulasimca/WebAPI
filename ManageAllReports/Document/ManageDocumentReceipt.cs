@@ -168,10 +168,11 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("|                                                                                                          |");
-            streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account          |");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI1, 106, 2) + "|");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI2, 106, 2) + "|");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI3, 106, 2) + "|");
             streamWriter.WriteLine("|                                                                                                          |");
-            streamWriter.WriteLine("|                                                                                                          |");
-            streamWriter.WriteLine("|DEPOSITOR OR HIS REPRESENTATIVE                                               GODOWN INCHARGE             |");
+            streamWriter.WriteLine("|  Sign. of the Authorised Person.                                            GODOWN INCHARGE             |");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
             streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockReceipt.Remarks, 103, 2)+"|");

@@ -33,8 +33,8 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AddDocHeaderForIssues(streamWriter, stockIssuesEntity, isDuplicate);
                 AddDetails(streamWriter, stockIssuesEntity);
                 AddDODetails(streamWriter, stockIssuesEntity);
-                AddFooter(streamWriter, stockIssuesEntity);               
-               
+                AddFooter(streamWriter, stockIssuesEntity);
+
             }
             catch (Exception ex)
             {
@@ -104,7 +104,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             {
                 AuditLog.WriteError(ex.Message);
             }
-           
+
 
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
             streamWriter.WriteLine("||SNo|  STACK NO  |    COMMODITY                  |  SCHEME      |UNIT WEIGHT  |NO.OFUNITS|   NET Wt/Nos|MOI% |");
@@ -135,7 +135,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 5, 1));
                 streamWriter.WriteLine(" ");
                 units = units + item.NoPacking;
-                netKgs = netKgs +Convert.ToDouble(item.Nkgs);
+                netKgs = netKgs + Convert.ToDouble(item.Nkgs);
             }
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
             streamWriter.WriteLine("||                                                               |Total        |" + report.StringFormatWithoutPipe(units.ToString(), 9, 1) + "|" + report.StringFormatWithoutPipe(netKgs.ToString(), 12, 1) + "|     |");
@@ -179,15 +179,16 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="stockIssuesEntity"></param>
         private void AddFooter(StreamWriter streamWriter, DocumentStockIssuesEntity stockIssuesEntity)
         {
-            streamWriter.WriteLine("|LORRY NO      :" + report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity.LorryNo), 17, 2) + "TC NAME       : "+ report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity.TransporterName), 60, 2) + "|");
+            streamWriter.WriteLine("| LORRY NO      :" + report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity.LorryNo), 17, 2) + "TC NAME      : " + report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity.TransporterName), 60, 2) + "|");
             streamWriter.WriteLine("|                                                                                                             |");
-            streamWriter.WriteLine("|The above stocks were weighed in our presence Received in Good Conditions and taken into account             |");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI1, 108, 2) + "|");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI2, 108, 2) + "|");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI3, 108, 2) + "|");
             streamWriter.WriteLine("|                                                                                                             |");
-            streamWriter.WriteLine("|                                                                                                             |");
-            streamWriter.WriteLine("|DEPOSITOR OR HIS REPRESENTATIVE                                               GODOWN INCHARGE                |");
+            streamWriter.WriteLine("|          Sign. of the Authorised Person.                                     GODOWN INCHARGE                |");
             streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|REMARKS                                                                                                      |");
-            streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockIssuesEntity.Remarks,105,2) + "|");
+            streamWriter.WriteLine("|   " + report.StringFormatWithoutPipe(stockIssuesEntity.Remarks, 105, 2) + "|");
             report.AddMoreContent(streamWriter, stockIssuesEntity.Remarks, 105, 3);
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine((char)12);
