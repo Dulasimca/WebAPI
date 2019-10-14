@@ -57,7 +57,7 @@ namespace TNCSCAPI.ManageAllReports.Transfer
             sw.WriteLine("        Truck Memo Region Wise Details of  Godown: : " + entity.GName);
             sw.WriteLine("        Date:" + report.FormatDate(entity.FromDate) + "  To : " + report.FormatDate(entity.Todate) + "            PageNo : " + pageno.ToString());
             sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("SNO  T.MEMO NO   DATE        RECEIVED GODOWN       REGION         Commodity       SCHEME       BAGS  NET Weight(Kgs) Doc.no/Lorry NO");
+            sw.WriteLine("SNO  T.MEMO NO   DATE         RECEIVED GODOWN       REGION         Commodity       SCHEME       BAGS  NET Weight(Kgs) Doc.no/Lorry NO");
             sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------");
         }
 
@@ -113,14 +113,14 @@ namespace TNCSCAPI.ManageAllReports.Transfer
                                 AddHeader(sw, entity, pageno);
                             }
                             PackingType = row["PBWeight"].ToString(); //PBWeight
-                            sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 1));
+                            sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
                             sw.Write(report.StringFormatWithoutPipe(row["STNo"].ToString(), 11, 2));
                             sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(row["STDate"].ToString()), 10, 2) + "  ");
                             sw.Write(report.StringFormatWithoutPipe(isfirst == true ? row["DepositorName"].ToString() : " ", 20, 2));
                             sw.Write(report.StringFormatWithoutPipe(isfirst == true ? row["RGNAME"].ToString() : " ", 15, 2));
                             sw.Write(report.StringFormatWithoutPipe(row["ITDescription"].ToString(), 15, 1));
-                            sw.Write(report.StringFormatWithoutPipe(row["SCName"].ToString(), 11, 1));
-                            sw.Write(report.StringFormatWithoutPipe(row["NoPacking"].ToString(), 6, 2));
+                            sw.Write(report.StringFormatWithoutPipe(row["SCName"].ToString(), 11, 2));
+                            sw.Write(report.StringFormatWithoutPipe(row["NoPacking"].ToString(), 6, 1));
                             sw.Write(report.StringFormatWithoutPipe(PackingType.ToUpper() == "NOS" ? row["Nkgs"].ToString() : report.DecimalformatForWeight(row["Nkgs"].ToString()), 15, 1));
                             sw.Write(report.StringFormatWithoutPipe(row["LNo"].ToString(), 21, 2));
                             sw.WriteLine("");

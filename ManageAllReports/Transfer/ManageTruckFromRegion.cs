@@ -85,7 +85,7 @@ namespace TNCSCAPI.ManageAllReports.Transfer
             try
             {
                 // dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, new string[] { "Coop", "Comodity" });
-                var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "DepositorName");
+                var dateList = entity.dataSet.Tables[0].DefaultView.ToTable(true, "TNCSName");
                 AddHeader(sw, entity, pageno);
                 foreach (DataRow depdata in dateList.Rows)
                 {
@@ -95,14 +95,14 @@ namespace TNCSCAPI.ManageAllReports.Transfer
                     isfirst = true;
                     string PackingType = string.Empty;
                     string depositor = string.Empty;
-                    depositor = Convert.ToString(depdata["DepositorName"]);
-                    DataRow[] data = entity.dataSet.Tables[0].Select("DepositorName='" + depositor + "'");
+                    depositor = Convert.ToString(depdata["TNCSName"]);
+                    DataRow[] data = entity.dataSet.Tables[0].Select("TNCSName='" + depositor + "'");
                     var distinctCommodity = report.ConvertDataRowToTable(data, entity.dataSet.Tables[0]).DefaultView.ToTable(true, "ITDescription");
 
                     foreach (DataRow item in distinctCommodity.Rows)
                     {
                         Total = 0;
-                        DataRow[] ndata = entity.dataSet.Tables[0].Select("DepositorName='" + depositor + "' and ITDescription='" + Convert.ToString(item["ITDescription"]) + "'");
+                        DataRow[] ndata = entity.dataSet.Tables[0].Select("TNCSName='" + depositor + "' and ITDescription='" + Convert.ToString(item["ITDescription"]) + "'");
                         foreach (DataRow row in ndata)
                         {
 
