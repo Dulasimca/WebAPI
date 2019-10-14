@@ -26,6 +26,7 @@ namespace TNCSCAPI.ManageAllReports.Sales
             StreamWriter streamWriter = null;
             try
             {
+                //GName = entity.GName;
                 GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
                 RegionName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
                 fileName = entity.GCode + GlobalVariable.SalesIssueMemoFileName;
@@ -67,7 +68,7 @@ namespace TNCSCAPI.ManageAllReports.Sales
         {
             int iCount = 10;
             var distinctCoop = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Coop");
-            //Date wise DO report
+            //var distinctCommodity = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Commodity");
             string sAckno = string.Empty;
             string sCoop = string.Empty;
             string sCommodity = string.Empty;
@@ -91,7 +92,7 @@ namespace TNCSCAPI.ManageAllReports.Sales
                     {
                         //Add header again
                         iCount = 11;
-                        sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------|");
+                        sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------|");
                         sw.WriteLine((char)12);
                         AddHeaderForCustomerDetail(sw, entity);
                     }
@@ -111,7 +112,7 @@ namespace TNCSCAPI.ManageAllReports.Sales
                     sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(item["Date"].ToString()), 10, 2));
                     sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? sCoop : " ", 35, 2));
                     sw.Write(report.StringFormatWithoutPipe(item["Scheme"].ToString(), 13, 2));
-                    sw.Write(report.StringFormatWithoutPipe(item["Commodity"].ToString(), 18, 2));
+                    sw.Write(report.StringFormatWithoutPipe(item["Commodity"].ToString(), 27, 2));
                     sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item["Quantity"].ToString()), 11, 1));
                     sw.Write(report.StringFormatWithoutPipe((item["Rate"].ToString()), 10, 1));
                     sw.Write(report.StringFormatWithoutPipe((item["Value"].ToString()), 11, 1));
@@ -126,20 +127,20 @@ namespace TNCSCAPI.ManageAllReports.Sales
                     sw.Write(report.StringFormatWithoutPipe(" ", 34, 2));
                     sw.Write(report.StringFormatWithoutPipe("", 23, 2));
                     sw.Write(report.StringFormatWithoutPipe("Total".ToString(), 11, 2));
-                    sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(dTotal.ToString()), 32, 1));
+                    sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(dTotal.ToString()), 41, 1));
                     dTotal = 0;
                     sw.WriteLine("");
                     //sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------|");
             }
 
-            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------|");
             sw.Write(" ");
             sw.Write(report.StringFormatWithoutPipe(" ", 34, 2));
             sw.Write(report.StringFormatWithoutPipe("", 23, 2));
             sw.Write(report.StringFormatWithoutPipe("Grand Total".ToString(), 11, 2));
-            sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(gTotal.ToString()), 32, 1));
+            sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(gTotal.ToString()), 41, 1));
             sw.WriteLine("");
-            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------|");
             sw.WriteLine((char)12);
         }
 
@@ -155,9 +156,9 @@ namespace TNCSCAPI.ManageAllReports.Sales
             sw.WriteLine("                        Stock Issue Register (Society/CRS/NMP) of  " + GName + " Godown");
             sw.WriteLine(" ");
             sw.WriteLine(" From: " + report.FormatDate(entity.FromDate) + " to " + report.FormatDate(entity.Todate) + "                                                              Page No: 1");
-            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("Issue No.    Issue Date    To whom                          Scheme        Commodity          NET. WEIGHT       Rate     Value   |");
-            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("Issue No.    Issue Date    To whom                          Scheme        Commodity                   NET. WEIGHT       Rate     Value   |");
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------|");
 
         }
 

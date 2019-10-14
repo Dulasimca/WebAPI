@@ -50,7 +50,8 @@
         public const string DOSPLPDSReportFileName = "DOSPLPDS";
         public const string DOSocietyReportFileName = "DOSOCIETY";
 
-        public const string SalesIssueMemoFileName = "IMCD";
+        public const string SalesIssueMemoFileName = "SIMCUSD";
+        public const string SalesIssueMemoAbstractFileName = "SIMABSD";
 
         public const string OCRReportFileName = "OCRREG";
         public const string GSTFileName = "GST";
