@@ -54,7 +54,7 @@ namespace TNCSCAPI.Controllers.Documents
         }
 
         [HttpGet("{id}")]
-        public string Get(string Value, string Code, int Type)
+        public string Get(string Value, string Code, int Type,string ToDate)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -62,6 +62,7 @@ namespace TNCSCAPI.Controllers.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Value", Value));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", Code));
             sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
             ds = manageSQLConnection.GetDataSetValues("GetDocumentCorrection", sqlParameters);
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))

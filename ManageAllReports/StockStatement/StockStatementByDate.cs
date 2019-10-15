@@ -7,10 +7,11 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
 {
     public class StockStatementByDate
     {
+        ManageReport manageReport = new ManageReport();
         public List<DailyStockDetailsEntity> ProcessStockStatement(StockParameter stockParameter)
         {
-            float _BookBalanceWeight = 0, _PhysicalBalanceWeight = 0, _CumulitiveShortage = 0, _Shortage = 0;
-            float _receiptuptoYesterday = 0, _receipttotay = 0, _issuesuptoYesterday = 0,
+            decimal _BookBalanceWeight = 0, _PhysicalBalanceWeight = 0, _CumulitiveShortage = 0, _Shortage = 0;
+            decimal _receiptuptoYesterday = 0, _receipttotay = 0, _issuesuptoYesterday = 0,
                 _issuestoday = 0, _otherIssuesuptoYesterday = 0, _otherIssuestoday = 0, _writeOFFAll = 0,
                 _openingBookBalance = 0, _closingBookBalance = 0, _phycialbalance = 0;
             string _itemCode = string.Empty;
@@ -62,7 +63,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                         DataRow[] otherIssuestoday = todayIssues.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
 
                         DataRow[] writeOFFuptoYesterday = issuesUptoYesterday.Tables[2].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                        
+
                         _BookBalanceWeight = 0;
                         _PhysicalBalanceWeight = 0;
                         _CumulitiveShortage = 0;
@@ -79,38 +80,38 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                         _writeOFFAll = 0;
                         if (openingBalance != null && openingBalance.Count() > 0)
                         {
-                            _BookBalanceWeight = float.Parse(Convert.ToString(openingBalance[0]["BookBalanceWeight"]));
-                            _PhysicalBalanceWeight = float.Parse(Convert.ToString(openingBalance[0]["PhysicalBalanceWeight"]));
-                            _CumulitiveShortage = float.Parse(Convert.ToString(openingBalance[0]["CumulitiveShortage"]));
-                            _Shortage = float.Parse(Convert.ToString(openingBalance[0]["WriteOff"]));
+                            _BookBalanceWeight = Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(openingBalance[0]["BookBalanceWeight"])));
+                            _PhysicalBalanceWeight =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(openingBalance[0]["PhysicalBalanceWeight"])));
+                            _CumulitiveShortage =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(openingBalance[0]["CumulitiveShortage"])));
+                            _Shortage =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(openingBalance[0]["WriteOff"])));
                         }
                         if (receiptuptoYesterday != null && receiptuptoYesterday.Count() > 0)
                         {
-                            _receiptuptoYesterday = float.Parse(Convert.ToString(receiptuptoYesterday[0]["TOTAL"]));
+                            _receiptuptoYesterday =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(receiptuptoYesterday[0]["TOTAL"])));
                         }
                         if (receipttotay != null && receipttotay.Count() > 0)
                         {
-                            _receipttotay = float.Parse(Convert.ToString(receipttotay[0]["TOTAL"]));
+                            _receipttotay =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(receipttotay[0]["TOTAL"])));
                         }
                         if (issuesuptoYesterday != null && issuesuptoYesterday.Count() > 0)
                         {
-                            _issuesuptoYesterday = float.Parse(Convert.ToString(issuesuptoYesterday[0]["TOTAL"]));
+                            _issuesuptoYesterday =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(issuesuptoYesterday[0]["TOTAL"])));
                         }
                         if (issuestoday != null && issuestoday.Count() > 0)
                         {
-                            _issuestoday = float.Parse(Convert.ToString(issuestoday[0]["TOTAL"]));
+                            _issuestoday =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(issuestoday[0]["TOTAL"])));
                         }
                         if (otherIssuesuptoYesterday != null && otherIssuesuptoYesterday.Count() > 0)
                         {
-                            _otherIssuesuptoYesterday = float.Parse(Convert.ToString(otherIssuesuptoYesterday[0]["TOTAL"]));
+                            _otherIssuesuptoYesterday =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(otherIssuesuptoYesterday[0]["TOTAL"])));
                         }
                         if (otherIssuestoday != null && otherIssuestoday.Count() > 0)
                         {
-                            _otherIssuestoday = float.Parse(Convert.ToString(otherIssuestoday[0]["TOTAL"]));
+                            _otherIssuestoday =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(otherIssuestoday[0]["TOTAL"])));
                         }
                         if (writeOFFuptoYesterday.Count() > 0)
                         {
-                            _writeOFFAll= float.Parse(Convert.ToString(writeOFFuptoYesterday[0]["TOTAL"]));
+                            _writeOFFAll =  Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(writeOFFuptoYesterday[0]["TOTAL"])));
                         }
                         _openingBookBalance = (_BookBalanceWeight + _receiptuptoYesterday) - (_issuesuptoYesterday + _otherIssuesuptoYesterday);
                         _closingBookBalance = (_openingBookBalance + _receipttotay) - (_issuestoday + _otherIssuestoday);
@@ -129,7 +130,14 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                         stockDetailsEntity.Flag = true;
                         // InsertData(stockDetailsEntity);
                         //}
-                        dailyStockDetailsEntities.Add(stockDetailsEntity);
+                        // Data checking
+                        decimal CheckData = stockDetailsEntity.OpeningBalance + stockDetailsEntity.ClosingBalance +
+                                             stockDetailsEntity.TotalReceipt + stockDetailsEntity.IssueSales
+                                             + stockDetailsEntity.IssueOthers;
+                        if (CheckData > 0)
+                        {
+                            dailyStockDetailsEntities.Add(stockDetailsEntity);
+                        }
                     }
                 }
             }
@@ -144,14 +152,14 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
     {
         public string ItemCode { get; set; }
         public string ITDescription { get; set; }
-        public float OpeningBalance { get; set; }
-        public float PhycialBalance { get; set; }
-        public float ClosingBalance { get; set; }
-        public float CSBalance { get; set; }
-        public float Shortage { get; set; }
-        public float TotalReceipt { get; set; }
-        public float IssueSales { get; set; }
-        public float IssueOthers { get; set; }
+        public decimal OpeningBalance { get; set; }
+        public decimal PhycialBalance { get; set; }
+        public decimal ClosingBalance { get; set; }
+        public decimal CSBalance { get; set; }
+        public decimal Shortage { get; set; }
+        public decimal TotalReceipt { get; set; }
+        public decimal IssueSales { get; set; }
+        public decimal IssueOthers { get; set; }
         public DateTime LastUpdated { get; set; }
         public string GodownCode { get; set; }
         public string RegionCode { get; set; }
