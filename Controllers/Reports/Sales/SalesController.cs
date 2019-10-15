@@ -32,7 +32,7 @@ namespace TNCSCAPI.Controllers.Reports.Sales
                 SalesIssueMemo salesIssueMemo = new SalesIssueMemo();
                 ManageReport manageReport = new ManageReport();
                 //DataTable dt = new DataTable();
-                if(manageReport.CheckDataAvailable(ds))
+                if (manageReport.CheckDataAvailable(ds))
                 {
                     CommonEntity entity = new CommonEntity
                     {
@@ -48,7 +48,6 @@ namespace TNCSCAPI.Controllers.Reports.Sales
             }
             else if (issueMemoDetails.Type == 2)
             {
-                
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issueMemoDetails.GCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@society", issueMemoDetails.SCode));
@@ -56,11 +55,26 @@ namespace TNCSCAPI.Controllers.Reports.Sales
                 sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", issueMemoDetails.Fdate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", issueMemoDetails.Tdate));
                 ds = manageSQLConnection.GetDataSetValues("GetIssuememoAbstract", sqlParameters);
-                
+                SalesIssueMemoAbstract salesIssueMemoAbstract = new SalesIssueMemoAbstract();
+                ManageReport manageReport = new ManageReport();
+                //DataTable dt = new DataTable();
+                if (manageReport.CheckDataAvailable(ds))
+                {
+                    CommonEntity entity = new CommonEntity
+                    {
+                        dataSet = ds,
+                        GCode = issueMemoDetails.GCode,
+                        FromDate = issueMemoDetails.Fdate,
+                        Todate = issueMemoDetails.Tdate,
+                        UserName = issueMemoDetails.UserName,
+                    };
+                    Task.Run(() => salesIssueMemoAbstract.GenerateSalesIssueMemoAbstract(entity));
+                }
+                return JsonConvert.SerializeObject(ds.Tables[0]);
             }
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            return JsonConvert.SerializeObject("");
         }
-}
+    }
 
     public class IssueMemoEntity
     {
