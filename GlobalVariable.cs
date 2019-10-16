@@ -62,6 +62,10 @@
         public const string TruckToRegionFileName = "TRUCKTOREGION";
         public const string TruckFromRegionFileName = "TRUCKFROMREGION";
 
+        public const string HoPurchaseFileName = "HOPURCHASE";
+        public const string RoPurchaseFileName = "ROPURCHASE";
+        public const string RoNoPurchaseFileName = "RONOPURCHASE";
+
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
         public const string DocumentEditPermission = " Document Edit Permission is not Granted. Please Contact Administrator! ";
