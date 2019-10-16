@@ -64,7 +64,7 @@
 
         public const string HoPurchaseFileName = "HOPURCHASE";
         public const string RoPurchaseFileName = "ROPURCHASE";
-        public const string RoNoPurchaseFileName = "RONOPURCHASE";
+        //public const string RoNoPurchaseFileName = "RONOPURCHASE";
 
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";

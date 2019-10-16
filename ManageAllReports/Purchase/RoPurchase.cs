@@ -4,10 +4,11 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.ManageAllReports.Purchase
 {
-    public class HoPurchase
+    public class RoPurchase
     {
         private string GName { get; set; }
         private string RegionName { get; set; }
@@ -19,9 +20,9 @@ namespace TNCSCAPI.ManageAllReports.Purchase
         /// Generate the Customer detail
         /// </summary>
         /// <param name="entity">Common entity</param>
-        public void GenerateHoPurchase(CommonEntity entity)
+        public void GenerateRoPurchase(CommonEntity entity)
         {
-            //AuditLog.WriteError("GenerateHoPurchaseReport");
+            //AuditLog.WriteError("GenerateRoPurchaseReport");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             try
@@ -29,7 +30,7 @@ namespace TNCSCAPI.ManageAllReports.Purchase
                 //GName = entity.GName;
                 GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
                 RegionName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
-                fileName = entity.GCode + GlobalVariable.HoPurchaseFileName;
+                fileName = entity.GCode + GlobalVariable.RoPurchaseFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
                 report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
                 subF_Path = fPath + "//" + entity.UserName; //ManageReport.GetDateForFolder();
@@ -39,9 +40,9 @@ namespace TNCSCAPI.ManageAllReports.Purchase
                 report.DeleteFileIfExists(filePath);
 
                 streamWriter = new StreamWriter(filePath, true);
-                WriteHoPurchase(streamWriter, entity);
-                List<HoPurchaseEntity> HoPurchase = new List<HoPurchaseEntity>();
-                HoPurchase = report.ConvertDataTableToList<HoPurchaseEntity>(entity.dataSet.Tables[0]);
+                WriteRoPurchase(streamWriter, entity);
+                List<RoPurchaseEntity> RoPurchase = new List<RoPurchaseEntity>();
+                RoPurchase = report.ConvertDataTableToList<RoPurchaseEntity>(entity.dataSet.Tables[0]);
 
                 streamWriter.Flush();
 
@@ -63,7 +64,7 @@ namespace TNCSCAPI.ManageAllReports.Purchase
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="entity"></param>
-        public void WriteHoPurchase(StreamWriter sw, CommonEntity entity)
+        public void WriteRoPurchase(StreamWriter sw, CommonEntity entity)
         {
             int iCount = 10;
             var distinctCoop = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Depositor");
@@ -74,7 +75,7 @@ namespace TNCSCAPI.ManageAllReports.Purchase
             string sCommodity = string.Empty;
             decimal dTotal = 0;
             //decimal gTotal = 0;
-            AddHeaderForHoPurchase(sw, entity);
+            AddHeaderForRoPurchase(sw, entity);
             foreach (DataRow dateValue in distinctCoop.Rows)
             {
                 iCount = 11;
@@ -91,8 +92,10 @@ namespace TNCSCAPI.ManageAllReports.Purchase
                         iCount = 11;
                         sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------|");
                         sw.WriteLine((char)12);
-                        AddHeaderForHoPurchase(sw, entity);
+                        AddHeaderForRoPurchase(sw, entity);
                     }
+                    // var sortedlist = sCommodity.OrderBy(s => s.sComm).ThenBy(s1 => s1.StudentID);
+                    //sCommodity = item.Sort((p1, p2) => string.Compare(p1.Name, p2.Name, true));
                     sDepositor = Convert.ToString(item["Depositor"]);
                     if (sAckno == sDepositor)
                     {
@@ -110,16 +113,16 @@ namespace TNCSCAPI.ManageAllReports.Purchase
                     sw.Write(report.StringFormatWithoutPipe(item["Commodity"].ToString(), 27, 2));
                     sw.Write(report.StringFormatWithoutPipe(item["Bags"].ToString(), 6, 1));
                     sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item["Quantity"].ToString()), 14, 1));
-                    sw.Write(report.StringFormatWithoutPipe((item["TruckMen"].ToString()), 16, 2));
-                    sw.Write(report.StringFormatWithoutPipe((item["orderno"].ToString()), 14, 2));
+                    sw.Write(report.StringFormatWithoutPipe((item["TruckMen"].ToString()), 20, 2));
+                    sw.Write(report.StringFormatWithoutPipe((item["Orderno"].ToString()), 14, 2));
                     sw.Write(report.StringFormatWithoutPipe((item["Lorryno"].ToString()), 13, 2));
                     sw.WriteLine("");
-                    iCount = iCount + 1;
                     dTotal += Convert.ToDecimal(item["Quantity"].ToString());
-                   // gTotal += Convert.ToDecimal(item["Quantity"].ToString());
+                    // gTotal += Convert.ToDecimal(item["Quantity"].ToString());
                     i = i + 1;
+                    iCount++;
                 }
-                //sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                //sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.Write(" ");
                 sw.Write(report.StringFormatWithoutPipe(" ", 34, 2));
                 sw.Write(report.StringFormatWithoutPipe("", 27, 2));
@@ -127,7 +130,7 @@ namespace TNCSCAPI.ManageAllReports.Purchase
                 sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(dTotal.ToString()), 37, 1));
                 dTotal = 0;
                 sw.WriteLine("");
-               // sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                // sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------------------------|");
             }
         }
         /// <summary>
@@ -135,16 +138,16 @@ namespace TNCSCAPI.ManageAllReports.Purchase
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="entity"></param>
-        public void AddHeaderForHoPurchase(StreamWriter sw, CommonEntity entity)
+        public void AddHeaderForRoPurchase(StreamWriter sw, CommonEntity entity)
         {
             sw.WriteLine("                                     TAMILNADU CIVIL SUPPLIES CORPORATION                      Report Date :   " + ManageReport.GetCurrentDate());
             sw.WriteLine(" ");
             sw.WriteLine("                               Purchase Receipt Details of " + GName + " Godown");
             sw.WriteLine(" ");
-            sw.WriteLine(" From: " + report.FormatDate(entity.FromDate) + " to " + report.FormatDate(entity.Todate) + "               Weight in Kilo Grams                                                             Page No: 1");
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("S.No Ack.No      Date       Place                               Commodity                     Bags    Net Weight  T.Memo No        Order No       Lorry No     |");
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine(" From: " + report.FormatDate(entity.FromDate) + " to " + report.FormatDate(entity.Todate) + "            Weight in Kilo Grams                                                                            Page No: 1");
+            sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("S.No Ack.No      Date       Place                               Commodity                     Bags    Net Weight  T.Memo No            Order No       Lorry No     |");
+            sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
 
         }
 
@@ -153,19 +156,19 @@ namespace TNCSCAPI.ManageAllReports.Purchase
 }
 
 
-    public class HoPurchaseEntity
-    {
-        public string Region { get; set; }
-        public string Godownname { get; set; }
-        public string Ackno { get; set; }
-        public DateTime Date { get; set; }
-        public string Depositor { get; set; }
-        public string Lorryno { get; set; }
-        public string orderno { get; set; }
-        public double Quantity { get; set; }
-        public string Bags { get; set; }
-        public string TruckMen { get; set; }
-        public string Type { get; set; }
-    }
+public class RoPurchaseEntity
+{
+    public string Region { get; set; }
+    public string Godownname { get; set; }
+    public string Ackno { get; set; }
+    public DateTime Date { get; set; }
+    public string Depositor { get; set; }
+    public string Lorryno { get; set; }
+    public string Orderno { get; set; }
+    public double Quantity { get; set; }
+    public string Bags { get; set; }
+    public string TruckMen { get; set; }
+    public string Type { get; set; }
 
+}
 
