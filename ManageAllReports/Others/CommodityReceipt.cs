@@ -68,7 +68,7 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine("                                        Receipt Datewise Details of - Commodity    Godown : " + GName);
             sw.WriteLine(" ");
-            sw.WriteLine("          From:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate) + "          -EXCESS ");
+            sw.WriteLine("          From:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate) + "   ");
             sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
             sw.WriteLine("S.No|  Ack No   |Date      |   Commodity    |  Bags  |  Qty(Kgs)/NO's  |   Received From     | Lorry No  |   T.MEMO.NO   | T.MEMO DT |  ORDERNO  | EXCESS | SHORT |");
             sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");

@@ -23,5 +23,34 @@ namespace TNCSCAPI.Controllers.Masters
             ds = manageSQLConnection.GetDataSetValues("GetSocietyMaster", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
+        [HttpPost("{id}")]
+        public string Post(SocietyEntity entity)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            if (entity.Type == 1)
+            {
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", entity.GCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@SocietyType", entity.ReceivorType));
+                ds = manageSQLConnection.GetDataSetValues("GetSocietyMasterByID", sqlParameters);
+            }
+            else
+            {
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", entity.GCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@SocietyType", entity.ReceivorType));
+                sqlParameters.Add(new KeyValuePair<string, string>("@SocietyCode", entity.SocietyCode));
+                ds = manageSQLConnection.GetDataSetValues("GetShopName", sqlParameters);
+            }
+            return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
+    }
+    public class SocietyEntity
+    {
+        public string GCode { get; set; }
+        public string ReceivorType { get; set; }
+        public string SocietyCode { get; set; }
+        public int Type { get; set; }
     }
 }

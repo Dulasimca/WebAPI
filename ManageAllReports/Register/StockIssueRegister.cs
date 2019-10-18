@@ -175,7 +175,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Stackno, 13, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 35, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.NoPacking.ToString(), 12, 2));
-                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.Decimalformat(item.NetWt.ToString()), 20, 1));
+                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.DecimalformatForWeight(item.NetWt.ToString()), 20, 1));
                 sw.WriteLine("");
                 sw.WriteLine(" ");
                 count = count + 2;
@@ -235,7 +235,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.TyName, 35, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 35, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.NoPacking.ToString(), 12, 2));
-                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.Decimalformat(item.NetWt.ToString()), 20, 1));
+                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.DecimalformatForWeight(item.NetWt.ToString()), 20, 1));
                 sw.WriteLine("");
                 sw.WriteLine(" ");
                 count = count + 2;
@@ -295,7 +295,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Scheme, 13, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 35, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.NoPacking.ToString(), 12, 2));
-                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.Decimalformat(item.NetWt.ToString()), 20, 1));
+                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.DecimalformatForWeight(item.NetWt.ToString()), 20, 1));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.PName, 35, 2));
                 sw.WriteLine("");
                 sw.WriteLine(" ");
@@ -334,6 +334,7 @@ namespace TNCSCAPI.ManageAllReports
             int count = 11;
             string weighmentType = string.Empty;
             var resultSet = from d in stockIssues
+                            orderby d.Commodity,d.Scheme 
                             group d by new { d.TyName, d.Scheme, d.Commodity, d.ITBweighment, d.PName } into groupedData
                             select new
                             {
@@ -356,7 +357,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Scheme, 13, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 27, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.NoPacking.ToString(), 8, 2));
-                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.Decimalformat(item.NetWt.ToString()), 15, 1));
+                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.DecimalformatForWeight(item.NetWt.ToString()), 15, 1));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.PName.ToString(), 27, 2));
                 sw.WriteLine("");
                 sw.WriteLine(" ");
@@ -415,7 +416,7 @@ namespace TNCSCAPI.ManageAllReports
                 weighmentType = item.GroupByNames.ITBweighment.ToUpper();
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 36, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.NoPacking.ToString(), 7, 2));
-                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.Decimalformat(item.NetWt.ToString()), 17, 1));
+                sw.Write(report.StringFormatWithoutPipe(weighmentType == "NOS" ? item.NetWt.ToString() : report.DecimalformatForWeight(item.NetWt.ToString()), 17, 1));
                 sw.Write(report.StringFormatWithoutPipe( item.GroupByNames.PName, 30, 2));
                 sw.WriteLine("");
                 sw.WriteLine(" ");

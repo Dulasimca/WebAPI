@@ -25,9 +25,10 @@ namespace TNCSCAPI.Controllers.Reports.Sales
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issueMemoDetails.GCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@society", issueMemoDetails.SCode));
-                sqlParameters.Add(new KeyValuePair<string, string>("@type", issueMemoDetails.TCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@type", issueMemoDetails.ReceivorType));
                 sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", issueMemoDetails.Fdate));
-                sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", issueMemoDetails.Tdate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ShopCode", issueMemoDetails.ShopCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", issueMemoDetails.Tdate)); 
                 ds = manageSQLConnection.GetDataSetValues("Getissuememo", sqlParameters);
                 SalesIssueMemo salesIssueMemo = new SalesIssueMemo();
                 ManageReport manageReport = new ManageReport();
@@ -51,9 +52,10 @@ namespace TNCSCAPI.Controllers.Reports.Sales
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issueMemoDetails.GCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@society", issueMemoDetails.SCode));
-                sqlParameters.Add(new KeyValuePair<string, string>("@type", issueMemoDetails.TCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@type", issueMemoDetails.ReceivorType));
                 sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", issueMemoDetails.Fdate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", issueMemoDetails.Tdate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ShopCode", issueMemoDetails.ShopCode));
                 ds = manageSQLConnection.GetDataSetValues("GetIssuememoAbstract", sqlParameters);
                 SalesIssueMemoAbstract salesIssueMemoAbstract = new SalesIssueMemoAbstract();
                 ManageReport manageReport = new ManageReport();
@@ -80,12 +82,13 @@ namespace TNCSCAPI.Controllers.Reports.Sales
     {
         public string GCode { get; set; }
         public string SCode { get; set; }
-        public string TCode { get; set; }
+        public string ReceivorType { get; set; }
         public string Fdate { get; set; }
         public string Tdate { get; set; }
         public string UserName { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }
         public int Type { get; set; }
+       public string ShopCode { get; set; }
     }
 }

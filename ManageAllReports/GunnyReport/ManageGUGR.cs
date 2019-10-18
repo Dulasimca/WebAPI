@@ -40,9 +40,9 @@ namespace TNCSCAPI.ManageAllReports.GunnyReport
                 streamWriter = new StreamWriter(filePath, true);
                 DateWiseCommodityWiseGUGRReport(streamWriter, entity);
 
-                //List<GUList> guList = new List<GUList>();
-                //guList = report.ConvertDataTableToList<GUList>(entity.dataSet.Tables[0]);
-
+                List<GUList> guList = new List<GUList>();
+                guList = report.ConvertDataTableToList<GUList>(entity.dataSet.Tables[0]);
+                WriteGUGRAbstract(streamWriter, guList, entity);
                 streamWriter.Flush();
 
             }
@@ -109,7 +109,7 @@ namespace TNCSCAPI.ManageAllReports.GunnyReport
                         sw.Write(report.StringFormatWithoutPipe(row["Date"].ToString(), 9, 2));
                         sw.Write(report.StringFormatWithoutPipe(row["Commodity"].ToString(), 16, 2));
                         sw.Write(report.StringFormatWithoutPipe("0", 8,2));
-                        sw.Write(report.StringFormatWithoutPipe(row["Bags"].ToString(), 9, 2));
+                        sw.Write(report.StringFormatWithoutPipe(row["Quantity"].ToString(), 9, 2));
                         sw.Write(report.StringFormatWithoutPipe(row["stackno"].ToString(), 10, 2));
                     //  sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(row["Quantity"].ToString()), 11, 1) + "  ");
                         sw.Write(report.StringFormatWithoutPipe(row["Year"].ToString(), 5, 1));
@@ -117,7 +117,7 @@ namespace TNCSCAPI.ManageAllReports.GunnyReport
                         sw.WriteLine("");
                         count = count + 1;
                       //  qty += !string.IsNullOrEmpty(row["Quantity"].ToString()) ? Convert.ToDecimal(row["Quantity"]) : 0;
-                        Bags += !string.IsNullOrEmpty(Convert.ToString(row["Bags"])) ? Convert.ToInt32(row["Bags"].ToString()) : 0;
+                        Bags += !string.IsNullOrEmpty(Convert.ToString(row["Quantity"])) ? Convert.ToInt32(row["Quantity"].ToString()) : 0;
                         i++;
                     }
                   
@@ -142,7 +142,75 @@ namespace TNCSCAPI.ManageAllReports.GunnyReport
                 AuditLog.WriteError(ex.Message + " " + ex.StackTrace);
             }
         }
-    }
+
+
+        /// <summary>
+        /// Write text file for item wise abstract data
+        /// </summary>
+        /// <param name="sw">Text Streamwriter</param>
+        /// <param name="dORegEntities">DOReg entity</param>
+        /// <param name="entity">Common Entity</param>
+        public void WriteGUGRAbstract(StreamWriter sw, List<GUList> gULists, CommonEntity entity)
+        {
+            try
+            {
+                int iCount = 11;
+                // Gets the group by values based on ths column Commodity,Scheme
+                var myResultItem = from a in gULists
+                                   group a by new { a.Commodity } into gValue
+                                   select new
+                                   {
+                                       Netwt = gValue.Sum(s => s.Quantity),
+                                       GroupByNames = gValue.Key
+                                   };
+
+                double dAmount = 0;
+                AddHeaderforAbstractItem(sw, entity);
+                foreach (var item in myResultItem)
+                {
+                    if (iCount >= 50)
+                    {
+                        //Add header again
+                        iCount = 11;
+                        sw.WriteLine("-------------------------------------------------------------------------------");
+                        sw.WriteLine((char)12);
+                        AddHeaderforAbstractItem(sw, entity);
+                    }
+                    sw.Write(report.StringFormat("", 10, 2));
+                    sw.Write(report.StringFormat(item.GroupByNames.Commodity, 37, 2));
+                    sw.Write(report.StringFormat(item.Netwt.ToString(), 10, 1));
+                    dAmount = dAmount + item.Netwt;
+                    iCount++;
+                    sw.WriteLine("");
+                }
+                // Add toal values
+                sw.WriteLine("-------------------------------------------------------------------------------");
+                sw.Write(report.StringFormat("", 10, 2));
+                sw.Write(report.StringFormat("  Total     ", 37, 2));
+                sw.Write(report.StringFormat(dAmount.ToString(), 10, 1));
+                sw.WriteLine("");
+                sw.WriteLine("-------------------------------------------------------------------------------");
+                sw.WriteLine((char)12);
+
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
+            }
+
+        }
+
+        public void AddHeaderforAbstractItem(StreamWriter sw, CommonEntity entity)
+        {
+             
+                sw.WriteLine(" TamilNadu Civil Supplies Corporation       " + entity.RName);
+                sw.WriteLine(HeaderTitle + " Abstract Details of " + entity.GName + " Godown");
+                sw.WriteLine(" From : " + report.FormatDate(entity.FromDate) + " To : " + report.FormatDate(entity.Todate));
+                sw.WriteLine("-------------------------------------------------------------------------------");
+                sw.WriteLine("              ITEM DETAILS                        NO OF GUNNIES ");
+                sw.WriteLine("-------------------------------------------------------------------------------");
+            }
+      }
 
     public class GUList
     {

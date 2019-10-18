@@ -188,12 +188,12 @@ namespace TNCSCAPI.ManageAllReports
                         ackNo = ackNoNext;
                     }
                     sw.Write(report.StringFormat(CheckRepeatValue == false ? i.ToString() : " ", 4, 2));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? ackNoNext : " ", 11, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["TruckMemoNo"].ToString() : " ", 19, 1));
-                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Lorryno"].ToString() : " ", 11, 1));
+                    sw.Write(report.StringFormat(CheckRepeatValue == false ? ackNoNext : " ", 11, 2));
+                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["TruckMemoNo"].ToString() : " ", 19, 2));
+                    sw.Write(report.StringFormat(CheckRepeatValue == false ? row["Lorryno"].ToString() : " ", 11, 2));
                     sw.Write(report.StringFormat(CheckRepeatValue == false ? fromWhomRcd : " ", 33, 2));
                     sw.Write(report.StringFormat(row["Scheme"].ToString(), 12, 2));
-                    sw.Write(report.StringFormat(row["Stackno"].ToString(), 12, 1));
+                    sw.Write(report.StringFormat(row["Stackno"].ToString(), 12, 2));
                     sw.Write(report.StringFormat(row["NoPacking"].ToString(), 8, 1));
                     sw.Write(report.StringFormat(row["Commodity"].ToString(), 15, 2));
                     sw.Write(report.StringFormat(row["NetWt"].ToString(), 10, 1));

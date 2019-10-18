@@ -164,7 +164,7 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                         sw.Write(report.StringFormatWithoutPipe("", 15, 2));
                         sw.Write(report.StringFormatWithoutPipe("  Total ", 11, 1));
                         sw.Write(report.StringFormatWithoutPipe(Qty.ToString(), 11, 1));
-                        sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Rate.ToString()), 10, 1));
+                        sw.Write(report.StringFormatWithoutPipe(" ", 10, 1));
                         sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Toatal_C_Amount.ToString()), 11, 1));
                         sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Total_NC_Amount.ToString()), 11, 1));
                         sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Amount.ToString()), 11, 1));
