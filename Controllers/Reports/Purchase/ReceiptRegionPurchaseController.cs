@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Newtonsoft.Json;
 using TNCSCAPI.ManageAllReports;
+using TNCSCAPI.ManageAllReports.Purchase;
+
 
 namespace TNCSCAPI.Controllers.Reports.Purchase
 {
@@ -24,6 +26,20 @@ namespace TNCSCAPI.Controllers.Reports.Purchase
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", reportParameter.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", reportParameter.GCode));
             ds = manageSQLConnection.GetDataSetValues("GetReceiptRegionPurchase", sqlParameters);
+            RoPurchase RoPurchase = new RoPurchase();
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = reportParameter.GCode,
+                    FromDate = reportParameter.FromDate,
+                    Todate = reportParameter.ToDate,
+                    UserName = reportParameter.UserName
+                };
+                Task.Run(() => RoPurchase.GenerateRoPurchase(entity));
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }
