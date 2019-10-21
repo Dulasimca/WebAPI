@@ -27,7 +27,6 @@ namespace TNCSCAPI.ManageAllReports.Sales
             try
             {
                 GName = entity.GName;
-                //GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
                 //RegionName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
                 fileName = entity.GCode + GlobalVariable.SalesIssueMemoFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
@@ -77,7 +76,6 @@ namespace TNCSCAPI.ManageAllReports.Sales
             AddHeaderForCustomerDetail(sw, entity);
             foreach (DataRow dateValue in distinctCoop.Rows)
             {
-                iCount = 11;
                 bool CheckRepeatValue = false;
                 sCoop = string.Empty;
                 sAckno = string.Empty;

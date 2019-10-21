@@ -25,8 +25,6 @@ namespace TNCSCAPI.ManageAllReports.Sales
             {
                 GName = entity.GName;
                 RName = entity.RName;
-                //GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
-                //RName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
                 fileName = entity.GCode + GlobalVariable.SalesIssueMemoAbstractFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
                 report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
