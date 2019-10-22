@@ -196,7 +196,7 @@ namespace TNCSCAPI.ManageAllReports
                     sw.Write(report.StringFormat(row["Stackno"].ToString(), 12, 2));
                     sw.Write(report.StringFormat(row["NoPacking"].ToString(), 8, 1));
                     sw.Write(report.StringFormat(row["Commodity"].ToString(), 15, 2));
-                    sw.Write(report.StringFormat(row["NetWt"].ToString(), 10, 1));
+                    sw.Write(report.StringFormat(report.DecimalformatForWeight(row["NetWt"].ToString()), 10, 1));
                     sw.WriteLine("");
                     i = CheckRepeatValue == false ? i + 1 : i; 
                 }
@@ -242,7 +242,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormat(item.GroupByNames.Stackno, 14, 1));
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 24, 2));
                 sw.Write(report.StringFormat(item.No_Bags.ToString(), 13, 2));
-                sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 20, 1));
+                sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 20, 1));
                 count++;
                 sw.WriteLine("");
             }
@@ -280,7 +280,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormat(item.GroupByNames.Scheme, 19, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 22, 2));
                 sw.Write(report.StringFormat(item.No_Bags.ToString(), 14, 1));
-                sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 20, 1));
+                sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 20, 1));
                 count++;
                 sw.WriteLine("");
             }
@@ -321,7 +321,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormat(item.GroupByNames.Packingtype, 21, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 21, 2));
                 sw.Write(report.StringFormat(item.No_Bags.ToString(), 24, 2));
-                sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 18, 1));
+                sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 18, 1));
                 count++;
                 sw.WriteLine("");
             }
@@ -358,7 +358,7 @@ namespace TNCSCAPI.ManageAllReports
                 }
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 18, 2));
                 sw.Write(report.StringFormat(item.No_Bags.ToString(), 12, 1));
-                sw.Write(report.StringFormat(report.Decimalformat(item.Netwt_Kgs.ToString()), 22, 1));
+                sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 22, 1));
                 count++;
                 sw.WriteLine("");
             }
