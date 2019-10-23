@@ -19,7 +19,7 @@ namespace TNCSCAPI.Controllers.Masters
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@gcode", GCode));
             ds = manageSQLConnection.GetDataSetValues("get_societymasterentryissuer", sqlParameters);
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            return JsonConvert.SerializeObject(ds);
         }
         [HttpPut("{id}")]
         public bool Put(SocietyMasterEntryIssuerEntity societyMasterEntry)
