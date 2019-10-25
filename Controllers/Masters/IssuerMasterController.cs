@@ -59,6 +59,7 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", issuerEntity.Activeflag));
             sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.ACSCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", issuerEntity.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", issuerEntity.RCode));
             return manageSQLConnection.InsertData("InsertIssuerMaster", sqlParameters);
         }
 
@@ -70,6 +71,7 @@ namespace TNCSCAPI.Controllers.Masters
         public string IssuerCode { get; set; }
         public string Activeflag { get; set; }
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string ACSCode { get; set; }
         public string SocietyCode { get; set; }
         public string CategoryId { get; set; }
