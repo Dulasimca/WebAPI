@@ -147,6 +147,7 @@ namespace TNCSCAPI
                         sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                         sqlCommand.ExecuteNonQuery();
                     }
+                    System.Threading.Thread.Sleep(100);
                     objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();

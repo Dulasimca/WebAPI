@@ -54,6 +54,8 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@Issuername", issuerEntity.IssuerName));
             sqlParameters.Add(new KeyValuePair<string, string>("@SocietyCode", issuerEntity.SocietyCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", issuerEntity.IssuerCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@CategoryId", issuerEntity.CategoryId));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Tycode", issuerEntity.Tycode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", issuerEntity.Activeflag));
             sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.ACSCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issuerEntity.GCode));
@@ -70,5 +72,7 @@ namespace TNCSCAPI.Controllers.Masters
         public string GCode { get; set; }
         public string ACSCode { get; set; }
         public string SocietyCode { get; set; }
+        public string CategoryId { get; set; }
+        public string Tycode { get; set; }
     }
 }
