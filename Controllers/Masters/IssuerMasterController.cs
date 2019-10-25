@@ -58,7 +58,7 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@Tycode", issuerEntity.Tycode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", issuerEntity.Activeflag));
             sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.ACSCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issuerEntity.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", issuerEntity.GCode));
             return manageSQLConnection.InsertData("InsertIssuerMaster", sqlParameters);
         }
 
