@@ -143,6 +143,7 @@ namespace TNCSCAPI
                         sqlCommand.Parameters.AddWithValue("@Godowncode", item.GodownCode);
                         sqlCommand.Parameters.AddWithValue("@RCode", issueList.RCode);
                         sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
+                        sqlCommand.Parameters.AddWithValue("@RowId", RowID);
                         sqlCommand.Parameters.AddWithValue("@Flag1", "-");
                         sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                         sqlCommand.ExecuteNonQuery();

@@ -115,8 +115,10 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                         }
                         _openingBookBalance = (_BookBalanceWeight + _receiptuptoYesterday) - (_issuesuptoYesterday + _otherIssuesuptoYesterday);
                         _closingBookBalance = (_openingBookBalance + _receipttotay) - (_issuestoday + _otherIssuestoday);
-                        _CumulitiveShortage = _CumulitiveShortage - _writeOFFAll;
+                        _CumulitiveShortage = _CumulitiveShortage - _writeOFFAll;                        
                         _phycialbalance = _closingBookBalance - (_CumulitiveShortage + _Shortage);
+                        _Shortage = _CumulitiveShortage > 0 ? _Shortage : (_CumulitiveShortage + _Shortage);
+                        _CumulitiveShortage = _CumulitiveShortage > 0 ? _CumulitiveShortage : 0;
                         stockDetailsEntity.OpeningBalance = _openingBookBalance;
                         stockDetailsEntity.ClosingBalance = _closingBookBalance;
                         stockDetailsEntity.PhycialBalance = _phycialbalance;
