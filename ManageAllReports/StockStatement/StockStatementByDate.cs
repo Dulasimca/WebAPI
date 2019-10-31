@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace TNCSCAPI.ManageAllReports.StockStatement
 {
@@ -145,6 +146,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             {
                 AuditLog.WriteError(" Process Daily Stock " + ex.Message);
             }
+            ManageStockStatement manageStockStatement = new ManageStockStatement();
+            Task.Run(() => manageStockStatement.GenerateStockStatementReport(dailyStockDetailsEntities, stockParameter)); //Generate the Report
             return dailyStockDetailsEntities;
         }
     }
@@ -173,6 +176,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
         public string ToDate { get; set; }
         public string GCode { get; set; }
         public string RCode { get; set; }
+        public string GName { get; set; }
+        public string RName { get; set; }
         public string UserName { get; set; }
     }
 }

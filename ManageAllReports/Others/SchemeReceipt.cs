@@ -71,9 +71,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine("      Issue memo Date wise Details of " +  SCName  + " Scheme   Godown : " + GName);
             sw.WriteLine(" ");
             sw.WriteLine(" From:" + report.FormatDate(entity.FromDate) + "     To : " + report.FormatDate(entity.Todate));
-            sw.WriteLine("---------------------------------------------------------------------------------------------------");
-            sw.WriteLine("S.No   Receipt.NO    Date          Commodity       Net Weight(Kgs)        Received From          ");
-            sw.WriteLine("---------------------------------------------------------------------------------------------------");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("S.No   Receipt.NO    Date          Commodity       Net Weight(Kgs)        Received From    T.MEMO.NO   Lorry No  ");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------");
         }
       
         /// <summary>
@@ -107,8 +107,10 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormatWithoutPipe(row["Ackno"].ToString(), 14, 2));
                 sw.Write(report.StringFormatWithoutPipe(row["Date"].ToString(), 10, 2));
                 sw.Write(report.StringFormatWithoutPipe(row["Commodity"].ToString(), 16, 2));
-                sw.Write(report.StringFormatWithoutPipe(row["Quantity"].ToString(), 20, 1));
+                sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(row["Quantity"].ToString()), 20, 1));
                 sw.Write(report.StringFormatWithoutPipe(Convert.ToString(row["RecdFrom"]).Trim(), 23, 2));
+                sw.Write(report.StringFormatWithoutPipe(row["TruckMemoNo"].ToString(), 11, 2));
+                sw.Write(report.StringFormatWithoutPipe(row["Lorryno"].ToString(), 10, 2));
                 sw.WriteLine("");
                 sw.WriteLine(" ");
                 i = i + 1;
