@@ -214,15 +214,16 @@ namespace TNCSCAPI.ManageAllReports.Stack
                     dtObStack = dataSet.Tables[2];
                     dtWriteOFF = dataSet.Tables[3];
                     string sStackCard = string.Empty;
+                    string sCommodity = string.Empty;
                     foreach (DataRow item in dtObStack.Rows)
                     {
                         StackCardRegisterEntity stackCardRegister = new StackCardRegisterEntity();
                         sStackCard = Convert.ToString(item["StockNo"]);
-
+                        sCommodity = Convert.ToString(item["Commodity"]);
                         //Filter particular stack card only
-                        DataRow[] dataRowsIssues = dtIssues.Select("StockNo = '" + sStackCard+"'");
-                        DataRow[] dataRowsReceipt = dtReceipt.Select("StockNo = '" + sStackCard + "'");
-                        DataRow[] dataRowsWriteOff = dtWriteOFF.Select("StockNo = '" + sStackCard + "'");
+                        DataRow[] dataRowsIssues = dtIssues.Select("StockNo = '" + sStackCard+ "' and Commodity='"+ sCommodity + "'");
+                        DataRow[] dataRowsReceipt = dtReceipt.Select("StockNo = '" + sStackCard + "' and Commodity='" + sCommodity + "'");
+                        DataRow[] dataRowsWriteOff = dtWriteOFF.Select("StockNo = '" + sStackCard + "' and Commodity='" + sCommodity + "'");
 
                         List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                         sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stackEntity.GCode));
@@ -231,6 +232,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                         DataSet dsGUGR = manageSQLConnection.GetDataSetValues("GetGUGRbyStackNo", sqlParameters);
 
                         stackCardRegister.StackCard = sStackCard;
+                        stackCardRegister.Commodity = sCommodity;
                         stackCardRegister.OpeningBag= Convert.ToString(item["NoPacking"]);
                         stackCardRegister.OpeningQty = Convert.ToString(item["TOTAL"]);
 
@@ -304,10 +306,10 @@ namespace TNCSCAPI.ManageAllReports.Stack
                     }
 
                 }
-                AuditLog.WriteError("Print start");
+               // AuditLog.WriteError("Print start");
                 StackCardRegisterPrint stackCardRegisterPrint = new StackCardRegisterPrint();
                 stackCardRegisterPrint.GenerateStackCardRegister(stackCardEntities, stackEntity);
-                AuditLog.WriteError("Print End");
+                //AuditLog.WriteError("Print End");
                 return stackCardEntities;
             }
             catch (Exception ex)
@@ -358,5 +360,6 @@ namespace TNCSCAPI.ManageAllReports.Stack
         public string BalanceQty { get; set; }
         public string StackStatus { get; set; }
         public string WriteOff { get; set; }
+        public string Commodity { get; set; }
     }
 }
