@@ -21,7 +21,7 @@ namespace TNCSCAPI.Controllers.Reports
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", commodity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", commodity.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", commodity.RCode));
-         ////   sqlParameters.Add(new KeyValuePair<string, string>("@TRCODE", commodity.TRCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@TRCODE", commodity.TRCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@ITCode", commodity.ITCode));
             ds = manageSQLConnection.GetDataSetValues("GetCOMMODITYRECEIPT", sqlParameters);
             //

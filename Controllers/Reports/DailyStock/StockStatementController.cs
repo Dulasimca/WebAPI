@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports;
 using TNCSCAPI.ManageAllReports.StockStatement;
 
 namespace TNCSCAPI.Controllers.Reports.DailyStock

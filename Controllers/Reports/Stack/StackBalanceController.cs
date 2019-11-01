@@ -65,6 +65,8 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", stackEntity.ICode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@ShortYear", stackEntity.StackDate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Status", stackEntity.StackStatus));
+                sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stackEntity.FromDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", stackEntity.ToDate));
                 ds = manageSQLConnection.GetDataSetValues("GetStackCardDetailsbyCommodity", sqlParameters);
                 //Calculate the 
                 var result = manageStackCard.ManageStackCardRegister(ds, stackEntity);
@@ -92,6 +94,8 @@ namespace TNCSCAPI.Controllers.Reports.Stack
         public string TStockNo { get; set; }
         public string StackStatus { get; set; }
         public int Type { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
 
         public string GName { get; set; }
         public string RName { get; set; }
