@@ -65,7 +65,7 @@ namespace TNCSCAPI
                 {
                     sqlCommand.Parameters.AddWithValue(keyValuePair.Key, keyValuePair.Value);
                 }
-
+                sqlCommand.CommandTimeout = 180;
                 dataAdapter = new SqlDataAdapter(sqlCommand);
                 dataAdapter.Fill(ds);
                 return ds;
