@@ -11,6 +11,8 @@ namespace TNCSCAPI.ManageAllReports
     {
         private string GName { get; set; }
         private string RName { get; set; }
+        private string ITName { get; set; }
+        private string TRName { get; set; }
         private string FromDate { get; set; }
         private string ToDate { get; set; }
         ManageReport report = new ManageReport();
@@ -19,7 +21,7 @@ namespace TNCSCAPI.ManageAllReports
         /// 
         /// </summary>
         /// <param name="entity"></param>
-        public void GenerateCommodityReceiptReport(CommonEntity entity)
+        public void GenerateCommodityReceiptReport(CommonEntity entity, string commodityName, string transactionName)
         {
             
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
@@ -28,6 +30,8 @@ namespace TNCSCAPI.ManageAllReports
             {
                 GName = entity.dataSet.Tables[0].Rows[0]["Godownname"].ToString();
                 RName = entity.dataSet.Tables[0].Rows[0]["Region"].ToString();
+                ITName = commodityName;
+                TRName = transactionName;
                 fileName = entity.GCode + GlobalVariable.CommodityReceiptReportFileName;
                 fPath = GlobalVariable.ReportPath + "Reports";
                 report.CreateFolderIfnotExists(fPath); // create a new folder if not exists
@@ -66,7 +70,7 @@ namespace TNCSCAPI.ManageAllReports
         {
             sw.WriteLine("                                    TAMILNADU CIVIL SUPPLIES CORPORATION                       " + RName);
             sw.WriteLine(" ");
-            sw.WriteLine("                                        Receipt Datewise Details of - Commodity    Godown : " + GName);
+            sw.WriteLine("                                      Receipt Datewise Details of - " + TRName+" - "+ ITName +"  Godown : " + GName);
             sw.WriteLine(" ");
             sw.WriteLine("          From:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate) + "   ");
             sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------|");

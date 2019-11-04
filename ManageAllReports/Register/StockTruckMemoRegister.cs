@@ -34,8 +34,9 @@ namespace TNCSCAPI.ManageAllReports
                 WriteTruckMemoForDateWise(sw, entity);
                 // sw.WriteLine((char)12);             
                 TruckMemoRegAbstract(sw, entity);
+                TruckMemoRegCommodityAbstract(sw, entity);
                 sw.Flush();
-               
+
                 //send mail to corresponding godown.
 
             }
@@ -128,8 +129,19 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine("StackNo       Commodity                                          No bags         Net Wt(in Kgs)/Nos  ");
             sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
         }
+        public void AddHeaderforTMCommodityAbstract(StreamWriter sw, CommonEntity commonEntity)
+        {
+            sw.WriteLine("                                  TAMILNADU CIVIL SUPPLIES CORPORATION                  Report Date :   " + ManageReport.GetCurrentDate());
+            sw.WriteLine(" ");
+            sw.WriteLine("                                          Truck Memo Register Abstract          Region :" + Regioncode);
+            sw.WriteLine(" ");
+            sw.WriteLine("Issue Date:" + report.FormatDate(commonEntity.FromDate) + " To : " + report.FormatDate(commonEntity.Todate) + " (Net Wt in kgs/Klts/Nos)    Godown : " + GName);
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("Recd.Type          Commodity                                        No bags         Net Wt(in Kgs)/Nos  ");
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
+        }
 
-        public void TruckMemoRegAbstract(StreamWriter sw, CommonEntity entity)
+        public void TruckMemoRegCommodityAbstract(StreamWriter sw, CommonEntity entity)
         {
            // var distinctDate = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Issue_Date");
             //Date wise DO report
@@ -145,14 +157,14 @@ namespace TNCSCAPI.ManageAllReports
 
                 // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
                 var myResult = from a in dORegEntities
-                               group a by new { a.Stackno, a.Commodity } into gValue
+                               group a by new { a.Commodity, a.TRName } into gValue
                                select new
                                {
                                    NoBags = gValue.Sum(s => s.NoBags),
                                    NetWt = gValue.Sum(s => s.NetWt),
                                    GroupByNames = gValue.Key
                                };
-            AddHeaderforTMAbstract(sw, entity);
+            AddHeaderforTMCommodityAbstract(sw, entity);
             foreach (var item in myResult)
                 {
                     if (iCount >= 50)
@@ -163,7 +175,7 @@ namespace TNCSCAPI.ManageAllReports
                         sw.WriteLine((char)12);
                         AddHeaderforTMAbstract(sw, entity);
                     }
-                    sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Stackno, 13, 2));
+                    sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.TRName, 18, 2));
                     sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 44, 2));
                     sw.Write(report.StringFormatWithoutPipe(item.NoBags.ToString(), 10, 1));
                     sw.Write(report.StringFormatWithoutPipe(item.NetWt.ToString(), 25, 1));
@@ -173,6 +185,51 @@ namespace TNCSCAPI.ManageAllReports
                 sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
                 sw.WriteLine((char)12);
            // }
+        }
+        public void TruckMemoRegAbstract(StreamWriter sw, CommonEntity entity)
+        {
+            // var distinctDate = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Issue_Date");
+            //Date wise DO report
+            int iCount = 11;
+            string sIssuer = string.Empty;
+            string sDoNo = string.Empty;
+            //foreach (DataRow dateValue in distinctDate.Rows)
+            //{
+            iCount = 11;
+            string sDoNo1 = string.Empty;
+            List<TruckMemoRegEntity> dORegEntities = new List<TruckMemoRegEntity>();
+            dORegEntities = report.ConvertDataTableToList<TruckMemoRegEntity>(entity.dataSet.Tables[0]);
+
+            // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
+            var myResult = from a in dORegEntities
+                           group a by new { a.Stackno, a.Commodity } into gValue
+                           select new
+                           {
+                               NoBags = gValue.Sum(s => s.NoBags),
+                               NetWt = gValue.Sum(s => s.NetWt),
+                               GroupByNames = gValue.Key
+                           };
+            AddHeaderforTMAbstract(sw, entity);
+            foreach (var item in myResult)
+            {
+                if (iCount >= 50)
+                {
+                    //Add header again
+                    iCount = 11;
+                    sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine((char)12);
+                    AddHeaderforTMAbstract(sw, entity);
+                }
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Stackno, 13, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 44, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.NoBags.ToString(), 10, 1));
+                sw.Write(report.StringFormatWithoutPipe(item.NetWt.ToString(), 25, 1));
+                iCount++;
+                sw.WriteLine("");
+            }
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine((char)12);
+            // }
         }
     }
     public class TruckMemoRegEntity
@@ -189,6 +246,7 @@ namespace TNCSCAPI.ManageAllReports
         public int? NoBags { get; set; }
         public string Commodity { get; set; }
         public double NetWt { get; set; }
+        public string TRName { get; set; }
 
     }
 }
