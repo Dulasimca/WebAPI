@@ -61,6 +61,7 @@
 
         public const string TruckToRegionFileName = "TRUCKTOREGION";
         public const string TruckFromRegionFileName = "TRUCKFROMREGION";
+        public const string TruckTransitFileName = "TRUCKTRANSIT";
 
         public const string HoPurchaseFileName = "HOPURCHASE";
         public const string RoPurchaseFileName = "ROPURCHASE";

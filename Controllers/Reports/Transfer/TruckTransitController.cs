@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports.Transfer;
+using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.Controllers.Reports.Transfer
 {
@@ -14,7 +16,7 @@ namespace TNCSCAPI.Controllers.Reports.Transfer
     public class TruckTransitController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string FDate, string ToDate, string GCode)
+        public string Get(string FDate, string ToDate, string GCode, string Username)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -23,6 +25,22 @@ namespace TNCSCAPI.Controllers.Reports.Transfer
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
             ds = manageSQLConnection.GetDataSetValues("GetTransitdetails", sqlParameters);
+            ManageTruckTransit manageTruckToRegion = new ManageTruckTransit();
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = GCode,
+                    FromDate = FDate,
+                    Todate = ToDate,
+                    UserName = Username,
+                    GName = ds.Tables[0].Rows[0]["TNCSName"].ToString(),
+                    RName = ds.Tables[0].Rows[0]["Region"].ToString()
+                };
+                Task.Run(() => manageTruckToRegion.GenerateTruckTransit(entity)); //Generate the Report
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }
