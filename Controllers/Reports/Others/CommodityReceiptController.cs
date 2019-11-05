@@ -38,7 +38,7 @@ namespace TNCSCAPI.Controllers.Reports
                     UserName = commodity.UserName,
                   //  SchemeName = commodity.SchemeName,
                 };
-                Task.Run(() => commodityReceipt.GenerateCommodityReceiptReport(entity)); //Generate the Report
+                Task.Run(() => commodityReceipt.GenerateCommodityReceiptReport(entity, commodity.ITName, commodity.TRName)); //Generate the Report
             }
 
             return JsonConvert.SerializeObject(ds.Tables[0]);
@@ -52,6 +52,8 @@ namespace TNCSCAPI.Controllers.Reports
         public string RCode { get; set; }
         public string TRCode { get; set; }
         public string ITCode { get; set; }
+        public string ITName { get; set; }
+        public string TRName { get; set; }
         public string UserName { get; set; }
         public int IssueToGodown { get; set; }
         public int IssueToDepositor { get; set; }
