@@ -8,7 +8,7 @@ namespace TNCSCAPI.ManageAllReports.QA
     public class ManageQAReceipt
     {
         ManageReport report = new ManageReport();
-        public void GenerateQAReceipt(DataSet ds, QuantityAccountEntity quantityAccount,string GlobalFileName,string reportName)
+        public void GenerateQAReceipt(DataSet ds, QuantityAccountEntity quantityAccount,string GlobalFileName,string reportName, int type=0)
         {
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
@@ -25,7 +25,7 @@ namespace TNCSCAPI.ManageAllReports.QA
                 //  isDuplicate = ReceiptId == "0" ? false : true;
                 streamWriter = new StreamWriter(filePath, true);
                 AddDocHeaderForReceipt(streamWriter, quantityAccount, reportName);
-                AddDetails(streamWriter, ds);
+                AddDetails(streamWriter, ds,type);
                 //AddFooter(streamWriter, chequeEntity);
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace TNCSCAPI.ManageAllReports.QA
         /// </summary>
         /// <param name="streamWriter"></param>
         /// <param name="stockReceipt"></param>
-        public void AddDetails(StreamWriter streamWriter, DataSet dataSet)
+        public void AddDetails(StreamWriter streamWriter, DataSet dataSet, int type)
         {
             int i = 0;
             //Add header values
@@ -94,11 +94,16 @@ namespace TNCSCAPI.ManageAllReports.QA
                 {
                     var result = report.StringFormatWithEmpty(Convert.ToString(item[k]));
                     streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : 15, i == 0 ? 2 : 1));
-                    if (i > 0)
+                    if (i > 0 && type==0)
+                    {
+                        Total = Total + (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
+                    }
+                    else if (i > 1 && type == 1)
                     {
                         Total = Total + (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
                     }
                     i = 1;
+                    
                 }
                 //Total
                 streamWriter.Write(report.StringFormat(Convert.ToString(Total), 15, 1));
