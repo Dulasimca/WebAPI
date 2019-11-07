@@ -24,18 +24,16 @@ namespace TNCSCAPI.Controllers.GST.Master
             sqlParameters.Add(new KeyValuePair<string, string>("@Branch", partyLedger.Branch));
             sqlParameters.Add(new KeyValuePair<string, string>("@IFSC", partyLedger.IFSC));
             sqlParameters.Add(new KeyValuePair<string, string>("@Favour", partyLedger.Favour));
-            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", partyLedger.RCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.RCode));
             return manageSQL.InsertData("InsertPartyLedgerdetails", sqlParameters);
         }
 
         [HttpGet("{id}")]
-        public string Get(string GCode, string RCode)
+        public string Get(string RCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@Gcode", GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
             ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
