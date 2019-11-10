@@ -526,7 +526,7 @@ namespace TNCSCAPI
             try
             {
                 TimeSpan different = Convert.ToDateTime(ToDate) - Convert.ToDateTime(FromDate);
-                return different.Days.ToString();
+                return (different.Days + 1).ToString();
             }
             catch (Exception ex)
             {
