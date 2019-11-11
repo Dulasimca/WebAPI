@@ -24,46 +24,49 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                 DataSet dataSetMaster = new DataSet();
 
                 dataSetMaster = manageSQLConnection.GetDataSetValues("GetMasterDataToProcessCB");
+                DataSet todayIssues = new DataSet();
+                DataSet todayReceipt = new DataSet();
+                DataSet issuesUptoYesterday = new DataSet();
+                DataSet receiptUptoYesterday = new DataSet();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+               
+               
+                sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stockParameter.GCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stockParameter.FDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", stockParameter.ToDate));
+                todayIssues = manageSQLConnection.GetDataSetValues("GetTodayIssuesByDate", sqlParameters);
+                todayReceipt = manageSQLConnection.GetDataSetValues("GetTodayReceiptByDate", sqlParameters);
+                issuesUptoYesterday = manageSQLConnection.GetDataSetValues("GetIssuesUptoYesterdayByDate", sqlParameters);
+                receiptUptoYesterday = manageSQLConnection.GetDataSetValues("GetReceiptUptoYesterdayByDate", sqlParameters);
                 if (dataSetMaster.Tables.Count > 0)
                 {
                     foreach (DataRow item in dataSetMaster.Tables[1].Rows) // item master details.
                     {
-                        DataSet todayIssues = new DataSet();
-                        DataSet todayReceipt = new DataSet();
-                        DataSet issuesUptoYesterday = new DataSet();
-                        DataSet receiptUptoYesterday = new DataSet();
-
+                        DailyStockDetailsEntity stockDetailsEntity = new DailyStockDetailsEntity();
                         _itemCode = Convert.ToString(item["ITCode"]);
                         _ITDescription = Convert.ToString(item["ITDescription"]);
-                        List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                        DailyStockDetailsEntity stockDetailsEntity = new DailyStockDetailsEntity();
+                       
                         stockDetailsEntity.ItemCode = _itemCode;
                         stockDetailsEntity.ITDescription = _ITDescription;
                         stockDetailsEntity.GodownCode = stockParameter.GCode;
                         stockDetailsEntity.RegionCode = stockParameter.RCode;
 
-                        sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", _itemCode));
-                        sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stockDetailsEntity.GodownCode));
-                        sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stockParameter.FDate));
-                        sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", stockParameter.ToDate));
-                        todayIssues = manageSQLConnection.GetDataSetValues("GetTodayIssuesByDate", sqlParameters);
-                        todayReceipt = manageSQLConnection.GetDataSetValues("GetTodayReceiptByDate", sqlParameters);
-                        issuesUptoYesterday = manageSQLConnection.GetDataSetValues("GetIssuesUptoYesterdayByDate", sqlParameters);
-                        receiptUptoYesterday = manageSQLConnection.GetDataSetValues("GetReceiptUptoYesterdayByDate", sqlParameters);
+                        // sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", _itemCode));
+
                         //foreach (DataRow godown in dataSetMaster.Tables[2].Rows) // godown details.
                         //{
 
                         //get opening balance for particualr item.
                         DataRow[] openingBalance = dataSetMaster.Tables[0].Select("GodownCode='" + stockDetailsEntity.GodownCode + "' and CommodityCode='" + stockDetailsEntity.ItemCode + "'");
 
-                        DataRow[] receiptuptoYesterday = receiptUptoYesterday.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                        DataRow[] receipttotay = todayReceipt.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                        DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                        DataRow[] issuestoday = todayIssues.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                        DataRow[] otherIssuesuptoYesterday = issuesUptoYesterday.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
-                        DataRow[] otherIssuestoday = todayIssues.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        DataRow[] receiptuptoYesterday = receiptUptoYesterday.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "' and ITCode='" + _itemCode + "'");
+                        DataRow[] receipttotay = todayReceipt.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "' and ITCode='" + _itemCode + "'");
+                        DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "' and ITCode='" + _itemCode + "'");
+                        DataRow[] issuestoday = todayIssues.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "' and ITCode='" + _itemCode + "'");
+                        DataRow[] otherIssuesuptoYesterday = issuesUptoYesterday.Tables[0].Select("GCode='" + stockDetailsEntity.GodownCode + "' and ITCode='" + _itemCode + "'");
+                        DataRow[] otherIssuestoday = todayIssues.Tables[1].Select("GCode='" + stockDetailsEntity.GodownCode + "' and ITCode='" + _itemCode + "'");
 
-                        DataRow[] writeOFFuptoYesterday = issuesUptoYesterday.Tables[2].Select("GCode='" + stockDetailsEntity.GodownCode + "'");
+                        DataRow[] writeOFFuptoYesterday = issuesUptoYesterday.Tables[2].Select("GCode='" + stockDetailsEntity.GodownCode + "' and ITCode='" + _itemCode + "'");
 
                         _BookBalanceWeight = 0;
                         _PhysicalBalanceWeight = 0;

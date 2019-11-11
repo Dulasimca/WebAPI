@@ -16,7 +16,7 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
     public class StockStatementController : ControllerBase
     {
        [HttpPost("{id}")]
-        public string Post(StockParameter stockParameter)
+        public string Post([FromBody] StockParameter stockParameter)
         {
             StockStatementByDate statementByDate = new StockStatementByDate();
             var result= statementByDate.ProcessStockStatement(stockParameter);
