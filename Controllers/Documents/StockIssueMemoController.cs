@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.ManageDocuments;
 using TNCSCAPI.Models.Documents;
@@ -17,20 +14,20 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockIssueMemoController : ControllerBase
     {
         [HttpPost("{id}")]
-        public Tuple<bool,string,string> Post(DocumentStockIssuesEntity documentStockIssuesEntity = null)
+        public Tuple<bool, string, string> Post(DocumentStockIssuesEntity documentStockIssuesEntity = null)
         {
             if (documentStockIssuesEntity.Type == 2)
             {
                 ManageDocumentIssues documentIssues = new ManageDocumentIssues();
                 documentIssues.GenerateIssues(documentStockIssuesEntity);
-                if(documentStockIssuesEntity.Loadingslip=="N" || string.IsNullOrEmpty(documentStockIssuesEntity.Loadingslip))
+                if (documentStockIssuesEntity.Loadingslip == "N" || string.IsNullOrEmpty(documentStockIssuesEntity.Loadingslip))
                 {
                     ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
                     List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                     sqlParameters.Add(new KeyValuePair<string, string>("@SINo", documentStockIssuesEntity.SINo));
                     manageSQLConnection.UpdateValues("UpdateStockIssuesLoadingslip", sqlParameters);
                 }
-                return new Tuple<bool, string,string>(true, "Print Generated Successfully", documentStockIssuesEntity.SINo);
+                return new Tuple<bool, string, string>(true, "Print Generated Successfully", documentStockIssuesEntity.SINo);
             }
             else
             {
@@ -41,7 +38,7 @@ namespace TNCSCAPI.Controllers.Documents
                 ManageReport manageReport = new ManageReport();
                 if (manageReport.CheckDataAvailable(result))
                 {
-                    if (documentStockIssuesEntity.SINo.Trim() != "0")
+                    if (documentStockIssuesEntity.SINo.Trim() != "0" && documentStockIssuesEntity.SINo.Trim() != "-")
                     {
                         List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
                         sqlParameters1.Add(new KeyValuePair<string, string>("@Type", "2"));
@@ -58,13 +55,13 @@ namespace TNCSCAPI.Controllers.Documents
                 }
                 else
                 {
-                    return new Tuple<bool, string,string>(false, "Permission not Granted","");
+                    return new Tuple<bool, string, string>(false, "Permission not Granted", "");
                 }
             }
         }
 
         [HttpGet("{id}")]
-        public string Get(string value, int Type,string GCode)
+        public string Get(string value, int Type, string GCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -90,7 +87,7 @@ namespace TNCSCAPI.Controllers.Documents
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@SINo", entity.DOCNumber));
-            return  manageSQLConnection.UpdateValues("UpdateStockIssuesLoadingslip", sqlParameters);
+            return manageSQLConnection.UpdateValues("UpdateStockIssuesLoadingslip", sqlParameters);
         }
     }
 }

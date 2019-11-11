@@ -14,7 +14,7 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
     public class DailyReceiptController : ControllerBase
     {
         [HttpPost("{id}")]
-        public string Post(DocumentEntity documentEntity)
+        public string Post([FromBody] DocumentEntity documentEntity)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
