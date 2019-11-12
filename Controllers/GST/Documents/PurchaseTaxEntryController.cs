@@ -16,10 +16,15 @@ namespace TNCSCAPI.Controllers.GST.Documents
         {
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             ManageSQLConnection manageSQL = new ManageSQLConnection();
-            sqlParameters.Add(new KeyValuePair<string, string>("@Month", purchaseTax.Month));
+            sqlParameters.Add(new KeyValuePair<string, string>("@PurchaseID", purchaseTax.PurchaseID));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Month", purchaseTax.Month)); 
             sqlParameters.Add(new KeyValuePair<string, string>("@Year", purchaseTax.Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@CompanyName", purchaseTax.CompanyName));
             sqlParameters.Add(new KeyValuePair<string, string>("@TIN", purchaseTax.TIN));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Pan", purchaseTax.Pan));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GSTNo", purchaseTax.GST));
+            sqlParameters.Add(new KeyValuePair<string, string>("@StateCode", purchaseTax.State));
+            sqlParameters.Add(new KeyValuePair<string, string>("@AccYear", purchaseTax.AccYear));
             sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", purchaseTax.BillNo));
             sqlParameters.Add(new KeyValuePair<string, string>("@BillDate", purchaseTax.BillDate.ToString("MM/dd/yyyy")));
             sqlParameters.Add(new KeyValuePair<string, string>("@CommodityName", purchaseTax.CommodityName));
@@ -58,6 +63,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
     public class PurchaseTaxEntity
     {
         public string Month { get; set; }
+        public string PurchaseID { get; set; }
         public string Year { get; set; }
         public string CompanyName { get; set; }
         public string TIN { get; set; }
@@ -73,6 +79,10 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public string AccRegion { get; set; }
+        public string AccYear { get; set; }
+        public string State { get; set; }
+        public string GST { get; set; }
+        public string Pan { get; set; }
         public string GCode { get; set; }
         public string RCode { get; set; }
         public string RoleId { get; set; }
