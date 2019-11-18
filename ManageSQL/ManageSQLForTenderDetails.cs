@@ -39,6 +39,7 @@ namespace TNCSCAPI.ManageSQL
                     {
                         sqlCommand.CommandText = "InsertTenderQuantityDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@TenderQtyID", entity.TenderQtyID);
                         sqlCommand.Parameters.AddWithValue("@Quantity", entity.AdditionalQty);
                         sqlCommand.Parameters.AddWithValue("@OrderNumber", entity.OrderNumber);
                     }

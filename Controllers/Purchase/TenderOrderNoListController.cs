@@ -6,23 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using TNCSCAPI.ManageSQL;
-using TNCSCAPI.Models.Purchase;
 
 namespace TNCSCAPI.Controllers.Purchase
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TenderAllotmentToRegionalController : ControllerBase
+    public class TenderOrderNoListController : ControllerBase
     {
-
-        [HttpPost("{id}")]
-        public Tuple<bool, string> Post([FromBody]List<TenderAllotmentToRegionEntity> entity)
-        {
-            ManageTenderAllotmentToRegion manageSQLConnection = new ManageTenderAllotmentToRegion();
-            return manageSQLConnection.InsertRegionTenderAllotmentDetails(entity);
-        }
-
         [HttpGet]
         public string Get()
         {
@@ -30,7 +20,7 @@ namespace TNCSCAPI.Controllers.Purchase
             DataSet ds = new DataSet();
             try
             {
-                ds = manageSQLConnection.GetDataSetValues("GetTenderAllotmentToRegionDetails");
+                ds = manageSQLConnection.GetDataSetValues("GetTenderOrderNoList");
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
             finally

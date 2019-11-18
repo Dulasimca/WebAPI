@@ -23,17 +23,44 @@ namespace TNCSCAPI.Controllers.Purchase
             return manageSQLConnection.InsertTenderAllotmentDetails(tenderAllotmentEntity);
         }
 
-        [HttpGet]
-        public string Get()
+        //[HttpGet]
+        //public string Get()
+        //{
+        //    ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+        //    DataSet ds = new DataSet();
+        //    try
+        //    {
+        //        ds = manageSQLConnection.GetDataSetValues("GetTenderAllotmentDetails");
+        //        return JsonConvert.SerializeObject(ds.Tables[0]);
+        //    }
+        //    finally
+        //    {
+        //        ds.Dispose();
+        //    }
+        //}
+
+        [HttpGet("{id}")]
+        public string Get(string value1, string value2, int Type)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
             try
             {
-                ds = manageSQLConnection.GetDataSetValues("GetTenderAllotmentDetails");
-                return JsonConvert.SerializeObject(ds.Tables[0]);
-            }
-            finally
+                if (Type == 2)
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@OrderNumber", value1));
+                    ds = manageSQLConnection.GetDataSetValues("GetTenderDataByOrderNumber", sqlParameters);
+                }
+                else
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", value1));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", value2));
+                    ds = manageSQLConnection.GetDataSetValues("GetTenderAllotmentDetails", sqlParameters);
+                }
+                return JsonConvert.SerializeObject(ds);
+            }            finally
             {
                 ds.Dispose();
             }

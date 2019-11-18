@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 using TNCSCAPI.Models.Purchase;
 
 namespace TNCSCAPI.ManageSQL
 {
-    public class ManageSQLForTenderAllotmentToRegion
+    public class ManageTenderAllotmentToRegion
     {
         SqlConnection sqlConnection = new SqlConnection();
         SqlCommand sqlCommand = new SqlCommand();
-        public Tuple<bool, string> InsertTenderAllotmentToRegional(TenderAllotmentToRegionEntity entity)
+        public Tuple<bool, string> InsertRegionTenderAllotmentDetails(List<TenderAllotmentToRegionEntity> entity)
         {
             SqlTransaction objTrans = null;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
@@ -29,22 +27,26 @@ namespace TNCSCAPI.ManageSQL
                     objTrans = sqlConnection.BeginTransaction();
                     //sqlCommand.Transaction = objTrans;
                     //sqlCommand.Connection = sqlConnection;
+                    foreach (var item in entity)
+                    {
+                        sqlCommand.Parameters.Clear();
+                        sqlCommand.Dispose();
+
+                        sqlCommand = new SqlCommand();
+                        sqlCommand.Transaction = objTrans;
+                        sqlCommand.Connection = sqlConnection;
+                        sqlCommand.CommandText = "InsertRegionalTenderAllotementDetails";
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@RegAllotmentID", item.RegAllotmentID);
+                        sqlCommand.Parameters.AddWithValue("@OrderNumber", item.OrderNumber);
+                        sqlCommand.Parameters.AddWithValue("@Quantity", item.Quantity);
+                        sqlCommand.Parameters.AddWithValue("@RCode", item.RCode);
+                        sqlCommand.Parameters.AddWithValue("@Spell", item.Spell);
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                    objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
-
-                    sqlCommand = new SqlCommand();
-                    sqlCommand.Transaction = objTrans;
-                    sqlCommand.Connection = sqlConnection;
-                    sqlCommand.CommandText = "InsertRegionalTenderAllotementDetails";
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@RegAllotmentID", entity.RegAllotmentID);
-                    sqlCommand.Parameters.AddWithValue("@TenderAllotmentID", entity.TenderAllotmentID);
-                    sqlCommand.Parameters.AddWithValue("@RCode", entity.RCode);
-                    sqlCommand.Parameters.AddWithValue("@Quantity", entity.Quantity);
-                    sqlCommand.Parameters.AddWithValue("@Remarks", entity.Remarks);
-
-                    sqlCommand.ExecuteNonQuery();
-                    objTrans.Commit();
                     return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
                 }
                 catch (Exception ex)
@@ -63,4 +65,3 @@ namespace TNCSCAPI.ManageSQL
         }
     }
 }
-

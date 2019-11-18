@@ -29,15 +29,23 @@ namespace TNCSCAPI.Controllers.Purchase
                 return manageSQLConnection.InsertTenderDetails(tenderDetailsEntity);
             //}
         }
-
-        [HttpGet]
-        public string Get()
+        [HttpGet("{id}")]
+        public string Get(string value, int Type)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
             try
             {
-                ds = manageSQLConnection.GetDataSetValues("GetTenderDetails");
+                if (Type == 2)
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@OrderNumber", value));
+                    ds = manageSQLConnection.GetDataSetValues("GetTenderQuantityDetails", sqlParameters);
+                }
+                else
+                {
+                    ds = manageSQLConnection.GetDataSetValues("GetTenderDetails");
+                }
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
             finally
