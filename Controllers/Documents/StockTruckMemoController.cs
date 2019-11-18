@@ -41,7 +41,7 @@ namespace TNCSCAPI.Controllers.Documents
                 ManageReport manageReport = new ManageReport();
                 if (manageReport.CheckDataAvailable(result))
                 {
-                    if (documentStockTransfer.STNo.Trim() != "0")
+                    if (documentStockTransfer.STNo.Trim() != "0" && documentStockTransfer.STNo.Trim() != "-")
                     {
                         List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
                         sqlParameters1.Add(new KeyValuePair<string, string>("@Type", "3"));
