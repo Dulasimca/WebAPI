@@ -4,7 +4,8 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
-
+using System.Collections.Generic;
+using TNCSCAPI.DataTransfer;
 
 namespace TNCSCAPI.ManageSQL
 {
@@ -24,6 +25,7 @@ namespace TNCSCAPI.ManageSQL
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, STNo = string.Empty;
+            bool isNewDoc = true;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
                 DataSet ds = new DataSet();
@@ -31,6 +33,10 @@ namespace TNCSCAPI.ManageSQL
                 sqlCommand = new SqlCommand();
                 try
                 {
+                    if(documentStockTransferDetails.STNo.Length>5)
+                    {
+                        isNewDoc = false;
+                    }
                     if (sqlConnection.State == 0)
                     {
                         sqlConnection.Open();
@@ -72,11 +78,20 @@ namespace TNCSCAPI.ManageSQL
                     //#if (!DEBUG)
                     ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
                     Task.Run(() => documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails));
-                    //#else
-                    //        ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
-                    //        documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails);
-                    //#endif
 
+                    if(isNewDoc)
+                    {
+                        ManageDataTransfer dataTransfer = new ManageDataTransfer();
+                        DataTransferEntity transferEntity = new DataTransferEntity();
+                        transferEntity.DocNumber = STNo;
+                        transferEntity.DocType = 3;
+                        transferEntity.TripType = 1;
+                        transferEntity.RCode = documentStockTransferDetails.RCode;
+                        transferEntity.GCode = documentStockTransferDetails.IssuingCode;
+                       // dataTransfer.InsertDataTransfer(transferEntity);
+                       Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
+                        
+                    }
 
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();

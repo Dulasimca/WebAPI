@@ -63,7 +63,7 @@ namespace TNCSCAPI.Controllers.Documents
                 ManageReport manageReport = new ManageReport();
                 if (manageReport.CheckDataAvailable(result))
                 {
-                    if(stockReceipt.SRNo.Trim() != "0")
+                    if(stockReceipt.SRNo.Trim() != "0" && stockReceipt.SRNo.Trim() != "-")
                     {
                         List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
                         sqlParameters1.Add(new KeyValuePair<string, string>("@Type","1"));

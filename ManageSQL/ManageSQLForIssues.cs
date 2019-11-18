@@ -16,6 +16,7 @@ namespace TNCSCAPI
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, SINo = string.Empty;
+            bool isNewDoc = true;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
                 DataSet ds = new DataSet();
@@ -23,6 +24,10 @@ namespace TNCSCAPI
                 sqlCommand = new SqlCommand();
                 try
                 {
+                    if (issueList.SINo.Length > 5)
+                    {
+                        isNewDoc = false;
+                    }
                     if (sqlConnection.State == 0)
                     {
                         sqlConnection.Open();
@@ -72,10 +77,20 @@ namespace TNCSCAPI
                     //#if (!DEBUG)
                     ManageDocumentIssues documentIssues = new ManageDocumentIssues();
                     Task.Run(() => documentIssues.GenerateIssues(issueList));
-                    //#else
-                    //  ManageDocumentIssues documentIssues = new ManageDocumentIssues();
-                    //  documentIssues.GenerateIssues(issueList);
-                    // #endif
+
+                    if (isNewDoc)
+                    {
+                        ManageDataTransfer dataTransfer = new ManageDataTransfer();
+                        DataTransferEntity transferEntity = new DataTransferEntity();
+                        transferEntity.DocNumber = STNo;
+                        transferEntity.DocType = 3;
+                        transferEntity.TripType = 1;
+                        transferEntity.RCode = documentStockTransferDetails.RCode;
+                        transferEntity.GCode = documentStockTransferDetails.IssuingCode;
+                        // dataTransfer.InsertDataTransfer(transferEntity);
+                        Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
+
+                    }
 
 
                     //   Delete Stock issue Item Details
