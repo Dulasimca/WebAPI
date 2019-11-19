@@ -42,4 +42,14 @@ namespace TNCSCAPI.Models.Purchase
         public string Quantity { get; set; }
         public int Spell { get; set; }
     }
+
+    public class TenderAllotmentToGodownEntity
+    {
+        public string OrderNumber { get; set; }
+        public string GodownAllotementID { get; set; }
+        public string RegAllotementID { get; set; }
+        public string GCode { get; set; }
+        public string Quantity { get; set; }
+        public string Remarks { get; set; }
+    }
 }

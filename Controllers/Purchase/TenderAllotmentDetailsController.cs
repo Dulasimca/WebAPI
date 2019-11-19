@@ -40,25 +40,16 @@ namespace TNCSCAPI.Controllers.Purchase
         //}
 
         [HttpGet("{id}")]
-        public string Get(string value1, string value2, int Type)
+        public string Get(string value1, string value2)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
             try
             {
-                if (Type == 2)
-                {
-                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                    sqlParameters.Add(new KeyValuePair<string, string>("@OrderNumber", value1));
-                    ds = manageSQLConnection.GetDataSetValues("GetTenderDataByOrderNumber", sqlParameters);
-                }
-                else
-                {
                     List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                     sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", value1));
                     sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", value2));
                     ds = manageSQLConnection.GetDataSetValues("GetTenderAllotmentDetails", sqlParameters);
-                }
                 return JsonConvert.SerializeObject(ds);
             }            finally
             {
