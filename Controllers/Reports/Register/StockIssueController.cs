@@ -22,6 +22,7 @@ namespace TNCSCAPI.Controllers.Reports.Register
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", issuerParameter.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", issuerParameter.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", issuerParameter.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", issuerParameter.RCode));
             //sqlParameters.Add(new KeyValuePair<string, string>("@Type", "0"));
             sqlParameters.Add(new KeyValuePair<string, string>("@Startindex", Convert.ToString(issuerParameter.StartIndex)));
             sqlParameters.Add(new KeyValuePair<string, string>("@TotalRows", Convert.ToString(issuerParameter.TotalRecord)));
@@ -33,6 +34,7 @@ namespace TNCSCAPI.Controllers.Reports.Register
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@ToDate", issuerParameter.ToDate));
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@GodownCode", issuerParameter.GCode));
                // sqlParametersNew.Add(new KeyValuePair<string, string>("@Type", "1"));
+                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", issuerParameter.RCode));
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@Startindex", Convert.ToString(issuerParameter.StartIndex)));
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@TotalRows", Convert.ToString(issuerParameter.TotalRecord)));
                 dsNew = manageSQLConnection.GetDataSetValues("StockIssueForRegister", sqlParametersNew);
@@ -62,6 +64,7 @@ namespace TNCSCAPI.Controllers.Reports.Register
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public int StartIndex { get; set; }
         public int TotalRecord { get; set; }
         public int Position { get; set; }

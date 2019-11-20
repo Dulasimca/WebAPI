@@ -23,6 +23,7 @@ namespace TNCSCAPI.Controllers.Reports.Register
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", reportParameter.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", reportParameter.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", reportParameter.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", reportParameter.RCode));
             ds = manageSQLConnection.GetDataSetValues("StockReceiptForRegister", sqlParameters);
             StockReceiptRegister stockDeliveryOrder = new StockReceiptRegister();
             ManageReport manageReport = new ManageReport();
