@@ -483,6 +483,7 @@ namespace TNCSCAPI.ManageAllReports
         public string GName { get; set; }
         public string RName { get; set; }
         public DataTable dataTable { get; set; }
+        public int Type { get; set; }
     }
 
 }
