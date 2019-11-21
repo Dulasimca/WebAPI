@@ -14,14 +14,26 @@ namespace TNCSCAPI.Controllers.GST.Master
     [ApiController]
     public class PartyMasterController : ControllerBase
     {
-        [HttpGet]
-        public string Get()
+        [HttpGet("{id}")]
+        public string Get(string RCode="0", int Type=2)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
             try
             {
-                ds = manageSQLConnection.GetDataSetValues("GetPartyNameDetails");
+                if (Type == 2)
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                    ds = manageSQLConnection.GetDataSetValues("GetPartyNameDetails");
+                }
+                else
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                    ds = manageSQLConnection.GetDataSetValues("GetPartyNameDetails", sqlParameters);
+                }
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
             finally
