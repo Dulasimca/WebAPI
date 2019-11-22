@@ -61,7 +61,7 @@ namespace TNCSCAPI.ManageSQL
                 catch (Exception ex)
                 {
                     objTrans.Rollback();
-                    AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
+                    AuditLog.WriteError("Allotment"+ ex.Message + " : " + ex.StackTrace);
                     return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
                 }
                 finally

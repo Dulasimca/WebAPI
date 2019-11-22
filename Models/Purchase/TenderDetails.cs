@@ -30,6 +30,7 @@ namespace TNCSCAPI.Models.Purchase
         public string TotalDays { get; set; }
         public string TargetDate { get; set; }
         public string AssignedQty { get; set; }
+        public string Spell { get; set; }
         public string Rate { get; set; }
         public string Remarks { get; set; }
     }

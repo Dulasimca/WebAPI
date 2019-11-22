@@ -17,7 +17,7 @@ namespace TNCSCAPI.Controllers.Purchase
     {
 
         [HttpPost("{id}")]
-        public Tuple<bool, string> Post(TenderAllotmentDetailsEntity tenderAllotmentEntity = null)
+        public Tuple<bool, string> Post([FromBody]List<TenderAllotmentDetailsEntity> tenderAllotmentEntity = null)
         {
             ManageSQLForTenderAllotmentDetails manageSQLConnection = new ManageSQLForTenderAllotmentDetails();
             return manageSQLConnection.InsertTenderAllotmentDetails(tenderAllotmentEntity);
