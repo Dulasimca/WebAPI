@@ -35,7 +35,8 @@ namespace TNCSCAPI.Controllers.Reports.Register
                     GCode = reportParameter.GCode,
                     FromDate = reportParameter.FromDate,
                     Todate = reportParameter.ToDate,
-                    UserName = reportParameter.UserName
+                    UserName = reportParameter.UserName,
+                    Type= reportParameter.Type
                 };
                  return manageGST.GenerateGSTFile(entity); //Generate the Report
             }

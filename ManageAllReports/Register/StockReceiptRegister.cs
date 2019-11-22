@@ -391,5 +391,6 @@ namespace TNCSCAPI.ManageAllReports
         public string ToDate { get; set; }
         public string UserName { get; set; }
         public string RCode { get; set; }
+        public int Type { get; set; }
     }
 }

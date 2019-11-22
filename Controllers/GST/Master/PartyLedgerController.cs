@@ -17,6 +17,7 @@ namespace TNCSCAPI.Controllers.GST.Master
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             ManageSQLConnection manageSQL = new ManageSQLConnection();
             sqlParameters.Add(new KeyValuePair<string, string>("@LedgerID", partyLedger.LedgerID));
+            sqlParameters.Add(new KeyValuePair<string, string>("@PCode", partyLedger.PCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Pan", partyLedger.Pan));
             sqlParameters.Add(new KeyValuePair<string, string>("@PartyName", partyLedger.PartyName));
             sqlParameters.Add(new KeyValuePair<string, string>("@TIN", partyLedger.Tin));
@@ -48,6 +49,7 @@ namespace TNCSCAPI.Controllers.GST.Master
     {
         public string Pan { get; set; }
         public string PartyName { get; set; }
+        public string PCode { get; set; }
         public string GST { get; set; }
         public string Account { get; set; }
         public string Bank { get; set; }

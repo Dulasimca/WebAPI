@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using TNCSCAPI.DataTransfer;
 using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
 
@@ -82,11 +83,11 @@ namespace TNCSCAPI
                     {
                         ManageDataTransfer dataTransfer = new ManageDataTransfer();
                         DataTransferEntity transferEntity = new DataTransferEntity();
-                        transferEntity.DocNumber = STNo;
-                        transferEntity.DocType = 3;
-                        transferEntity.TripType = 1;
-                        transferEntity.RCode = documentStockTransferDetails.RCode;
-                        transferEntity.GCode = documentStockTransferDetails.IssuingCode;
+                        transferEntity.DocNumber = SINo;
+                        transferEntity.DocType = 2;
+                        transferEntity.TripType = 2;
+                        transferEntity.RCode = issueList.RCode;
+                        transferEntity.GCode = issueList.IssuingCode;
                         // dataTransfer.InsertDataTransfer(transferEntity);
                         Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
 

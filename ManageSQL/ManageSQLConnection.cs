@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using TNCSCAPI.DataTransfer;
 using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
 
@@ -159,6 +160,7 @@ namespace TNCSCAPI
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, SRNo = string.Empty;
+            bool isNewDoc = true;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
                 DataSet ds = new DataSet();
@@ -166,6 +168,10 @@ namespace TNCSCAPI
                 sqlCommand = new SqlCommand();
                 try
                 {
+                    if (receiptList.SRNo.Length > 5)
+                    {
+                        isNewDoc = false;
+                    }
                     if (sqlConnection.State == 0)
                     {
                         sqlConnection.Open();
@@ -214,6 +220,19 @@ namespace TNCSCAPI
                     ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
                     Task.Run(() => documentReceipt.GenerateReceipt(receiptList));
 
+                    if (isNewDoc)
+                    {
+                        ManageDataTransfer dataTransfer = new ManageDataTransfer();
+                        DataTransferEntity transferEntity = new DataTransferEntity();
+                        transferEntity.DocNumber = SRNo;
+                        transferEntity.DocType = 1;
+                        transferEntity.TripType = 3;
+                        transferEntity.RCode = receiptList.RCode;
+                        transferEntity.GCode = receiptList.ReceivingCode;
+                        // dataTransfer.InsertDataTransfer(transferEntity);
+                        Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
+
+                    }
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();

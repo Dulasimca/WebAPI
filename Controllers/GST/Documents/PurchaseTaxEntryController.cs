@@ -26,7 +26,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@StateCode", purchaseTax.State));
             sqlParameters.Add(new KeyValuePair<string, string>("@AccYear", purchaseTax.AccYear));
             sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", purchaseTax.BillNo));
-            sqlParameters.Add(new KeyValuePair<string, string>("@BillDate", purchaseTax.BillDate.ToString("MM/dd/yyyy")));
+            sqlParameters.Add(new KeyValuePair<string, string>("@BillDate", purchaseTax.BillDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@CommodityName", purchaseTax.CommodityName));
             sqlParameters.Add(new KeyValuePair<string, string>("@Quantity", purchaseTax.Quantity));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rate", purchaseTax.Rate));
@@ -68,7 +68,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string CompanyName { get; set; }
         public string TIN { get; set; }
         public string BillNo { get; set; }
-        public DateTime BillDate { get; set; }
+        public string BillDate { get; set; }
         public string CommodityName { get; set; }
         public string Quantity { get; set; }
         public string Rate { get; set; }

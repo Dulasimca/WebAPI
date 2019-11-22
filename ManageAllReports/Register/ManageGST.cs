@@ -58,9 +58,19 @@ namespace TNCSCAPI.ManageAllReports.Register
         {
             try
             {
-                foreach (DataRow row in entity.dataSet.Tables[0].Rows)
+                if (entity.Type == 2)
                 {
-                    sw.WriteLine(row["GST"].ToString());
+                    foreach (DataRow row in entity.dataSet.Tables[1].Rows)
+                    {
+                        sw.WriteLine(row["GST"].ToString());
+                    }
+                }
+                else
+                {
+                    foreach (DataRow row in entity.dataSet.Tables[0].Rows)
+                    {
+                        sw.WriteLine(row["GST"].ToString());
+                    }
                 }
             }
             catch (Exception ex)
