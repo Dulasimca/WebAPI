@@ -25,7 +25,7 @@ namespace TNCSCAPI.Controllers.GST.Master
                 {
                     List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                     sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
-                    ds = manageSQLConnection.GetDataSetValues("GetPartyNameDetails");
+                    ds = manageSQLConnection.GetDataSetValues("GetPartyNameDetails", sqlParameters);
                 }
                 else
                 {
