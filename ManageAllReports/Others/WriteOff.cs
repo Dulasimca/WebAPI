@@ -75,6 +75,7 @@ namespace TNCSCAPI.ManageAllReports
                 int i = 1;
                 foreach (DataRow nrow in dateList.Rows)
                 {
+                    netweight = 0;
                     DataRow[] drdata = entity.dataSet.Tables[0].Select("Commodity='" + Convert.ToString(nrow["Commodity"]) + "'");
                     foreach (DataRow row in drdata)
                     {
