@@ -17,7 +17,7 @@ namespace TNCSCAPI.Controllers.Purchase
     {
 
         [HttpPost("{id}")]
-        public Tuple<bool, string> Post([FromBody]List<TenderAllotmentToRegionEntity> entity)
+        public Tuple<bool, string> Post(TenderAllotmentToRegionEntity entity)
         {
             ManageTenderAllotmentToRegion manageSQLConnection = new ManageTenderAllotmentToRegion();
             return manageSQLConnection.InsertRegionTenderAllotmentDetails(entity);

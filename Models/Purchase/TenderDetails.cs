@@ -42,6 +42,7 @@ namespace TNCSCAPI.Models.Purchase
         public string RCode { get; set; }
         public string Quantity { get; set; }
         public int Spell { get; set; }
+        public int PartyCode { get; set; }
     }
 
     public class TenderAllotmentToGodownEntity

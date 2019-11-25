@@ -12,7 +12,7 @@ namespace TNCSCAPI.ManageSQL
     {
         SqlConnection sqlConnection = new SqlConnection();
         SqlCommand sqlCommand = new SqlCommand();
-        public Tuple<bool, string> InsertTenderAllotmentDetails(List<TenderAllotmentDetailsEntity> entity)
+        public Tuple<bool, string> InsertTenderAllotmentDetails(TenderAllotmentDetailsEntity entity)
         {
             SqlTransaction objTrans = null;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
@@ -29,8 +29,8 @@ namespace TNCSCAPI.ManageSQL
                     objTrans = sqlConnection.BeginTransaction();
                     //sqlCommand.Transaction = objTrans;
                     //sqlCommand.Connection = sqlConnection;
-                    foreach (var item in entity)
-                    {
+                    //foreach (var item in entity)
+                    //{
                         sqlCommand.Parameters.Clear();
                         sqlCommand.Dispose();
 
@@ -39,19 +39,19 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertTenderAllotmentDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.AddWithValue("@AllotmentID", item.AllotmentID);
-                        sqlCommand.Parameters.AddWithValue("@OrderNumber", item.OrderNumber);
-                        sqlCommand.Parameters.AddWithValue("@PartyCode", item.PartyCode);
-                        sqlCommand.Parameters.AddWithValue("@TotalDays", item.TotalDays);
-                        sqlCommand.Parameters.AddWithValue("@TargetDate", item.TargetDate);
-                        sqlCommand.Parameters.AddWithValue("@AssignedQty", item.AssignedQty);
-                        sqlCommand.Parameters.AddWithValue("@Rate", item.Rate);
-                        sqlCommand.Parameters.AddWithValue("@Spell", item.Spell);
-                        sqlCommand.Parameters.AddWithValue("@Remarks", item.Remarks);
+                        sqlCommand.Parameters.AddWithValue("@AllotmentID", entity.AllotmentID);
+                        sqlCommand.Parameters.AddWithValue("@OrderNumber", entity.OrderNumber);
+                        sqlCommand.Parameters.AddWithValue("@PartyCode", entity.PartyCode);
+                        sqlCommand.Parameters.AddWithValue("@TotalDays", entity.TotalDays);
+                        sqlCommand.Parameters.AddWithValue("@TargetDate", entity.TargetDate);
+                        sqlCommand.Parameters.AddWithValue("@AssignedQty", entity.AssignedQty);
+                        sqlCommand.Parameters.AddWithValue("@Rate", entity.Rate);
+                        sqlCommand.Parameters.AddWithValue("@Spell", entity.Spell);
+                        sqlCommand.Parameters.AddWithValue("@Remarks", entity.Remarks);
 
 
                         sqlCommand.ExecuteNonQuery();
-                    }
+                  //  }
                     objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();

@@ -24,7 +24,7 @@ namespace TNCSCAPI.Controllers.Purchase
                     sqlParameters.Add(new KeyValuePair<string, string>("@RCode", value));
                     sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type));
                     ds = manageSQLConnection.GetDataSetValues("GetTenderOrderNoList", sqlParameters);
-                return JsonConvert.SerializeObject(ds);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
             }
             finally
             {

@@ -10,7 +10,7 @@ namespace TNCSCAPI.ManageSQL
     {
         SqlConnection sqlConnection = new SqlConnection();
         SqlCommand sqlCommand = new SqlCommand();
-        public Tuple<bool, string> InsertRegionTenderAllotmentDetails(List<TenderAllotmentToRegionEntity> entity)
+        public Tuple<bool, string> InsertRegionTenderAllotmentDetails(TenderAllotmentToRegionEntity entity)
         {
             SqlTransaction objTrans = null;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
@@ -27,8 +27,8 @@ namespace TNCSCAPI.ManageSQL
                     objTrans = sqlConnection.BeginTransaction();
                     //sqlCommand.Transaction = objTrans;
                     //sqlCommand.Connection = sqlConnection;
-                    foreach (var item in entity)
-                    {
+                    //foreach (var item in entity)
+                    //{
                         sqlCommand.Parameters.Clear();
                         sqlCommand.Dispose();
 
@@ -37,13 +37,14 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertRegionalTenderAllotementDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.AddWithValue("@RegAllotmentID", item.RegAllotmentID);
-                        sqlCommand.Parameters.AddWithValue("@OrderNumber", item.OrderNumber);
-                        sqlCommand.Parameters.AddWithValue("@Quantity", item.Quantity);
-                        sqlCommand.Parameters.AddWithValue("@RCode", item.RCode);
-                        sqlCommand.Parameters.AddWithValue("@Spell", item.Spell);
+                        sqlCommand.Parameters.AddWithValue("@RegAllotmentID", entity.RegAllotmentID);
+                        sqlCommand.Parameters.AddWithValue("@OrderNumber", entity.OrderNumber);
+                        sqlCommand.Parameters.AddWithValue("@Quantity", entity.Quantity);
+                        sqlCommand.Parameters.AddWithValue("@RCode", entity.RCode);
+                        sqlCommand.Parameters.AddWithValue("@Spell", entity.Spell);
+                        sqlCommand.Parameters.AddWithValue("@PartyCode", entity.PartyCode);
                         sqlCommand.ExecuteNonQuery();
-                    }
+                   // }
                     objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
