@@ -15,8 +15,6 @@ namespace TNCSCAPI.Controllers.Purchase
     [ApiController]
     public class TenderAllotmentToGodownController : ControllerBase
     {
-      //  
-
         [HttpPost("{id}")]
         public Tuple<bool, string> Post(TenderAllotmentToGodownEntity entity)
         {
