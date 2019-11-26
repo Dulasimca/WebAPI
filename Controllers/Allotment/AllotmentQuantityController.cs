@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TNCSCAPI.ManageSQL;
 
 namespace TNCSCAPI.Controllers.Allotment
@@ -19,7 +21,24 @@ namespace TNCSCAPI.Controllers.Allotment
             ManageSQLForAllotmentQty manageSQL = new ManageSQLForAllotmentQty();
             return manageSQL.InsertAllotmentQtyEntry(allotmentEntity);
         }
+        [HttpGet("{id}")]
+        public string Get(string RCode, string GCode, string Month, string Year, string FromDate, string ToDate)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            // sqlParameters.Add(new KeyValuePair<string, string>("@RoleId", RoleId));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Gcode", GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Month", Month));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Year", Year));
+            sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", FromDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
+            ds = manageSQLConnection.GetDataSetValues("GetAllotmentIssueQuantityDetails", sqlParameters);
+            return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
     }
+   
 
     public class AllotmentQuantityEntity
     {
@@ -39,4 +58,4 @@ namespace TNCSCAPI.Controllers.Allotment
         public string ITName { get; set; }
         public string Quantity { get; set; }
     }
-    }
+}
