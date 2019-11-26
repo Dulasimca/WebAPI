@@ -49,6 +49,8 @@ namespace TNCSCAPI.DataTransfer
                                 sqlCommand.Parameters.AddWithValue("@DocType", dataTransferEntity.DocType);//"3"
                                 sqlCommand.Parameters.AddWithValue("@TripType", dataTransferEntity.TripType);//1
                                 sqlCommand.Parameters.AddWithValue("@DocNumber", dataTransferEntity.DocNumber);
+                                sqlCommand.Parameters.AddWithValue("@GPSStatus", dataTransferEntity.GPSStatus);
+                                sqlCommand.Parameters.AddWithValue("@GToGStatus", dataTransferEntity.G2GStatus);
                                 sqlCommand.Parameters.Add("@TransferId", SqlDbType.BigInt);
                                 sqlCommand.Parameters["@TransferId"].Direction = ParameterDirection.Output;
                                 sqlCommand.ExecuteNonQuery();
