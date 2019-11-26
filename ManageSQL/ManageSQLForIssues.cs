@@ -133,7 +133,7 @@ namespace TNCSCAPI
                         sqlCommand.Parameters.AddWithValue("@Scheme", item.Scheme);
                         sqlCommand.Parameters.AddWithValue("@RCode", issueList.RCode);
                         sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                        sqlCommand.Parameters.AddWithValue("@flag1", "-"); //StackYear
+                        sqlCommand.Parameters.AddWithValue("@flag1", item.StackYear); //StackYear
                         sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                         sqlCommand.ExecuteNonQuery();
                     }
