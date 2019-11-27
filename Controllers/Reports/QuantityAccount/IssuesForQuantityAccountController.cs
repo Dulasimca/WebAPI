@@ -23,6 +23,7 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", accountEntity.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", accountEntity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", accountEntity.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", accountEntity.RCode));
             ds = manageSQLConnection.GetDataSetValues("GetIssuesForQuantityAC", sqlParameters);
             //Generate the report.
             ManageReport manageReport = new ManageReport();
@@ -42,6 +43,7 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string UserId { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }

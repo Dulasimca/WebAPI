@@ -23,12 +23,14 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", accountEntity.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", accountEntity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", accountEntity.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", accountEntity.RCode));
             ds = manageSQLConnection.GetDataSetValues("GetIssuesForQuantityACAllScheme", sqlParameters);
             //Generate the report.
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))
             {
                 ManageQAIssuesAllScheme manageQAReceipt = new ManageQAIssuesAllScheme();
+                //manageQAReceipt.GenerateQAIssues(ds, accountEntity, GlobalVariable.QAIssuesForAllScheme);
                 Task.Run(() => manageQAReceipt.GenerateQAIssues(ds, accountEntity, GlobalVariable.QAIssuesForAllScheme));
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }

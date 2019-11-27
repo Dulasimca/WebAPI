@@ -8,7 +8,7 @@ namespace TNCSCAPI.ManageAllReports.QA
     public class ManageQAReceipt
     {
         ManageReport report = new ManageReport();
-        public void GenerateQAReceipt(DataSet ds, QuantityAccountEntity quantityAccount,string GlobalFileName,string reportName, int type=0)
+        public void GenerateQAReceipt(DataSet ds, QuantityAccountEntity quantityAccount, string GlobalFileName, string reportName, int type = 0)
         {
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
@@ -25,7 +25,7 @@ namespace TNCSCAPI.ManageAllReports.QA
                 //  isDuplicate = ReceiptId == "0" ? false : true;
                 streamWriter = new StreamWriter(filePath, true);
                 AddDocHeaderForReceipt(streamWriter, quantityAccount, reportName);
-                AddDetails(streamWriter, ds,type);
+                AddDetails(streamWriter, ds, type);
                 //AddFooter(streamWriter, chequeEntity);
             }
             catch (Exception ex)
@@ -74,42 +74,54 @@ namespace TNCSCAPI.ManageAllReports.QA
             int i = 0;
             //Add header values
             int count = dataSet.Tables[0].Columns.Count;
-            int length = (count * 15) + count + 20;
-            streamWriter.WriteLine("---" + report.AddLine(length));
+            int length = (count * 12) + count + 20 + 6;
+            streamWriter.WriteLine("-" + report.AddLine(length));
             streamWriter.Write(" ");
             foreach (DataColumn dataColumn in dataSet.Tables[0].Columns)
             {
-                streamWriter.Write(report.StringFormat(dataColumn.ColumnName, i == 0 ? 20 : 15, i == 0 ? 2 : 1));
-                i = 1;
+                streamWriter.Write(report.StringFormat(dataColumn.ColumnName, i == 0 ? 20 : i > 0 && i <= 2 ? 15 : 12, i <= 2 ? 2 : 1));
+                i++;
             }
-            streamWriter.Write("       Total  |");
+            streamWriter.Write("    Total   |");
             streamWriter.WriteLine(" ");
-            streamWriter.WriteLine("---" + report.AddLine(length));
+            streamWriter.WriteLine("-" + report.AddLine(length));
             foreach (DataRow item in dataSet.Tables[0].Rows)
             {
                 i = 0;
                 decimal Total = 0;
+                decimal dTotal = 0;
                 streamWriter.Write(" ");
                 for (int k = 0; k < count; k++)
                 {
                     var result = report.StringFormatWithEmpty(Convert.ToString(item[k]));
-                    streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : 15, i == 0 ? 2 : 1));
-                    if (i > 0 && type==0)
+                    if (i <= 2 && type == 0)
                     {
-                        Total = Total + (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
+                        streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : i > 0 && i <= 2 ? 15 : 12, i <=2 ? 2 : 1));
                     }
-                    else if (i > 1 && type == 1)
+                    else if (i <= 3 && type == 1)
                     {
-                        Total = Total + (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
+                        streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : i > 0 && i <= 2 ? 15 : 12, i <=3 ? 2 : 1));
                     }
-                    i = 1;
-                    
+                    if (i > 2 && type == 0)
+                    {
+                        dTotal = (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
+                        Total = Total + dTotal;
+                        streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(dTotal)), i == 0 ? 20 : i > 0 && i <= 2 ? 15 : 12, i <= 2 ? 2 : 1));
+                    }
+                    else if (i > 3 && type == 1)
+                    {
+                        dTotal = (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
+                        Total = Total + dTotal;
+                        streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(dTotal)), i == 0 ? 20 : i > 0 && i <= 2 ? 15 : 12, i <=3 ? 2 : 1));
+                    }
+                    i++;
+
                 }
                 //Total
-                streamWriter.Write(report.StringFormat(Convert.ToString(Total), 15, 1));
+                streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(Total)), 12, 1));
                 streamWriter.WriteLine(" ");
             }
-            streamWriter.WriteLine("---" + report.AddLine(length));
+            streamWriter.WriteLine("-" + report.AddLine(length));
         }
     }
 }

@@ -80,7 +80,7 @@ namespace TNCSCAPI.ManageAllReports.QA
             streamWriter.Write(" ");
             foreach (DataColumn dataColumn in dataSet.Tables[0].Columns)
             {
-                streamWriter.Write(report.StringFormat(dataColumn.ColumnName, i == 0 ? 23 : 20, i == 0 ? 2 : 1));
+                streamWriter.Write(report.StringFormat(dataColumn.ColumnName, i == 0 ? 20 : 20, i == 0 ? 2 : 1));
                 i = 1;
             }
             streamWriter.Write("         Total    |");
@@ -94,7 +94,7 @@ namespace TNCSCAPI.ManageAllReports.QA
                 for (int k = 0; k < count; k++)
                 {
                     var result = report.StringFormatWithEmpty(Convert.ToString(item[k]));
-                    streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 23 : 20, i == 0 ? 2 : 1));
+                    streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : 20, i == 0 ? 2 : 1));
                     if (i > 0)
                     {
                         Total = Total + (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
