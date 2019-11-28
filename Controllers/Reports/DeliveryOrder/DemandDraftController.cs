@@ -24,6 +24,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", demandDraft.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", demandDraft.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", demandDraft.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", demandDraft.RCode));
             ds = manageSQLConnection.GetDataSetValues("Get_demanddraftdetails", sqlParameters);
             ManageDemandDraft manageDemand = new ManageDemandDraft();
             ManageReport manageReport = new ManageReport();
@@ -52,6 +53,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string UserName { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }

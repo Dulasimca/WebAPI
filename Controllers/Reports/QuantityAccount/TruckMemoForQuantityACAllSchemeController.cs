@@ -23,13 +23,14 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", accountEntity.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", accountEntity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", accountEntity.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", accountEntity.RCode));
             ds = manageSQLConnection.GetDataSetValues("GetTruckMemoForQuantityAC", sqlParameters);
             //Generate the report.
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))
             {
                 ManageQAReceipt manageQAReceipt = new ManageQAReceipt();
-                Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity, GlobalVariable.QATruckMemoForAllScheme, "- Truck Memo Abstract -"));
+                Task.Run(() => manageQAReceipt.GenerateQAReceipt(ds, accountEntity, GlobalVariable.QATruckMemoForAllScheme, "- Truck Memo Abstract -",2));
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
             return JsonConvert.SerializeObject(string.Empty);

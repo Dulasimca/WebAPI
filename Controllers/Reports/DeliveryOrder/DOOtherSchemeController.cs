@@ -25,6 +25,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", SchemeWise.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", SchemeWise.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Schcode", SchemeWise.SchCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", SchemeWise.RCode));
             ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrdersOtherScheme", sqlParameters);
             ManageDOOthers manageDOSPLPDS = new ManageDOOthers();
             ManageReport manageReport = new ManageReport();

@@ -24,7 +24,8 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", SchemeWise.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", SchemeWise.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", SchemeWise.GCode));
-         //   sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", SchemeWise.SCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", SchemeWise.RCode));
+            //   sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", SchemeWise.SCode));
             ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrdersAllScheme", sqlParameters);
             ManageDOAllScheme manageDOAllScheme = new ManageDOAllScheme();
             ManageReport manageReport = new ManageReport();
@@ -51,6 +52,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }
         public string SchCode { get; set; }
