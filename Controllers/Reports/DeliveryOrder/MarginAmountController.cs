@@ -23,8 +23,8 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", marginAmount.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", marginAmount.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", marginAmount.GCode));
-           // sqlParameters.Add(new KeyValuePair<string, string>("@SocCode", marginAmount.SCode));
-             ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrderMarginAmount", sqlParameters);
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", marginAmount.RCode));
+            ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrderMarginAmount", sqlParameters);
             ManageDOMargin manageDOMargin = new ManageDOMargin();
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))

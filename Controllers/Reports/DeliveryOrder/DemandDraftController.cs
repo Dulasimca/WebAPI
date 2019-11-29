@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 using TNCSCAPI.ManageAllReports;
 using TNCSCAPI.ManageAllReports.DeliveryOrder;
 
@@ -24,6 +21,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", demandDraft.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", demandDraft.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", demandDraft.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", demandDraft.RCode));
             ds = manageSQLConnection.GetDataSetValues("Get_demanddraftdetails", sqlParameters);
             ManageDemandDraft manageDemand = new ManageDemandDraft();
             ManageReport manageReport = new ManageReport();
@@ -37,21 +35,22 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
                     FromDate = demandDraft.FromDate,
                     Todate = demandDraft.ToDate,
                     UserName = demandDraft.UserName,
-                    GName= demandDraft.GName,
-                    RName= demandDraft.RName
+                    GName = demandDraft.GName,
+                    RName = demandDraft.RName
                 };
                 // commodityIssueMemo.GenerateCommodityIssueMemoReport(entity);
                 Task.Run(() => manageDemand.GenerateDemandDraftReport(entity)); //Generate the Report
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-        }
+    }
 
     public class DemandDraftEntity
     {
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string UserName { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }

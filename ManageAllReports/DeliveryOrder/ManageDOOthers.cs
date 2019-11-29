@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data;
+using System.IO;
 
 namespace TNCSCAPI.ManageAllReports.DeliveryOrder
 {
@@ -62,9 +59,9 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
             sw.WriteLine("   TAMILNADU CIVIL SUPPLIES CORPORATION          " + entity.RName);
             sw.WriteLine("   Godown : " + entity.GName + "Delivery Order Details Society Wise with Issue Details");
             sw.WriteLine("   D.Ord Date:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate));
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("D.O.No     D.O.Date  COMMODITY      SCHEME          NET.WT      Rate       C.AMOUNT  NC.AMOUNT     AMOUNT");
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine(" Godown Name             D.O.No     D.O.Date  COMMODITY      SCHEME          NET.WT      Rate       C.AMOUNT  NC.AMOUNT     AMOUNT");
+            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
         }
 
         /// <summary>
@@ -135,13 +132,14 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                             {
                                 //Add header again
                                 count = 11;
-                                sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                                sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
                                 sw.WriteLine((char)12);
                                 AddHeader(sw, entity);
                             }
                             doNoNext = row["Dono"].ToString();
                             C_Amount = (row["C_Nc"].ToString() == "C") ? Convert.ToDecimal(row["Amount"]) : 0;
                             NC_Amount = (row["C_Nc"].ToString() == "NC") ? Convert.ToDecimal(row["Amount"]) : 0;
+                            sw.Write(report.StringFormatWithoutPipe(row["GodownName"].ToString(), 25, 2));
                             sw.Write(report.StringFormatWithoutPipe(doNoNext, 11, 1));
                             sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(row["Dodate"].ToString()), 10, 2));
                             sw.Write(report.StringFormatWithoutPipe(row["Comodity"].ToString(), 15, 2));
@@ -161,7 +159,7 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                             count++;
                         }
                         sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-                        sw.Write(report.StringFormatWithoutPipe("", 11, 2));
+                        sw.Write(report.StringFormatWithoutPipe("", 36, 2));
                         sw.Write(report.StringFormatWithoutPipe("", 10, 2));
                         sw.Write(report.StringFormatWithoutPipe("", 15, 2));
                         sw.Write(report.StringFormatWithoutPipe("  Total ", 11, 1));
@@ -176,9 +174,8 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                         sw.WriteLine("");
                         sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
                     }
-
                     sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-                    sw.Write(report.StringFormatWithoutPipe("", 11, 2));
+                    sw.Write(report.StringFormatWithoutPipe("", 36, 2));
                     sw.Write(report.StringFormatWithoutPipe("", 10, 2));
                     sw.Write(report.StringFormatWithoutPipe("", 15, 2));
                     sw.Write(report.StringFormatWithoutPipe("  Demand ", 11, 1));
@@ -216,9 +213,10 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
             sw.WriteLine("   TAMILNADU CIVIL SUPPLIES CORPORATION          " + entity.RName);
             sw.WriteLine("   Godown : " + entity.GName + "Delivery Order Details Society Wise with Issue Details");
             sw.WriteLine("   D.Ord Date:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate));
-            sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("D.O.No     D.O.Date       Shop                SCHEME          NET.WT      Rate       C.AMOUNT  NC.AMOUNT     AMOUNT");
-            sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine(" Godown Name             D.O.No     D.O.Date       Shop                SCHEME          NET.WT      Rate       C.AMOUNT  NC.AMOUNT     AMOUNT");
+            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+
         }
 
         /// <summary>
@@ -267,89 +265,89 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                     string coop = string.Empty;
                     AddCommodityHeader(sw, entity);
                     coop = Convert.ToString(date["Comodity"]);
-                   // DataRow[] data = entity.dataSet.Tables[0].Select("Comodity='" + Convert.ToString(date["Comodity"]) + "'");
+                    // DataRow[] data = entity.dataSet.Tables[0].Select("Comodity='" + Convert.ToString(date["Comodity"]) + "'");
                     //var distinctCommodity = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Comodity");
                     sw.WriteLine(report.StringFormatWithoutPipe(coop, 50, 2));
 
                     //foreach (DataRow item in distinctCommodity.Rows)
                     //{
-                        Qty = 0;
-                        Rate = 0;
+                    Qty = 0;
+                    Rate = 0;
+                    C_Amount = 0;
+                    NC_Amount = 0;
+                    Amount = 0;
+                    Toatal_C_Amount = 0;
+                    Total_NC_Amount = 0;
+                    DataRow[] ndata = entity.dataSet.Tables[0].Select("Comodity='" + Convert.ToString(date["Comodity"]) + "'");
+                    foreach (DataRow row in ndata)
+                    {
                         C_Amount = 0;
                         NC_Amount = 0;
-                        Amount = 0;
-                        Toatal_C_Amount = 0;
-                        Total_NC_Amount = 0;
-                        DataRow[] ndata = entity.dataSet.Tables[0].Select("Comodity='" + Convert.ToString(date["Comodity"]) + "'");
-                        foreach (DataRow row in ndata)
+                        if (count >= 50)
                         {
-                            C_Amount = 0;
-                            NC_Amount = 0;
-                            if (count >= 50)
-                            {
-                                //Add header again
-                                count = 11;
-                                sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-                                sw.WriteLine((char)12);
+                            //Add header again
+                            count = 11;
+                            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+                            sw.WriteLine((char)12);
                             AddCommodityHeader(sw, entity);
-                            }
-                            doNoNext = row["Dono"].ToString();
-                            C_Amount = (row["C_Nc"].ToString() == "C") ? Convert.ToDecimal(row["Amount"]) : 0;
-                            NC_Amount = (row["C_Nc"].ToString() == "NC") ? Convert.ToDecimal(row["Amount"]) : 0;
-                            sw.Write(report.StringFormatWithoutPipe(doNoNext, 11, 1));
-                            sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(row["Dodate"].ToString()), 10, 2));
-                            sw.Write(report.StringFormatWithoutPipe(row["Coop"].ToString(), 25, 2));
-                            sw.Write(report.StringFormatWithoutPipe(row["Scheme"].ToString(), 11, 2));
-                            sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(row["Quantity"].ToString()), 11, 1));
-                            sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(row["Rate"].ToString()), 10, 1));
-                            sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Convert.ToString(C_Amount)), 11, 1));
-                            sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Convert.ToString(NC_Amount)), 11, 1));
-                            sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(row["Amount"].ToString()), 11, 1));
-                            sw.WriteLine("");
-                            Rate += !string.IsNullOrEmpty(Convert.ToString(row["Rate"])) ? Convert.ToDecimal(row["Rate"].ToString()) : 0;
-                            Toatal_C_Amount += !string.IsNullOrEmpty(Convert.ToString(C_Amount)) ? C_Amount : 0;
-                            Total_NC_Amount += !string.IsNullOrEmpty(Convert.ToString(NC_Amount)) ? NC_Amount : 0;
-                            Amount += !string.IsNullOrEmpty(Convert.ToString(row["Amount"])) ? Convert.ToDecimal(row["Amount"].ToString()) : 0;
-                            Qty += !string.IsNullOrEmpty(Convert.ToString(row["Quantity"])) ? Convert.ToDecimal(row["Quantity"].ToString()) : 0;
-                            i = i + 1;
-                            count++;
                         }
-                        sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-                        sw.Write(report.StringFormatWithoutPipe("", 11, 2));
-                        sw.Write(report.StringFormatWithoutPipe("", 10, 2));
-                        sw.Write(report.StringFormatWithoutPipe("", 25, 2));
-                        sw.Write(report.StringFormatWithoutPipe("  Total ", 11, 1));
-                        sw.Write(report.StringFormatWithoutPipe(Qty.ToString(), 11, 1));
-                        sw.Write(report.StringFormatWithoutPipe(" ", 10, 1));
-                        sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Toatal_C_Amount.ToString()), 11, 1));
-                        sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Total_NC_Amount.ToString()), 11, 1));
-                        sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Amount.ToString()), 11, 1));
-                        GrandTotal_C += Toatal_C_Amount;
-                        GrandTotal_NC += Total_NC_Amount;
-                        GrandTotal += Amount;
+                        doNoNext = row["Dono"].ToString();
+                        C_Amount = (row["C_Nc"].ToString() == "C") ? Convert.ToDecimal(row["Amount"]) : 0;
+                        NC_Amount = (row["C_Nc"].ToString() == "NC") ? Convert.ToDecimal(row["Amount"]) : 0;
+                        sw.Write(report.StringFormatWithoutPipe(row["GodownName"].ToString(), 25, 2));
+                        sw.Write(report.StringFormatWithoutPipe(doNoNext, 11, 1));
+                        sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(row["Dodate"].ToString()), 10, 2));
+                        sw.Write(report.StringFormatWithoutPipe(row["Coop"].ToString(), 25, 2));
+                        sw.Write(report.StringFormatWithoutPipe(row["Scheme"].ToString(), 11, 2));
+                        sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(row["Quantity"].ToString()), 11, 1));
+                        sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(row["Rate"].ToString()), 10, 1));
+                        sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Convert.ToString(C_Amount)), 11, 1));
+                        sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Convert.ToString(NC_Amount)), 11, 1));
+                        sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(row["Amount"].ToString()), 11, 1));
                         sw.WriteLine("");
-                        sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                        Rate += !string.IsNullOrEmpty(Convert.ToString(row["Rate"])) ? Convert.ToDecimal(row["Rate"].ToString()) : 0;
+                        Toatal_C_Amount += !string.IsNullOrEmpty(Convert.ToString(C_Amount)) ? C_Amount : 0;
+                        Total_NC_Amount += !string.IsNullOrEmpty(Convert.ToString(NC_Amount)) ? NC_Amount : 0;
+                        Amount += !string.IsNullOrEmpty(Convert.ToString(row["Amount"])) ? Convert.ToDecimal(row["Amount"].ToString()) : 0;
+                        Qty += !string.IsNullOrEmpty(Convert.ToString(row["Quantity"])) ? Convert.ToDecimal(row["Quantity"].ToString()) : 0;
+                        i = i + 1;
+                        count++;
                     }
-
-                    sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-                    sw.Write(report.StringFormatWithoutPipe("", 11, 2));
+                    sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+                    sw.Write(report.StringFormatWithoutPipe("", 36, 2));
                     sw.Write(report.StringFormatWithoutPipe("", 10, 2));
                     sw.Write(report.StringFormatWithoutPipe("", 25, 2));
-                    sw.Write(report.StringFormatWithoutPipe("  Demand ", 11, 1));
-                    sw.Write(report.StringFormatWithoutPipe(" ", 11, 1));
+                    sw.Write(report.StringFormatWithoutPipe("  Total ", 11, 1));
+                    sw.Write(report.StringFormatWithoutPipe(Qty.ToString(), 11, 1));
                     sw.Write(report.StringFormatWithoutPipe(" ", 10, 1));
-                    sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal_C.ToString()), 11, 1));
-                    sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal_NC.ToString()), 11, 1));
-                    sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal.ToString()), 11, 1));
+                    sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Toatal_C_Amount.ToString()), 11, 1));
+                    sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Total_NC_Amount.ToString()), 11, 1));
+                    sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Amount.ToString()), 11, 1));
+                    GrandTotal_C += Toatal_C_Amount;
+                    GrandTotal_NC += Total_NC_Amount;
+                    GrandTotal += Amount;
                     sw.WriteLine("");
-                    sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+                }
+                sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+                sw.Write(report.StringFormatWithoutPipe("", 36, 2));
+                sw.Write(report.StringFormatWithoutPipe("", 10, 2));
+                sw.Write(report.StringFormatWithoutPipe("", 25, 2));
+                sw.Write(report.StringFormatWithoutPipe("  Demand ", 11, 1));
+                sw.Write(report.StringFormatWithoutPipe(" ", 11, 1));
+                sw.Write(report.StringFormatWithoutPipe(" ", 10, 1));
+                sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal_C.ToString()), 11, 1));
+                sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal_NC.ToString()), 11, 1));
+                sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal.ToString()), 11, 1));
+                sw.WriteLine("");
+                sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
 
-                    //Check Collections 
-                    sw.WriteLine((char)12);
-               //}
+                //Check Collections 
+                sw.WriteLine((char)12);
+                //}
                 if (!isDataAvailable)
                 {
-                    sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
                     sw.WriteLine((char)12);
                 }
             }

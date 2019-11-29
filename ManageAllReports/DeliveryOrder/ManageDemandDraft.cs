@@ -70,9 +70,9 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
             sw.WriteLine("      TamilNadu Civil Supplies Corporation       " + entity.RName);
             sw.WriteLine("      Godown Name: " + entity.GName + "    Delivery Order Payment Details ");
             sw.WriteLine("      D.Ord.Date:" + report.FormatDate(entity.FromDate) + "    To : " + report.FormatDate(entity.Todate) +"  Page No :" + pageNo.ToString());
-            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("SOCIETY                             DONO       DO DATE      DD.NO      DD DATE       AMOUNT         BANK            CEREAL     NON CEREAL");
-            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("   Godown Name           SOCIETY                             DONO       DO DATE      DD.NO      DD DATE       AMOUNT         BANK            CEREAL     NON CEREAL");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         }
 
         /// <summary>
@@ -98,10 +98,12 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                         //Add header again
                         pageNo++;
                         count = 8;
-                        sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------");
+                        sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                         sw.WriteLine((char)12);
                         AddHeader(sw, entity, pageNo);
-                    }                  
+                    }
+                    sw.Write(" ");
+                    sw.Write(report.StringFormatWithoutPipe(row["GodownName"].ToString(), 24, 2));
                     sw.Write(report.StringFormatWithoutPipe(row["Society"].ToString(), 34, 2));
                     sw.Write(report.StringFormatWithoutPipe(row["Dono"].ToString(), 10, 2));
                     sw.Write(report.StringFormatWithoutPipe(row["Dodate"].ToString(), 10, 2) + "  ");
@@ -118,7 +120,8 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                     NonCeral += !string.IsNullOrEmpty(row["NonCereal"].ToString()) ? Convert.ToDecimal(row["NonCereal"]) : 0;
 
                 }
-                sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------");
+                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                sw.Write(report.StringFormatWithoutPipe(" ", 25, 2));
                 sw.Write(report.StringFormatWithoutPipe(" ", 34, 2));
                 sw.Write(report.StringFormatWithoutPipe(" ", 10, 2));
                 sw.Write(report.StringFormatWithoutPipe(" ", 10, 2) + "  ");
@@ -129,7 +132,7 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                 sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Convert.ToString(Ceral)), 12, 1));
                 sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Convert.ToString(NonCeral)), 12, 1));
                 sw.WriteLine("");
-                sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------");
+                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 sw.WriteLine((char)12);
             }
             catch (Exception ex)

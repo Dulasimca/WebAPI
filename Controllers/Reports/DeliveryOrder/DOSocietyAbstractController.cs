@@ -24,6 +24,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", societyAbstract.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", societyAbstract.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", societyAbstract.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", societyAbstract.RCode));
             ds = manageSQLConnection.GetDataSetValues("GetDeliveryOrdeSocietyAbstract", sqlParameters);
             ManageDOSociety manageDOSociety = new ManageDOSociety();
             ManageReport manageReport = new ManageReport();
@@ -50,6 +51,7 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }
         public string UserName { get; set; }
