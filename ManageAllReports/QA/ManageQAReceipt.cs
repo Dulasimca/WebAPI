@@ -102,6 +102,11 @@ namespace TNCSCAPI.ManageAllReports.QA
                     {
                         streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : i > 0 && i <= 2 ? 15 : 12, i <=3 ? 2 : 1));
                     }
+                    else if (i <= 1 && type == 2)
+                    {
+                        streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : i > 0 && i <= 1 ? 15 : 12, i <= 1 ? 2 : 1));
+                    }
+
                     if (i > 2 && type == 0)
                     {
                         dTotal = (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
@@ -113,6 +118,12 @@ namespace TNCSCAPI.ManageAllReports.QA
                         dTotal = (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
                         Total = Total + dTotal;
                         streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(dTotal)), i == 0 ? 20 : i > 0 && i <= 2 ? 15 : 12, i <=3 ? 2 : 1));
+                    }
+                    else if (i > 1 && type == 2)
+                    {
+                        dTotal = (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
+                        Total = Total + dTotal;
+                        streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(dTotal)), i == 0 ? 20 : i > 0 && i <= 2 ? 15 : 12, i <= 1 ? 2 : 1));
                     }
                     i++;
 
