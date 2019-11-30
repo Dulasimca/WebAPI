@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Data;
 using System.IO;
 using TNCSCAPI.Controllers.Reports.QuantityAccount;
@@ -75,18 +74,18 @@ namespace TNCSCAPI.ManageAllReports.QA
             int i = 0;
             //Add header values
             int count = dataSet.Tables[0].Columns.Count;
-            int length = (count * 20)+ count + 18;
+            int length = (count * 20) + count + 18;
             streamWriter.WriteLine("-" + report.AddLine(length));
             streamWriter.Write(" ");
             foreach (DataColumn dataColumn in dataSet.Tables[0].Columns)
             {
-                streamWriter.Write(report.StringFormat(dataColumn.ColumnName, i == 0 ? 20 : 20, i == 0 ? 2 : 1));
-                i = 1;
+                streamWriter.Write(report.StringFormat(dataColumn.ColumnName, i == 0 ? 20 : 20, i <= 1 ? 2 : 1));
+                i ++;
             }
             streamWriter.Write("         Total    |");
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("-" + report.AddLine(length));
-              foreach (DataRow item in dataSet.Tables[0].Rows)
+            foreach (DataRow item in dataSet.Tables[0].Rows)
             {
                 i = 0;
                 decimal Total = 0;
@@ -94,15 +93,20 @@ namespace TNCSCAPI.ManageAllReports.QA
                 for (int k = 0; k < count; k++)
                 {
                     var result = report.StringFormatWithEmpty(Convert.ToString(item[k]));
-                    streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : 20, i == 0 ? 2 : 1));
-                    if (i > 0)
+                    if(i<=1)
+                    {
+                        streamWriter.Write(report.StringFormat(result.Item1, i == 0 ? 20 : 20, i <= 1 ? 2 : 1));
+
+                    }
+                    else 
                     {
                         Total = Total + (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
+                        streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(Total)), i == 0 ? 20 : 20, i <= 1 ? 2 : 1));
                     }
-                    i = 1;
+                    i++;
                 }
                 //Total
-                streamWriter.Write(report.StringFormat(Convert.ToString(Total), 18, 1));
+                streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(Total)), 18, 1));
                 streamWriter.WriteLine(" ");
             }
             streamWriter.WriteLine("-" + report.AddLine(length));
