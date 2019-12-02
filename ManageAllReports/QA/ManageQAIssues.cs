@@ -89,6 +89,7 @@ namespace TNCSCAPI.ManageAllReports.QA
             {
                 i = 0;
                 decimal Total = 0;
+                decimal dTotal = 0;
                 streamWriter.Write(" ");
                 for (int k = 0; k < count; k++)
                 {
@@ -100,8 +101,9 @@ namespace TNCSCAPI.ManageAllReports.QA
                     }
                     else 
                     {
-                        Total = Total + (result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0);
-                        streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(Total)), i == 0 ? 20 : 20, i <= 1 ? 2 : 1));
+                        dTotal = result.Item2 == true ? Convert.ToDecimal(result.Item1) : 0;
+                        Total = Total + dTotal;
+                        streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(Convert.ToString(dTotal)), i == 0 ? 20 : 20, i <= 1 ? 2 : 1));
                     }
                     i++;
                 }
