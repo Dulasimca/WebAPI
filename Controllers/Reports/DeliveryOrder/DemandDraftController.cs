@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 using TNCSCAPI.ManageAllReports;
 using TNCSCAPI.ManageAllReports.DeliveryOrder;
 
@@ -38,15 +35,15 @@ namespace TNCSCAPI.Controllers.Reports.DeliveryOrder
                     FromDate = demandDraft.FromDate,
                     Todate = demandDraft.ToDate,
                     UserName = demandDraft.UserName,
-                    GName= demandDraft.GName,
-                    RName= demandDraft.RName
+                    GName = demandDraft.GName,
+                    RName = demandDraft.RName
                 };
                 // commodityIssueMemo.GenerateCommodityIssueMemoReport(entity);
                 Task.Run(() => manageDemand.GenerateDemandDraftReport(entity)); //Generate the Report
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-        }
+    }
 
     public class DemandDraftEntity
     {

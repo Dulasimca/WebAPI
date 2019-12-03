@@ -59,9 +59,9 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
             sw.WriteLine("        TAMILNADU CIVIL SUPPLIES CORPORATION          " + entity.RName);
             sw.WriteLine("        Godown : " + entity.GName + "Delivery Order Details Society Wise with Issue Details For OAP Scheme ");
             sw.WriteLine("        D.Ord Date:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate));
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("D.O.No     D.O.Date  COMMODITY      SCHEME          NET.WT      Rate       C.AMOUNT  NC.AMOUNT     AMOUNT");
-            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine(" Godown Name             D.O.No     D.O.Date  COMMODITY      SCHEME          NET.WT      Rate       C.AMOUNT  NC.AMOUNT     AMOUNT");
+            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
         }
 
         /// <summary>
@@ -136,13 +136,15 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                             {
                                 //Add header again
                                 count = 11;
-                                sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                                sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
                                 sw.WriteLine((char)12);
                                 AddHeader(sw, entity);
                             }
                             doNoNext = row["Dono"].ToString();
                             C_Amount = (row["C_Nc"].ToString() == "C") ? Convert.ToDecimal(row["Amount"]) : 0;
                             NC_Amount = (row["C_Nc"].ToString() == "NC") ? Convert.ToDecimal(row["Amount"]) : 0;
+                            sw.Write(report.StringFormatWithoutPipe(row["GodownName"].ToString(), 25, 2));
+
                             sw.Write(report.StringFormatWithoutPipe(doNoNext, 11, 1));
                             sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(row["Dodate"].ToString()), 10, 2));
                             sw.Write(report.StringFormatWithoutPipe(row["Comodity"].ToString(), 15, 2));
@@ -161,8 +163,8 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                             i = i + 1;
                             count++;
                         }
-                        sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-                        sw.Write(report.StringFormatWithoutPipe("", 11, 2));
+                        sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
+                        sw.Write(report.StringFormatWithoutPipe("", 36, 2));
                         sw.Write(report.StringFormatWithoutPipe("", 10, 2));
                         sw.Write(report.StringFormatWithoutPipe("", 15, 2));
                         sw.Write(report.StringFormatWithoutPipe("  Total ", 11, 1));
@@ -175,11 +177,10 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                         GrandTotal_NC += Total_NC_Amount;
                         GrandTotal += Amount;
                         sw.WriteLine("");
-                        sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                        sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
                     }
-
-                    sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-                    sw.Write(report.StringFormatWithoutPipe("", 11, 2));
+                    sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
+                    sw.Write(report.StringFormatWithoutPipe("", 36, 2));
                     sw.Write(report.StringFormatWithoutPipe("", 10, 2));
                     sw.Write(report.StringFormatWithoutPipe("", 15, 2));
                     sw.Write(report.StringFormatWithoutPipe("  Demand ", 11, 1));
@@ -189,14 +190,14 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                     sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal_NC.ToString()), 11, 1));
                     sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal.ToString()), 11, 1));
                     sw.WriteLine("");
-                    sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
 
                     //Check Collections 
                     sw.WriteLine((char)12);
                 }
                 if (!isDataAvailable)
                 {
-                    sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
                     sw.WriteLine((char)12);
                 }
             }

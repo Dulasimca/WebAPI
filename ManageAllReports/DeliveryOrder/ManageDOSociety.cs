@@ -56,9 +56,9 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
             sw.WriteLine("   TAMILNADU CIVIL SUPPLIES CORPORATION          " + entity.RName);
             sw.WriteLine("   Godown : " + entity.GName + "Delivery Order Details Society Wise with Issue Details");
             sw.WriteLine("   D.Ord Date:" + report.FormatDate(entity.FromDate) + "           To : " + report.FormatDate(entity.Todate));
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("DONO               SOCIETY                  D0 DATE  AMOUNTDUE      CHEQUE/DD       Adv.Col       DEB.BAL");
-            sw.WriteLine("-------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine(" Godown Name             DONO               SOCIETY                  D0 DATE  AMOUNTDUE      CHEQUE/DD       Adv.Col       DEB.BAL");
+            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
         }
 
         /// <summary>
@@ -108,10 +108,12 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                         {
                             //Add header again
                             count = 8;
-                            sw.WriteLine("------------------------------------------------------------------------------------------------------------");
+                            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
                             sw.WriteLine((char)12);
                             AddHeader(sw, entity);
                         }
+                        sw.Write(report.StringFormatWithoutPipe(row["GodownName"].ToString(), 25, 2));
+
                         sw.Write(report.StringFormatWithoutPipe(row["Dono"].ToString(), 10, 2));
                         sw.Write(report.StringFormatWithoutPipe(i == 1 ? row["issuername"].ToString() : " ", 30, 2));
                         sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(row["DoDate"].ToString()), 10, 2));
@@ -127,8 +129,8 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                         i = 2;
                         count++;
                     }
-                    sw.WriteLine("------------------------------------------------------------------------------------------------------------");
-                    sw.Write(report.StringFormatWithoutPipe(" ", 10, 2));
+                    sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
+                    sw.Write(report.StringFormatWithoutPipe(" ", 35, 2));
                     sw.Write(report.StringFormatWithoutPipe(" ", 30, 2));
                     sw.Write(report.StringFormatWithoutPipe("Total", 10, 2));
                     sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(Due.ToString()), 13, 1));
@@ -140,10 +142,10 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                     GrandTotal_Paid += Paid;
                     GrandTotal_ADV += AdvanceCollection;
                     GrandTotal_Debit += Debit;
-                    sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
                 }
-                sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
-                sw.Write(report.StringFormatWithoutPipe(" ", 10, 2));
+                sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
+                sw.Write(report.StringFormatWithoutPipe(" ", 35, 2));
                 sw.Write(report.StringFormatWithoutPipe(" ", 20, 2));
                 sw.Write(report.StringFormatWithoutPipe("Grand Total", 20, 2));
                 sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal_Due.ToString()), 13, 1));
@@ -151,12 +153,12 @@ namespace TNCSCAPI.ManageAllReports.DeliveryOrder
                 sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal_ADV.ToString()), 13, 1));
                 sw.Write(report.StringFormatWithoutPipe(report.Decimalformat(GrandTotal_Debit.ToString()), 12, 1));
                 sw.WriteLine("");
-                sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
                 //Check Collections 
                 sw.WriteLine((char)12);
                 if (!isDataAvailable)
                 {
-                    sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------");
                     sw.WriteLine((char)12);
                 }
             }

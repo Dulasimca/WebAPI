@@ -33,8 +33,8 @@ namespace TNCSCAPI.Controllers.Reports.Register
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@FromDate", issuerParameter.FromDate));
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@ToDate", issuerParameter.ToDate));
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@GodownCode", issuerParameter.GCode));
-               // sqlParametersNew.Add(new KeyValuePair<string, string>("@Type", "1"));
-                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", issuerParameter.RCode));
+                // sqlParametersNew.Add(new KeyValuePair<string, string>("@Type", "1"));
+                sqlParametersNew.Add(new KeyValuePair<string, string>("@RCode", issuerParameter.RCode));
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@Startindex", Convert.ToString(issuerParameter.StartIndex)));
                 sqlParametersNew.Add(new KeyValuePair<string, string>("@TotalRows", Convert.ToString(issuerParameter.TotalRecord)));
                 dsNew = manageSQLConnection.GetDataSetValues("StockIssueForRegister", sqlParametersNew);

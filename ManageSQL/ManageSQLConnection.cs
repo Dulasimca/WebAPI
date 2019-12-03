@@ -103,8 +103,8 @@ namespace TNCSCAPI
                 {
                     sqlCommand.Parameters.AddWithValue(keyValuePair.Key, keyValuePair.Value);
                 }
-                sqlCommand.ExecuteNonQuery();
-                return true;
+                int affected = sqlCommand.ExecuteNonQuery();
+                return affected > 0 ? true : false;
             }
             catch (Exception ex)
             {
