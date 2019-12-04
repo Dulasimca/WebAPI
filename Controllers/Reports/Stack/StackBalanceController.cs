@@ -52,6 +52,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", stackEntity.ICode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stackEntity.StackDate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", stackEntity.TStockNo.Trim()));
+                sqlParameters.Add(new KeyValuePair<string, string>("@StackYear", stackEntity.StackYear));
                 ds = manageSQLConnection.GetDataSetValues("GetStackCardDetailsbyId", sqlParameters);
                 //Calculate the 
                 var result= manageStackCard.ManageStackBalance(ds, stackEntity);
@@ -96,6 +97,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
         public int Type { get; set; }
         public string FromDate { get; set; }
         public string ToDate { get; set; }
+        public string StackYear { get; set; }
 
         public string GName { get; set; }
         public string RName { get; set; }
