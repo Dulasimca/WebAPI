@@ -23,6 +23,7 @@ namespace TNCSCAPI.Controllers.Reports
             sqlParameters.Add(new KeyValuePair<string, string>("@FDate", commodity.FDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", commodity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodCode", commodity.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", commodity.RCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@TRCODE", commodity.TRCode));
             ds = manageSQLConnection.GetDataSetValues("GetTransactionReceipt", sqlParameters);
             TransactionReceipt stockDeliveryOrder = new TransactionReceipt();
