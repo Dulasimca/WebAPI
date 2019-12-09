@@ -25,7 +25,7 @@ namespace TNCSCAPI.Controllers.Reports.Transfer
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
-            ds = manageSQLConnection.GetDataSetValues("GetTransitdetails", sqlParameters);
+             ds = manageSQLConnection.GetDataSetValues("GetTransitdetails", sqlParameters);
             ManageTruckTransit manageTruckToRegion = new ManageTruckTransit();
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))

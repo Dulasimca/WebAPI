@@ -13,7 +13,16 @@ namespace TNCSCAPI.Controllers.Masters
          [HttpGet("{id}")]
         public string Get(string GCode, int Type = 0)
         {
-            if(Type==2)
+            if(Type == 1)
+            {
+                DataSet ds = new DataSet();
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+                ds = manageSQLConnection.GetDataSetValues("GetIssuerPartyMaster", sqlParameters);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            else if(Type==2)
             {
                 DataSet ds = new DataSet();
                 ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -37,13 +46,25 @@ namespace TNCSCAPI.Controllers.Masters
         [HttpPut("{id}")]
         public bool Put(IssuerEntity issuerEntity)
         {
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", issuerEntity.IssuerCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", issuerEntity.Activeflag));
-            sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.ACSCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issuerEntity.GCode));
-            return manageSQLConnection.UpdateValues("UpdateIssuerMaster", sqlParameters);
+            if (issuerEntity.Type == 1)
+            {
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", issuerEntity.IssuerCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@PartyID", issuerEntity.PartyID));
+                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", issuerEntity.RCode));
+                return manageSQLConnection.UpdateValues("UpdateIssuerPartyMaster", sqlParameters);
+            }
+            else
+            {
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", issuerEntity.IssuerCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", issuerEntity.Activeflag));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.ACSCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", issuerEntity.GCode));
+                return manageSQLConnection.UpdateValues("UpdateIssuerMaster", sqlParameters);
+            }
         }
 
         [HttpPost("{id}")]
@@ -51,6 +72,7 @@ namespace TNCSCAPI.Controllers.Masters
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@IssuerNo", issuerEntity.IssuerNo));
             sqlParameters.Add(new KeyValuePair<string, string>("@Issuername", issuerEntity.IssuerName));
             sqlParameters.Add(new KeyValuePair<string, string>("@SocietyCode", issuerEntity.SocietyCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", issuerEntity.IssuerCode));
@@ -68,6 +90,9 @@ namespace TNCSCAPI.Controllers.Masters
     }
     public class IssuerEntity
     {
+        public int Type { get; set; }
+        public string PartyID { get; set; }
+        public string IssuerNo { get; set; }
         public string IssuerName { get; set; }
         public string IssuerCode { get; set; }
         public string Activeflag { get; set; }
