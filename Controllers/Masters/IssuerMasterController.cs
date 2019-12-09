@@ -72,6 +72,7 @@ namespace TNCSCAPI.Controllers.Masters
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@IssuerNo", issuerEntity.IssuerNo));
             sqlParameters.Add(new KeyValuePair<string, string>("@Issuername", issuerEntity.IssuerName));
             sqlParameters.Add(new KeyValuePair<string, string>("@SocietyCode", issuerEntity.SocietyCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", issuerEntity.IssuerCode));
@@ -91,6 +92,7 @@ namespace TNCSCAPI.Controllers.Masters
     {
         public int Type { get; set; }
         public string PartyID { get; set; }
+        public string IssuerNo { get; set; }
         public string IssuerName { get; set; }
         public string IssuerCode { get; set; }
         public string Activeflag { get; set; }

@@ -8,6 +8,7 @@ namespace TNCSCAPI.Models
     public class PurchaseParameter
     {
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string OrderNo { get; set; }
@@ -17,6 +18,7 @@ namespace TNCSCAPI.Models
     public class GUGRParameter
     {
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public string Type { get; set; }

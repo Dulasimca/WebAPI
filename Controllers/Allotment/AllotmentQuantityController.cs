@@ -17,7 +17,6 @@ namespace TNCSCAPI.Controllers.Allotment
         [HttpPost("{id}")]
         public Tuple<bool, string> Post([FromBody]List<AllotmentQuantityEntity> allotmentEntity)
         {
-
             ManageSQLForAllotmentQty manageSQL = new ManageSQLForAllotmentQty();
             return manageSQL.InsertAllotmentQtyEntry(allotmentEntity);
         }
@@ -42,6 +41,7 @@ namespace TNCSCAPI.Controllers.Allotment
 
     public class AllotmentQuantityEntity
     {
+        public int Type { get; set; }
         public string FPSName { get; set; }
         public string FPSCode { get; set; }
         public string SocietyCode { get; set; }

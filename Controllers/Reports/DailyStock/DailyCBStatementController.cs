@@ -30,7 +30,7 @@ namespace TNCSCAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public string Get(string Date,string RCode,string GCode)
+        public string Get(string Date,string RCode,string GCode, string RoleId)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
@@ -40,6 +40,7 @@ namespace TNCSCAPI.Controllers
                 sqlParameters.Add(new KeyValuePair<string, string>("@Date", Date));
                 sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@RoleId", RoleId));
                 ds = manageSQLConnection.GetDataSetValues("GetDailyCBData", sqlParameters);
                 return JsonConvert.SerializeObject(ds);
             }

@@ -16,7 +16,7 @@ namespace TNCSCAPI.Controllers.Reports.Transfer
     public class TruckTransitController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string FDate, string ToDate, string GCode, string Username)
+        public string Get(string FDate, string ToDate, string GCode, string Username, string RCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -24,7 +24,8 @@ namespace TNCSCAPI.Controllers.Reports.Transfer
             sqlParameters.Add(new KeyValuePair<string, string>("@FDate", FDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
-            ds = manageSQLConnection.GetDataSetValues("GetTransitdetails", sqlParameters);
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
+             ds = manageSQLConnection.GetDataSetValues("GetTransitdetails", sqlParameters);
             ManageTruckTransit manageTruckToRegion = new ManageTruckTransit();
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))
