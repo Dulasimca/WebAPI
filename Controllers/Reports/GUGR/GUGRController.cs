@@ -25,6 +25,7 @@ namespace TNCSCAPI.Controllers.Reports.GUGR
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", reportParameter.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", reportParameter.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", reportParameter.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", reportParameter.RCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Type", reportParameter.Type));
             ds = manageSQLConnection.GetDataSetValues("GETGRGU", sqlParameters);
             ManageGUGR manageGUGR = new ManageGUGR();

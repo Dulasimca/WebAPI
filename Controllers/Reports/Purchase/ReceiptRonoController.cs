@@ -24,6 +24,7 @@ namespace TNCSCAPI.Controllers.Reports.Purchase
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", reportParameter.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", reportParameter.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@orderno", reportParameter.OrderNo));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", reportParameter.RCode));
             ds = manageSQLConnection.GetDataSetValues("Getrono", sqlParameters);           
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }

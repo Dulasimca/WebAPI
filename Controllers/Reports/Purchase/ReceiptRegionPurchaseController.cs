@@ -25,6 +25,7 @@ namespace TNCSCAPI.Controllers.Reports.Purchase
             sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", reportParameter.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", reportParameter.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", reportParameter.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", reportParameter.RCode));
             ds = manageSQLConnection.GetDataSetValues("GetReceiptRegionPurchase", sqlParameters);
             RoPurchase RoPurchase = new RoPurchase();
             ManageReport manageReport = new ManageReport();
