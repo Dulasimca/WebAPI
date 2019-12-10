@@ -21,6 +21,7 @@ namespace TNCSCAPI.Controllers.Reports.DDCheque
             sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", oCREntity.FromDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", oCREntity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", oCREntity.GCode));
+            // sqlParameters.Add(new KeyValuePair<string, string>("@RCode", oCREntity.RCode));
             ds = manageSQLConnection.GetDataSetValues("GetOCRReport", sqlParameters);
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))
@@ -46,6 +47,7 @@ namespace TNCSCAPI.Controllers.Reports.DDCheque
     public class OCREntity
     {
         public string GCode { get; set; }
+        public string RCode { get; set; }
         public string UserID { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }
