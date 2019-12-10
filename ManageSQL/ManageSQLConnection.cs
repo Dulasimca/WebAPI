@@ -272,8 +272,8 @@ namespace TNCSCAPI
                         sqlCommand.Parameters.AddWithValue("@Scheme", item.Scheme);
                         sqlCommand.Parameters.AddWithValue("@RCode", receiptList.RCode);
                         sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                        //sqlCommand.Parameters.AddWithValue("@flag1", "-");
-                        //sqlCommand.Parameters.AddWithValue("@Flag2", "-");
+                        sqlCommand.Parameters.AddWithValue("@flag1", item.StackYear);
+                          //sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                         sqlCommand.ExecuteNonQuery();
                     }
 

@@ -23,6 +23,7 @@ namespace TNCSCAPI.Controllers.Reports
             sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", commodity.FDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", commodity.ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", commodity.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", commodity.RCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@ScCode", commodity.TRCode));
             ds = manageSQLConnection.GetDataSetValues("GetSchemeReceipt", sqlParameters);
             SchemeReceipt schemeReceipt = new SchemeReceipt();

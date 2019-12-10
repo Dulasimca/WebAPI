@@ -73,7 +73,7 @@ namespace TNCSCAPI.ManageAllReports
                     {
                         //Add header again
                         iCount = 11;
-                        sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+                        sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------");
                         sw.WriteLine((char)12);
                         AddHeader(sw, Convert.ToString(dateValue["Issue_Date"]));
                     }
@@ -89,21 +89,21 @@ namespace TNCSCAPI.ManageAllReports
                     }
 
                     sIssuer = Convert.ToString(dr["To_Whom_Issued"]).Trim();
-                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue==false? i.ToString():" ", 4, 2));
+                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? i.ToString() : " ", 4, 2));
                     sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? dr["Truck_Memono"].ToString() : " ", 12, 2));
-                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? dr["Mono"].ToString():" ", 15, 2));
-                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? dr["RoNo"].ToString():" ", 11, 2));
-                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ?  sIssuer:" ", 31, 2));
+                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? dr["Mono"].ToString() : " ", 15, 2));
+                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? dr["RoNo"].ToString() : " ", 11, 2));
+                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? sIssuer : " ", 31, 2));
                     sw.Write(report.StringFormatWithoutPipe(dr["Scheme"].ToString(), 10, 2));
-                    sw.Write(report.StringFormatWithoutPipe(dr["Stackno"].ToString(), 8, 2));
+                    sw.Write(report.StringFormatWithoutPipe(dr["Stackno"].ToString(), 10, 2));
                     sw.Write(report.StringFormatWithoutPipe(dr["NoBags"].ToString(), 7, 1));
                     sw.Write(report.StringFormatWithoutPipe(dr["Commodity"].ToString(), 25, 2));
-                    sw.Write(report.StringFormatWithoutPipe(dr["NetWt"].ToString(), 7, 2));
+                    sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(dr["NetWt"].ToString()), 9, 1));
                     sw.WriteLine("");
                     iCount = iCount + 1;
                     i = CheckRepeatValue == false ? i + 1 : i;
                 }
-                sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+                sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------");
                 sw.WriteLine((char)12);
             }
         }
@@ -114,9 +114,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine("                                          Truck Memo Register");
             sw.WriteLine(" ");
             sw.WriteLine("Issue Date:" + report.FormatDate(Date) + " (Net Wt in kgs/Klts/Nos)   Godown : " + GName + "          Region :" + Regioncode);
-            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("S.No Truck Memo   Mo.No           Ro.No       To Whom Issued                  Scheme     StackNo  No bags Commodity                 Net wt  ");
-            sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("S.No Truck Memo   Mo.No           Ro.No       To Whom Issued                  Scheme     StackNo    No bags Commodity                 Net wt  ");
+            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------");
         }
         public void AddHeaderforTMAbstract(StreamWriter sw, CommonEntity commonEntity)
         {
@@ -124,7 +124,7 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine("                                          Truck Memo Register Abstract          Region :" + Regioncode);
             sw.WriteLine(" ");
-            sw.WriteLine("Issue Date:" + report.FormatDate(commonEntity.FromDate) + " To : "+ report.FormatDate(commonEntity.Todate) + " (Net Wt in kgs/Klts/Nos)    Godown : " + GName  );
+            sw.WriteLine("Issue Date:" + report.FormatDate(commonEntity.FromDate) + " To : " + report.FormatDate(commonEntity.Todate) + " (Net Wt in kgs/Klts/Nos)    Godown : " + GName);
             sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
             sw.WriteLine("StackNo       Commodity                                          No bags         Net Wt(in Kgs)/Nos  ");
             sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
@@ -143,48 +143,48 @@ namespace TNCSCAPI.ManageAllReports
 
         public void TruckMemoRegCommodityAbstract(StreamWriter sw, CommonEntity entity)
         {
-           // var distinctDate = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Issue_Date");
+            // var distinctDate = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Issue_Date");
             //Date wise DO report
             int iCount = 11;
             string sIssuer = string.Empty;
             string sDoNo = string.Empty;
             //foreach (DataRow dateValue in distinctDate.Rows)
             //{
-                iCount = 11;
-                string sDoNo1 = string.Empty;
-                List<TruckMemoRegEntity> dORegEntities = new List<TruckMemoRegEntity>();
-                dORegEntities = report.ConvertDataTableToList<TruckMemoRegEntity>(entity.dataSet.Tables[0]);
+            iCount = 11;
+            string sDoNo1 = string.Empty;
+            List<TruckMemoRegEntity> dORegEntities = new List<TruckMemoRegEntity>();
+            dORegEntities = report.ConvertDataTableToList<TruckMemoRegEntity>(entity.dataSet.Tables[0]);
 
-                // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
-                var myResult = from a in dORegEntities
-                               group a by new { a.Commodity, a.TRName } into gValue
-                               select new
-                               {
-                                   NoBags = gValue.Sum(s => s.NoBags),
-                                   NetWt = gValue.Sum(s => s.NetWt),
-                                   GroupByNames = gValue.Key
-                               };
+            // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
+            var myResult = from a in dORegEntities
+                           group a by new { a.Commodity, a.TRName } into gValue
+                           select new
+                           {
+                               NoBags = gValue.Sum(s => s.NoBags),
+                               NetWt = gValue.Sum(s => s.NetWt),
+                               GroupByNames = gValue.Key
+                           };
             AddHeaderforTMCommodityAbstract(sw, entity);
             foreach (var item in myResult)
+            {
+                if (iCount >= 50)
                 {
-                    if (iCount >= 50)
-                    {
-                        //Add header again
-                        iCount = 11;
-                        sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
-                        sw.WriteLine((char)12);
-                        AddHeaderforTMAbstract(sw, entity);
-                    }
-                    sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.TRName, 18, 2));
-                    sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 44, 2));
-                    sw.Write(report.StringFormatWithoutPipe(item.NoBags.ToString(), 10, 1));
-                    sw.Write(report.StringFormatWithoutPipe(item.NetWt.ToString(), 25, 1));
-                    iCount++;
-                    sw.WriteLine("");
+                    //Add header again
+                    iCount = 11;
+                    sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine((char)12);
+                    AddHeaderforTMAbstract(sw, entity);
                 }
-                sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
-                sw.WriteLine((char)12);
-           // }
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.TRName, 18, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 44, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.NoBags.ToString(), 10, 1));
+                sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.NetWt.ToString()), 25, 1));
+                iCount++;
+                sw.WriteLine("");
+            }
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine((char)12);
+            // }
         }
         public void TruckMemoRegAbstract(StreamWriter sw, CommonEntity entity)
         {
@@ -223,7 +223,7 @@ namespace TNCSCAPI.ManageAllReports
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Stackno, 13, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 44, 2));
                 sw.Write(report.StringFormatWithoutPipe(item.NoBags.ToString(), 10, 1));
-                sw.Write(report.StringFormatWithoutPipe(item.NetWt.ToString(), 25, 1));
+                sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.NetWt.ToString()), 25, 1));
                 iCount++;
                 sw.WriteLine("");
             }

@@ -128,8 +128,8 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Parameters.AddWithValue("@Scheme", item.Scheme);
                         sqlCommand.Parameters.AddWithValue("@Rcode", item.RCode);
                         sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                        sqlCommand.Parameters.AddWithValue("Flag1", "-");
-                        sqlCommand.Parameters.AddWithValue("Flag2", "-");
+                        sqlCommand.Parameters.AddWithValue("@Flag1", item.StackYear);
+                        sqlCommand.Parameters.AddWithValue("@Flag2", "-");
                         sqlCommand.ExecuteNonQuery();
                     }
 

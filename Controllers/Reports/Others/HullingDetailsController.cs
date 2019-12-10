@@ -15,7 +15,7 @@ namespace TNCSCAPI.Controllers.Reports
     public class HullingDetailsController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string FDate, string ToDate, string GCode, string UserName)
+        public string Get(string FDate, string ToDate, string GCode, string UserName,string RCode)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -23,6 +23,7 @@ namespace TNCSCAPI.Controllers.Reports
             sqlParameters.Add(new KeyValuePair<string, string>("@FDate", FDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
             ds = manageSQLConnection.GetDataSetValues("GetHullingDetails", sqlParameters);
             HullingDetails hullingDetails = new HullingDetails();
             ManageReport manageReport = new ManageReport();

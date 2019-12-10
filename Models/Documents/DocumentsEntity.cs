@@ -56,6 +56,7 @@ namespace TNCSCAPI.Models.Documents
         public string CommodityName { get; set; }
         public string SchemeName { get; set; }
         public string PackingName { get;set; }
+        public string StackYear { get; set; }
     }
 
     public class DocumentStockIssuesEntity
@@ -277,6 +278,7 @@ namespace TNCSCAPI.Models.Documents
         public string ITDescription { get; set; }
         public string PackingType { get; set; }
         public string SchemeName { get; set; }
+        public string StackYear { get; set; }
     }
 
     public class DocumentSTTDetails
