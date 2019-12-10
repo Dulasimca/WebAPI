@@ -51,6 +51,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                         StackCardEntity stackCard = new StackCardEntity();
                         stackCard.SDate = Convert.ToDateTime(dr["Dates"]);
                         stackCard.AckDate = Convert.ToString(dr["Dates"]);
+                        stackCard.StackNo = Convert.ToString(dr["StockNo"]);
                         stackCard.ReceiptBags = Convert.ToString(dr["NoPacking"]);
                         stackCard.ReceiptQuantity = Convert.ToString(dr["TOTAL"]);
                         dClosingBalance = dClosingBalance + Convert.ToDecimal(Convert.ToString(dr["TOTAL"]));
@@ -81,6 +82,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                             StackCardEntity nstackCard = new StackCardEntity();
                             nstackCard.SDate = Convert.ToDateTime(ndr["Dates"]);
                             nstackCard.AckDate = Convert.ToString(ndr["Dates"]);
+                            nstackCard.StackNo = Convert.ToString(ndr["StockNo"]);
                             nstackCard.IssuesBags = Convert.ToString(ndr["NoPacking"]);
                             nstackCard.IssuesQuantity = Convert.ToString(ndr["TOTAL"]);
                             nstackCard.ClosingBalance = Convert.ToString(dClosingBalance);
@@ -340,6 +342,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
     {
         public DateTime SDate { get; set; }
         public string AckDate { get; set; }
+        public string StackNo { get; set; }
         public string ReceiptBags { get; set; }
         public string ReceiptQuantity { get; set; }
         public string IssuesBags { get; set; }
