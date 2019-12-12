@@ -29,6 +29,7 @@ namespace TNCSCAPI.Controllers.GST.Master
             sqlParameters.Add(new KeyValuePair<string, string>("@IFSC", partyLedger.IFSC));
             sqlParameters.Add(new KeyValuePair<string, string>("@Favour", partyLedger.Favour));
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.RCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Flag", partyLedger.Flag));
             return manageSQL.InsertData("InsertPartyLedgerdetails", sqlParameters);
         }
 
@@ -78,5 +79,6 @@ public class PartyLedgerEntryEntity
         public string LedgerID { get; set; }
         public string StateCode { get; set; }
         public string Tin { get; set; }
+        public string Flag { get; set; }
     }
 }
