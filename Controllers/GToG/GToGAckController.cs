@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace TNCSCAPI.Controllers.GToG
 {
@@ -13,14 +10,14 @@ namespace TNCSCAPI.Controllers.GToG
     public class GToGAckController : ControllerBase
     {
         [HttpPost("{id}")]
-        public string Post(string IssueMemoNumber,string FpsAckDate)
+        public string Post(GToGParameter gToG)
         {
             bool isUpdated = false;
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", IssueMemoNumber));
-            isUpdated= manageSQLConnection.UpdateValues("UpdateGToGAck", sqlParameters);
-            return JsonConvert.SerializeObject(GetMessage(IssueMemoNumber, isUpdated));
+            sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", gToG.IssueMemoNumber));
+            isUpdated = manageSQLConnection.UpdateValues("UpdateGToGAck", sqlParameters);
+            return JsonConvert.SerializeObject(GetMessage(gToG.IssueMemoNumber, isUpdated));
         }
 
         public GToGEntity GetMessage(string IssueMemoNumber, bool isUpdated)
@@ -48,6 +45,11 @@ namespace TNCSCAPI.Controllers.GToG
             }
         }
 
+    }
+    public class GToGParameter
+    {
+        public string IssueMemoNumber { get; set; }
+        public string FpsAckDate { get; set; }
     }
     public class GToGEntity
     {

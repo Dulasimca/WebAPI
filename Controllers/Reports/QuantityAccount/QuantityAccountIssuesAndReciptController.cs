@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using TNCSCAPI.ManageAllReports.QA;
+using Newtonsoft.Json;
 
 namespace TNCSCAPI.Controllers.Reports.QuantityAccount
 {
@@ -11,5 +9,14 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
     [ApiController]
     public class QuantityAccountIssuesAndReciptController : ControllerBase
     {
+        [HttpPost("{id}")]
+        public string Post(QuantityAccountEntity quantityAccountEntity)
+        {
+            // DataSet ds = new DataSet();
+            ManageQuantityAccountReceiptandIssues manageQuantityAccount = new ManageQuantityAccountReceiptandIssues();
+            var result=manageQuantityAccount.ProcessQAStatement(quantityAccountEntity);
+            return JsonConvert.SerializeObject(result);
+        }
     }
+
 }
