@@ -33,19 +33,36 @@ namespace TNCSCAPI.Controllers.GST.Master
         }
 
         [HttpGet("{id}")]
-        public string Get(string RCode)
+        public string Get(string RCode, string Type = "Active")
         {
-            DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
-            ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            DataSet ds = new DataSet();
+            try
+            {
+                if (Type == "InActive")
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
+                    ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
+                }
+                else
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
+                    ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
+                }
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            finally
+            {
+                ds.Dispose();
+            }
         }
-
     }
 
-    public class PartyLedgerEntryEntity
+public class PartyLedgerEntryEntity
     {
         public string Pan { get; set; }
         public string PartyName { get; set; }
