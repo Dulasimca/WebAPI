@@ -236,7 +236,11 @@ namespace TNCSCAPI.ManageAllReports.QA
                             _IsBalanceQty = _GrandTotalReceipt - _IsTotalIssues;
                             objectEntity.IsBalanceQty = _IsBalanceQty;
 
-                            _qaObjectEntity.Add(objectEntity);
+                            if (_IsBalanceQty > 0 || _IsTotalOtherIssues > 0 || _IsTotalFreeRiceIssues > 0 || _IsTotalSales > 0 ||
+                               _GrandTotalReceipt > 0 || _TotalReceipt > 0 || _TotalOtherReceipt > 0 || _Total > 0 || _TotalFreeRice > 0)
+                            {
+                                _qaObjectEntity.Add(objectEntity);
+                            }
                             //decimal CheckData = stockDetailsEntity.OpeningBalance + stockDetailsEntity.ClosingBalance +
                             //               stockDetailsEntity.TotalReceipt + stockDetailsEntity.IssueSales
                             //               + stockDetailsEntity.IssueOthers;
@@ -281,11 +285,11 @@ namespace TNCSCAPI.ManageAllReports.QA
                     object objSum;
                     if (SchemeCode == "All")
                     {
-                        objSum = dtQty.Compute("Sum(TOTAL)", "Trcode='" + TRCode + "' and GCode='" + objectEntity.GCode + "'");
+                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Trcode='" + TRCode + "' and GCode='" + objectEntity.GCode + "'");
                     }
                     else
                     {
-                        objSum = dtQty.Compute("Sum(TOTAL)", "Scheme ='" + SchemeCode + "' and Trcode='" + TRCode + "' and GCode='" + objectEntity.GCode + "'");
+                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Scheme ='" + SchemeCode + "' and Trcode='" + TRCode + "' and GCode='" + objectEntity.GCode + "'");
                     }
                     _qtyData = _qtyData + Convert.ToDecimal(manageReport.DecimalformatForWeight(objSum.ToString()));
                 }

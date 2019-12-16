@@ -312,7 +312,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                 }
                // AuditLog.WriteError("Print start");
                 StackCardRegisterPrint stackCardRegisterPrint = new StackCardRegisterPrint();
-                stackCardRegisterPrint.GenerateStackCardRegister(stackCardEntities, stackEntity);
+               Task.Run(()=>stackCardRegisterPrint.GenerateStackCardRegister(stackCardEntities, stackEntity));
                 //AuditLog.WriteError("Print End");
                 return stackCardEntities;
             }
