@@ -58,7 +58,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                             stockDetailsEntity.RegionCode = Convert.ToString(godown["TNCSRegn"]);
                             stockDetailsEntity.RName = Convert.ToString(godown["RGNAME"]);
                             stockDetailsEntity.GName = Convert.ToString(godown["TNCSName"]);
-                            stockDetailsEntity.TNCSCapacity = Convert.ToString(godown["TNCSCapacity"]);
+                            stockDetailsEntity.TNCSCapacity = Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(godown["TNCSCapacity"])));
                             // sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", _itemCode));
 
 
@@ -168,7 +168,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
     {
         public string ItemCode { get; set; }
         public string GName { get; set; }
-        public string TNCSCapacity { get; set; }
+        public decimal TNCSCapacity { get; set; }
         public string RName { get; set; }
         public string ITDescription { get; set; }
         public decimal OpeningBalance { get; set; }
@@ -203,7 +203,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
         {
             RNAME = string.Empty;
             TNCSName = string.Empty;
-            TNCSCapacity = string.Empty;
+            TNCSCapacity = default(decimal); 
             GStatus = string.Empty;
             RStatus = string.Empty;
             PADDY_A = default(decimal);
@@ -260,7 +260,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
 
         public string RNAME { get; set; }
         public string TNCSName { get; set; }
-        public string TNCSCapacity { get; set; }
+        public decimal TNCSCapacity { get; set; }
         public string GStatus { get; set; }
         public string RStatus { get; set; }
         public decimal PADDY_A { get; set; }//IT001
