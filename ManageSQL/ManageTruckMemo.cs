@@ -84,6 +84,7 @@ namespace TNCSCAPI.ManageSQL
                         ManageDataTransfer dataTransfer = new ManageDataTransfer();
                         DataTransferEntity transferEntity = new DataTransferEntity();
                         transferEntity.DocNumber = STNo;
+                        transferEntity.DocDate = documentStockTransferDetails.STDate;
                         transferEntity.DocType = 3;
                         transferEntity.TripType = 1;
                         transferEntity.RCode = documentStockTransferDetails.RCode;
