@@ -10,6 +10,8 @@ namespace TNCSCAPI.DataTransfer
         public string GCode { get; set; }
         public string RCode { get; set; }
         public int DocType { get; set; }
+        public string Date { get; set; }
+        public string DocDate { get; set; }
         public int TripType { get; set; }
         public int G2GStatus { get; set; }
         public int GPSStatus { get; set; }

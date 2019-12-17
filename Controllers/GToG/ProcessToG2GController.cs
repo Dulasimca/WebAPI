@@ -17,10 +17,23 @@ namespace TNCSCAPI.Controllers.G2G
         [HttpPost("{id}")]
         public bool Post([FromBody]List<DataTransferEntity> entity)
         {
-            ManageDataTransfer manageSQLConnection = new ManageDataTransfer();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            DataSet ds = new DataSet();
+            ManageDataTransfer manageDataTransfer = new ManageDataTransfer();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", entity[0].RCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", entity[0].GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Date", entity[0].Date));
+            ds = manageSQLConnection.GetDataSetValues("GetProcessToG2gData", sqlParameters);
+            var result = JsonConvert.SerializeObject(ds.Tables[0]);
             foreach (var item in entity)
             {
-                 manageSQLConnection.InsertDataTransfer(item);
+                // var findData = result.Contains(item.DocNumber);
+                //if(findData.GToGStatus != 6)
+                //{
+
+                //}
+                manageDataTransfer.InsertDataTransfer(item);
 
             }
             return true;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports.StockStatement;
 
 namespace TNCSCAPI.Controllers
 {
@@ -32,21 +33,19 @@ namespace TNCSCAPI.Controllers
         [HttpGet("{id}")]
         public string Get(string Date,string RCode,string GCode, string RoleId)
         {
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            DataSet ds = new DataSet();
             try
             {
-                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                sqlParameters.Add(new KeyValuePair<string, string>("@Date", Date));
-                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
-                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
-                sqlParameters.Add(new KeyValuePair<string, string>("@RoleId", RoleId));
-                ds = manageSQLConnection.GetDataSetValues("GetDailyCBData", sqlParameters);
-                return JsonConvert.SerializeObject(ds);
+                StockParameter stockParameter = new StockParameter();
+                stockParameter.FDate = Date;
+                stockParameter.ToDate = Date;
+                stockParameter.RCode = RCode;
+                stockParameter.GCode = GCode;
+                ManageDailyCBStatement manageDailyCB = new ManageDailyCBStatement();
+                var result = manageDailyCB.GetDailyCB(stockParameter);
+                return JsonConvert.SerializeObject(result);
             }
             finally
             {
-                ds.Dispose();
             }
         }
     }
