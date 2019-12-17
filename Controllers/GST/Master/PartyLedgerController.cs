@@ -29,23 +29,41 @@ namespace TNCSCAPI.Controllers.GST.Master
             sqlParameters.Add(new KeyValuePair<string, string>("@IFSC", partyLedger.IFSC));
             sqlParameters.Add(new KeyValuePair<string, string>("@Favour", partyLedger.Favour));
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.RCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Flag", partyLedger.Flag));
             return manageSQL.InsertData("InsertPartyLedgerdetails", sqlParameters);
         }
 
         [HttpGet("{id}")]
-        public string Get(string RCode)
+        public string Get(string RCode, string Type = "Active")
         {
-            DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
-            ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
-            return JsonConvert.SerializeObject(ds.Tables[0]);
+            DataSet ds = new DataSet();
+            try
+            {
+                if (Type == "InActive")
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
+                    ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
+                }
+                else
+                {
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
+                    ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
+                }
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            finally
+            {
+                ds.Dispose();
+            }
         }
-
     }
 
-    public class PartyLedgerEntryEntity
+public class PartyLedgerEntryEntity
     {
         public string Pan { get; set; }
         public string PartyName { get; set; }
@@ -61,5 +79,6 @@ namespace TNCSCAPI.Controllers.GST.Master
         public string LedgerID { get; set; }
         public string StateCode { get; set; }
         public string Tin { get; set; }
+        public string Flag { get; set; }
     }
 }

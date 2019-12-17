@@ -29,7 +29,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                 report.DeleteFileIfExists(filePath);
                 streamWriter = new StreamWriter(filePath, true);
                 AddDocHeaderForIssues(streamWriter,stackEntity);
-                AddDetails(streamWriter, stackCardRegisters);
+                AddDetails(streamWriter, stackCardRegisters, stackEntity);
 
             }
             catch (Exception ex)
@@ -59,16 +59,14 @@ namespace TNCSCAPI.ManageAllReports.Stack
             streamWriter.Write(report.StringFormatWithoutPipe("REGION : ", 9, 1));
             streamWriter.Write(report.StringFormatWithoutPipe(stackEntity.RName, 45, 2));
             streamWriter.WriteLine("");
-            streamWriter.Write("  Commodity: ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stackEntity.ITName, 25, 2));
             streamWriter.Write("  Godown :");
             streamWriter.Write(report.StringFormatWithoutPipe(stackEntity.GName, 25, 2));
             streamWriter.WriteLine("");
-            streamWriter.WriteLine("                                             Formation Year: " + stackEntity.StackDate);
-            streamWriter.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            streamWriter.WriteLine("                                                   OPENING BALANCE RECEIPT         RECEIPT    ISSUE                   ISSUE   BALANCE            BALANCE  STACK");
-            streamWriter.WriteLine("  SNO  STACKNO       FROM DATE  TO DATE            BAGS       QTY  BAGS     GU        QTY     BAGS           GR        QTY     BAGS                  QTY  STATUS   W/OFF QTY");
-            streamWriter.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            streamWriter.WriteLine("                             Formation Year: " + stackEntity.StackDate);
+            streamWriter.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            streamWriter.WriteLine("                                                                           OPENING BALANCE RECEIPT         RECEIPT    ISSUE                   ISSUE   BALANCE            BALANCE  STACK");
+            streamWriter.WriteLine("  SNO     COMMODITY             STACKNO       FROM DATE  TO DATE            BAGS       QTY  BAGS     GU        QTY     BAGS           GR        QTY     BAGS                  QTY  STATUS   W/OFF QTY");
+            streamWriter.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         }
 
         /// <summary>
@@ -76,10 +74,11 @@ namespace TNCSCAPI.ManageAllReports.Stack
         /// </summary>
         /// <param name="streamWriter"></param>
         /// <param name="stockIssuesEntity"></param>
-        private void AddDetails(StreamWriter streamWriter, List<StackCardRegisterEntity> stackCardRegisters)
+        private void AddDetails(StreamWriter streamWriter, List<StackCardRegisterEntity> stackCardRegisters, StackEntity stackEntity)
         {
             try
             {
+                int count = 13;
                 int i = 1;
                 string Fromdate = string.Empty;
                 string Todate = string.Empty;
@@ -96,22 +95,31 @@ namespace TNCSCAPI.ManageAllReports.Stack
                 decimal WriteOffQty = 0;
                 foreach (var item in stackCardRegisters)
                 {
+                    if(count>50)
+                    {
+                        streamWriter.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                        count = 13;
+                        streamWriter.WriteLine((char)12);
+                        AddDocHeaderForIssues(streamWriter, stackEntity);
+                    }
+                    count++;
                     streamWriter.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 1));
-                    streamWriter.Write(report.StringFormatWithoutPipe(item.StackCard, 13, 1));
-                    streamWriter.Write(report.StringFormatWithoutPipe(item.FromDate, 10, 1));
-                    streamWriter.Write(report.StringFormatWithoutPipe(item.ToDate, 10, 1));
+                    streamWriter.Write(report.StringFormatWithoutPipe(item.Commodity, 25, 2));
+                    streamWriter.Write(report.StringFormatWithoutPipe(item.StackCard, 13, 2));
+                    streamWriter.Write(report.StringFormatWithoutPipe(item.FromDate, 10, 2));
+                    streamWriter.Write(report.StringFormatWithoutPipe(item.ToDate, 10, 2));
                     streamWriter.Write(report.StringFormatWithoutPipe(item.OpeningBag, 9, 1));
-                    streamWriter.Write(report.StringFormatWithoutPipe(item.OpeningQty, 11, 1));
+                    streamWriter.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.OpeningQty), 11, 1));
                     streamWriter.Write(report.StringFormatWithoutPipe(item.ReceiptBag, 9, 1));
                     streamWriter.Write(report.StringFormatWithoutPipe(item.GU, 8, 1));
-                    streamWriter.Write(report.StringFormatWithoutPipe(item.ReceiptQty, 11, 1));
+                    streamWriter.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.ReceiptQty), 11, 1));
                     streamWriter.Write(report.StringFormatWithoutPipe(item.IssuesBag, 9, 1));
                     streamWriter.Write(report.StringFormatWithoutPipe(item.GR, 8, 1));
-                    streamWriter.Write(report.StringFormatWithoutPipe(item.IssuesQty, 11, 1));
+                    streamWriter.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.IssuesQty), 11, 1));
                     streamWriter.Write(report.StringFormatWithoutPipe(item.BalanceBag, 9, 1));
-                    streamWriter.Write(report.StringFormatWithoutPipe(item.BalanceQty, 15, 1));
+                    streamWriter.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.BalanceQty), 15, 1));
                     streamWriter.Write(report.StringFormatWithoutPipe(item.StackStatus, 5, 1));
-                    streamWriter.Write(report.StringFormatWithoutPipe(item.WriteOff, 9, 1));
+                    streamWriter.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item.WriteOff), 9, 1));
                     streamWriter.WriteLine(" ");
                     streamWriter.WriteLine(" ");
                     OpeningBag += Convert.ToInt32(item.OpeningBag);
@@ -128,7 +136,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                     WriteOffQty += Convert.ToDecimal(item.WriteOff);
                     i = i + 1;
                 }
-                streamWriter.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                streamWriter.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
                 streamWriter.Write(report.StringFormatWithoutPipe(" ", 4, 1));
                 streamWriter.Write(report.StringFormatWithoutPipe("-", 13, 1));
@@ -147,7 +155,7 @@ namespace TNCSCAPI.ManageAllReports.Stack
                 streamWriter.Write(report.StringFormatWithoutPipe("-", 5, 1));
                 streamWriter.Write(report.StringFormatWithoutPipe(WriteOffQty.ToString(), 9, 1));
                 streamWriter.WriteLine(" ");
-                streamWriter.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                streamWriter.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 streamWriter.WriteLine((char)12);
             }
             catch (Exception ex)
