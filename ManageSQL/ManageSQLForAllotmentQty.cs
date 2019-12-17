@@ -41,14 +41,13 @@ namespace TNCSCAPI.ManageSQL
                             sqlCommand.Connection = sqlConnection;
                             sqlCommand.CommandText = "InsertAllotmentQuantity";
                             sqlCommand.CommandType = CommandType.StoredProcedure;
-                            sqlCommand.Parameters.AddWithValue("@SocietyCode", item.SocietyCode);
+                            //sqlCommand.Parameters.AddWithValue("@SocietyCode", item.SocietyCode);
                             sqlCommand.Parameters.AddWithValue("@FPSCode", item.FPSCode);
                             sqlCommand.Parameters.AddWithValue("@SchemeCode", '-');
                             sqlCommand.Parameters.AddWithValue("@AMonth", item.AllotmentMonth);
                             sqlCommand.Parameters.AddWithValue("@AYear", item.AllotmentYear);
                             sqlCommand.Parameters.AddWithValue("@GCode", item.GCode);
                             sqlCommand.Parameters.AddWithValue("@Taluk", item.Taluk);
-
                             sqlCommand.Parameters.AddWithValue("@ITCode", i.ITCode);
                             sqlCommand.Parameters.AddWithValue("@Quantity", i.Quantity);
 
