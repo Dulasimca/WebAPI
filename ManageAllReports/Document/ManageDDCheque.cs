@@ -60,7 +60,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write(report.StringFormatWithoutPipe(chequeEntity.ReceiptNo, 25, 2));
             streamWriter.Write("   ");
             streamWriter.Write("DATE : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(chequeEntity.DDChequeItems[0].ReceiptDate), 13, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(chequeEntity.ReceiptDate), 13, 2));
             streamWriter.WriteLine("");
             streamWriter.WriteLine("------------------------------------------------------------------------------");
             streamWriter.Write("   Received with Thanks from Thiru / M/s.");

@@ -70,7 +70,7 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Parameters.AddWithValue("@cdbank", item.Bank);
                         sqlCommand.Parameters.AddWithValue("@cdwhom", item.ReceivedFrom);
                         sqlCommand.Parameters.AddWithValue("@whomcode", item.ReceivorCode);
-                        sqlCommand.Parameters.AddWithValue("@recdate", item.ReceiptDate);
+                        sqlCommand.Parameters.AddWithValue("@recdate", chequeEntity.ReceiptDate);
                         sqlCommand.Parameters.AddWithValue("@eflag", "N");
                         sqlCommand.ExecuteNonQuery();
                     }

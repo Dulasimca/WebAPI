@@ -9,6 +9,7 @@ namespace TNCSCAPI.Models.Documents
     {
         public string GCode { get; set; } //godcode
         public string ReceiptNo { get; set; } //vrno
+        public string ReceiptDate { get; set; } //recdate
         public string Details { get; set; } //detail
         public string Flag { get; set; } //eflag
         public string UserID { get; set; }
@@ -23,7 +24,6 @@ namespace TNCSCAPI.Models.Documents
     {
         public string ChequeNo { get; set; } //cdno
         public string ChequeDate { get; set; } //cddate
-        public string ReceiptDate { get; set; } //recdate
         public string PaymentType { get; set; } //cdopt
         public string ReceivedFrom { get; set; } //cdwhom
         public string Amount { get; set; } //cdamount
