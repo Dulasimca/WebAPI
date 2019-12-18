@@ -225,6 +225,7 @@ namespace TNCSCAPI
                         ManageDataTransfer dataTransfer = new ManageDataTransfer();
                         DataTransferEntity transferEntity = new DataTransferEntity();
                         transferEntity.DocNumber = SRNo;
+                        transferEntity.DocDate = receiptList.SRDate;
                         transferEntity.DocType = 1;
                         transferEntity.TripType = 3;
                         transferEntity.RCode = receiptList.RCode;

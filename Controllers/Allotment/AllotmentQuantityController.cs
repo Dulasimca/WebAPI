@@ -44,7 +44,7 @@ namespace TNCSCAPI.Controllers.Allotment
         public int Type { get; set; }
         public string FPSName { get; set; }
         public string FPSCode { get; set; }
-        public string SocietyCode { get; set; }
+       // public string SocietyCode { get; set; }
         public string GCode { get; set; }
         public string RCode { get; set; }
         public string Taluk { get; set; }
