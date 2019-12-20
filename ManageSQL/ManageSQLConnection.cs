@@ -230,6 +230,8 @@ namespace TNCSCAPI
                         transferEntity.TripType = 3;
                         transferEntity.RCode = receiptList.RCode;
                         transferEntity.GCode = receiptList.ReceivingCode;
+                        transferEntity.G2GStatus = 4;
+                        transferEntity.GPSStatus = 0;
                         // dataTransfer.InsertDataTransfer(transferEntity);
                         Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
 

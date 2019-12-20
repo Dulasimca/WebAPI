@@ -89,8 +89,10 @@ namespace TNCSCAPI.ManageSQL
                         transferEntity.TripType = 1;
                         transferEntity.RCode = documentStockTransferDetails.RCode;
                         transferEntity.GCode = documentStockTransferDetails.IssuingCode;
-                       // dataTransfer.InsertDataTransfer(transferEntity);
-                       Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
+                        transferEntity.G2GStatus = 4;
+                        transferEntity.GPSStatus = 0;
+                        // dataTransfer.InsertDataTransfer(transferEntity);
+                        Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
                         
                     }
 
