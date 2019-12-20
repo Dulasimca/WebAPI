@@ -30,7 +30,7 @@ namespace TNCSCAPI.ManageSQL
                     foreach (var i in item.ItemList)
                     {
 
-                        dt.Rows.Add("", item.FPSCode, "-", Convert.ToDouble(i.Quantity), item.AllotmentMonth
+                        dt.Rows.Add(0,"", item.FPSCode, "-", i.ITCode, Convert.ToDouble(i.Quantity), item.AllotmentMonth
                             , item.AllotmentYear, item.GCode, item.Taluk);
                         //sqlCommand.Parameters.AddWithValue("@FPSCode", item.FPSCode);
                         //sqlCommand.Parameters.AddWithValue("@SchemeCode", '-');
@@ -77,6 +77,7 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Parameters.AddWithValue("@TableAllotmentQuantity", dt);
                         sqlCommand.ExecuteNonQuery();
                         objTrans.Commit();
+                        return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
                     }
                     catch (Exception ex)
                     {
@@ -120,7 +121,7 @@ namespace TNCSCAPI.ManageSQL
                     //}
                     #endregion
 
-                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
+                  
                 }
 
             }

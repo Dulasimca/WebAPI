@@ -298,7 +298,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             try
             {
                 ManageReport report = new ManageReport();
-                decimal svalue = (type == 1 ? qty / 1000 : qty);
+                decimal svalue = Math.Round((type == 1 ? qty / 1000 : qty),3);
                 return Convert.ToDecimal(report.DecimalformatForWeight(Convert.ToString(svalue)));
             }
             catch (Exception ex)
