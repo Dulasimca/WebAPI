@@ -14,7 +14,7 @@ namespace TNCSCAPI.Controllers.Masters
     public class NotificationsController : ControllerBase
     {
         [HttpGet]
-        public string Get(int Type)
+        public string Get(int Type=0)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
