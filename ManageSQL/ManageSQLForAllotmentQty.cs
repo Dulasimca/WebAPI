@@ -134,7 +134,7 @@ namespace TNCSCAPI.ManageSQL
         }
 
 
-        public string InsertFPSAllotmentQty(List<FPSAllotmentQuantityEntity> entity)
+        public StatusMessages InsertFPSAllotmentQty(FPSAllotmentQuantityEntity entity)
         {
             DataTable dt = new DataTable();
             dt.Columns.AddRange(new DataColumn[10] { new DataColumn("RowId", typeof(long)),
@@ -153,16 +153,16 @@ namespace TNCSCAPI.ManageSQL
                 ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
                 ds = manageSQLConnection.GetDataSetValues("GetAllotmentCommodity");
                 string itemcode = string.Empty;
-                foreach (var item in entity)
+                foreach (var item in entity.ItemDetail)
                 {
-                    foreach (var i in item.ItemList)
+                    foreach (var i in item.CommodityDetaills)
                     {
-                        DataRow[] commodityData = ds.Tables[0].Select("Acomm='" + i.Commodity + "' and Asch='" + i.Scheme + "'");
+                        DataRow[] commodityData = ds.Tables[0].Select("Acomm='" + i.CommodityName + "' and Asch='" + i.SchemeName + "'");
                         if (commodityData.Length > 0)
                         {
                             itemcode = Convert.ToString(commodityData[0]["Acommcode"]);
-                            dt.Rows.Add(0, "", item.FPSCode, "-", itemcode, Convert.ToDouble(i.Quantity), item.AllotmentMonth
-                                , item.AllotmentYear, item.GCode, item.Taluk);
+                            dt.Rows.Add(0, "", item.FPSCode, "-", itemcode, Convert.ToDouble(i.Quantity), entity.AllotmentMonth
+                                , entity.AllotmentYear, item.GodownCode, item.TalukName);
                         }
                     }
                 }
@@ -179,10 +179,6 @@ namespace TNCSCAPI.ManageSQL
                             sqlConnection.Open();
                         }
                         objTrans = sqlConnection.BeginTransaction();
-
-                        sqlCommand.Parameters.Clear();
-                        sqlCommand.Dispose();
-
                         sqlCommand = new SqlCommand();
                         sqlCommand.Transaction = objTrans;
                         sqlCommand.Connection = sqlConnection;
@@ -191,13 +187,13 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Parameters.AddWithValue("@TableAllotmentQuantity", dt);
                         sqlCommand.ExecuteNonQuery();
                         objTrans.Commit();
-                        return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
+                        return GetStatusMessages(true);//new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
                     }
                     catch (Exception ex)
                     {
 
                         AuditLog.WriteError("Allotment" + ex.Message + " : " + ex.StackTrace);
-                        return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
+                        return GetStatusMessages(false);//new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
                     }
                     finally
                     {
@@ -211,9 +207,26 @@ namespace TNCSCAPI.ManageSQL
             catch (Exception ex)
             {
                 AuditLog.WriteError("Allotment" + ex.Message + " : " + ex.StackTrace);
-                return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
+                return GetStatusMessages(false); //new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
             }
 
         }
+
+        public StatusMessages GetStatusMessages(bool isSuccess=false)
+        {
+            StatusMessages messages = new StatusMessages();
+            if (isSuccess)
+            {
+                messages.StatusCode = "1";
+                messages.Message = "Success";
+            }
+            else
+            {
+                messages.StatusCode = "0";
+                messages.Message = "Error";
+            }
+            return messages;
+        }
+
     }
 }
