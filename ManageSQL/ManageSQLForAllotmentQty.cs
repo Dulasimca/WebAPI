@@ -30,7 +30,7 @@ namespace TNCSCAPI.ManageSQL
                     foreach (var i in item.ItemList)
                     {
 
-                        dt.Rows.Add(0,"", item.FPSCode, "-", i.ITCode, Convert.ToDouble(i.Quantity), item.AllotmentMonth
+                        dt.Rows.Add(0, "", item.FPSCode, "-", i.ITCode, Convert.ToDouble(i.Quantity), item.AllotmentMonth
                             , item.AllotmentYear, item.GCode, item.Taluk);
                         //sqlCommand.Parameters.AddWithValue("@FPSCode", item.FPSCode);
                         //sqlCommand.Parameters.AddWithValue("@SchemeCode", '-');
@@ -121,16 +121,99 @@ namespace TNCSCAPI.ManageSQL
                     //}
                     #endregion
 
-                  
+
                 }
 
             }
             catch (Exception ex)
-            {               
+            {
                 AuditLog.WriteError("Allotment" + ex.Message + " : " + ex.StackTrace);
                 return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
             }
-          
+
+        }
+
+
+        public string InsertFPSAllotmentQty(List<FPSAllotmentQuantityEntity> entity)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.AddRange(new DataColumn[10] { new DataColumn("RowId", typeof(long)),
+                new DataColumn("SocietyCode", typeof(string)),
+                new DataColumn("Societyshopcode",typeof(string)),
+            new DataColumn("Schemecode",typeof(string)),
+            new DataColumn("commoditycode",typeof(string)),
+            new DataColumn("Quantity",typeof(float)),
+            new DataColumn("Allotmentmonth",typeof(string)),
+            new DataColumn("Allotmentyear",typeof(string)),
+            new DataColumn("GCode",typeof(string)),
+            new DataColumn("Taluk",typeof(string))});
+            try
+            {
+                DataSet ds = new DataSet();
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                ds = manageSQLConnection.GetDataSetValues("GetAllotmentCommodity");
+                string itemcode = string.Empty;
+                foreach (var item in entity)
+                {
+                    foreach (var i in item.ItemList)
+                    {
+                        DataRow[] commodityData = ds.Tables[0].Select("Acomm='" + i.Commodity + "' and Asch='" + i.Scheme + "'");
+                        if (commodityData.Length > 0)
+                        {
+                            itemcode = Convert.ToString(commodityData[0]["Acommcode"]);
+                            dt.Rows.Add(0, "", item.FPSCode, "-", itemcode, Convert.ToDouble(i.Quantity), item.AllotmentMonth
+                                , item.AllotmentYear, item.GCode, item.Taluk);
+                        }
+                    }
+                }
+
+                SqlTransaction objTrans = null;
+                using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
+                {
+                    sqlCommand = new SqlCommand();
+
+                    try
+                    {
+                        if (sqlConnection.State == 0)
+                        {
+                            sqlConnection.Open();
+                        }
+                        objTrans = sqlConnection.BeginTransaction();
+
+                        sqlCommand.Parameters.Clear();
+                        sqlCommand.Dispose();
+
+                        sqlCommand = new SqlCommand();
+                        sqlCommand.Transaction = objTrans;
+                        sqlCommand.Connection = sqlConnection;
+                        sqlCommand.CommandText = "BulkInsertAllotmentQuantity";
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@TableAllotmentQuantity", dt);
+                        sqlCommand.ExecuteNonQuery();
+                        objTrans.Commit();
+                        return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        AuditLog.WriteError("Allotment" + ex.Message + " : " + ex.StackTrace);
+                        return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
+                    }
+                    finally
+                    {
+                        sqlConnection.Close();
+                        sqlCommand.Dispose();
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("Allotment" + ex.Message + " : " + ex.StackTrace);
+                return new Tuple<bool, string>(false, GlobalVariable.ErrorMessage);
+            }
+
         }
     }
 }

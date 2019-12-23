@@ -37,6 +37,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                 stockCB.TNCSCapacity = newData[0].TNCSCapacity;
                 stockCB.RStatus = GetApprovalStatus(regionApproval);
                 stockCB.GStatus = GetApprovalStatus(godownApproval);
+                stockCB.RRemark= GetApprovalRemark(regionApproval);
+                stockCB.GRemark = GetApprovalRemark(godownApproval);
                 foreach (var Details in newData)
                 {
                     if (Details.ItemCode == "IT001")
@@ -328,6 +330,25 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             }
             
         }
+        public string GetApprovalRemark(DataRow[] dataRows)
+        {
+            try
+            {
+                if (dataRows.Count() > 0)
+                {
+                    return dataRows[0]["remarks"].ToString();// remarks;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message);
+                return  string.Empty;
+            }
 
+        }
     }
 }

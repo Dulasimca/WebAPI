@@ -206,6 +206,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             TNCSCapacity = default(decimal); 
             GStatus = string.Empty;
             RStatus = string.Empty;
+            GRemark = string.Empty;
+            RRemark = string.Empty;
             PADDY_A = default(decimal);
             PADDY_COMMON = default(decimal);
             RAW_RICE_COMMON = default(decimal);
@@ -263,6 +265,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
         public decimal TNCSCapacity { get; set; }
         public string GStatus { get; set; }
         public string RStatus { get; set; }
+        public string GRemark { get; set; }
+        public string RRemark { get; set; }
         public decimal PADDY_A { get; set; }//IT001
         public decimal PADDY_COMMON { get; set; }//IT003
         public decimal RAW_RICE_COMMON { get; set; }//IT009
