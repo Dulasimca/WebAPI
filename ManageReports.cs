@@ -297,9 +297,9 @@ namespace TNCSCAPI
                     sFormattedValue = "0.000";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                AuditLog.WriteError(" DecimalformatForWeight : " + ex.Message);
             }
             return sFormattedValue;
         }
