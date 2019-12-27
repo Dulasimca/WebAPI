@@ -154,6 +154,7 @@ namespace TNCSCAPI.ManageAllReports
             int count = 11;
             string weighmentType = string.Empty;
             var resultSet = from d in stockIssues
+                            orderby d.Commodity ascending
                             group d by new { d.Stackno, d.Commodity, d.ITBweighment } into groupedData
                             select new
                             {
@@ -214,6 +215,7 @@ namespace TNCSCAPI.ManageAllReports
             int count = 11;
             string weighmentType = string.Empty;
             var resultSet = from d in stockIssues
+                            orderby d.TyName ascending
                             group d by new { d.TyName, d.Commodity, d.ITBweighment } into groupedData
                             select new
                             {
@@ -274,6 +276,7 @@ namespace TNCSCAPI.ManageAllReports
             int count = 11;
             string weighmentType = string.Empty;
             var resultSet = from d in stockIssues
+                            orderby d.Scheme ascending
                             group d by new { d.Scheme, d.Commodity, d.ITBweighment, d.PName } into groupedData
                             select new
                             {
@@ -334,7 +337,7 @@ namespace TNCSCAPI.ManageAllReports
             int count = 11;
             string weighmentType = string.Empty;
             var resultSet = from d in stockIssues
-                            orderby d.Commodity,d.Scheme 
+                            orderby d.TyName,d.Scheme  ascending
                             group d by new { d.TyName, d.Scheme, d.Commodity, d.ITBweighment, d.PName } into groupedData
                             select new
                             {
@@ -396,6 +399,7 @@ namespace TNCSCAPI.ManageAllReports
             int count = 11;
             string weighmentType = string.Empty;
             var resultSet = from d in stockIssues
+                            orderby d.Commodity ascending
                             group d by new { d.Commodity,d.ITBweighment, d.PName } into groupedData
                             select new
                             {

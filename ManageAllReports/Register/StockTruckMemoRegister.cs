@@ -157,6 +157,7 @@ namespace TNCSCAPI.ManageAllReports
 
             // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
             var myResult = from a in dORegEntities
+                           orderby a.Commodity ascending
                            group a by new { a.Commodity, a.TRName } into gValue
                            select new
                            {
@@ -202,6 +203,7 @@ namespace TNCSCAPI.ManageAllReports
 
             // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
             var myResult = from a in dORegEntities
+                           orderby a.Commodity,a.Stackno ascending
                            group a by new { a.Stackno, a.Commodity } into gValue
                            select new
                            {

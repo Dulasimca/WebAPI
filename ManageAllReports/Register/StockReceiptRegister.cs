@@ -49,7 +49,7 @@ namespace TNCSCAPI.ManageAllReports
                 StockReceiptAbstractCommodityWise(streamWriter, stockReceiptList, entity);
 
                 streamWriter.Flush();
-               
+
             }
             catch (Exception ex)
             {
@@ -92,9 +92,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine(" ");
             sw.WriteLine("Abstract:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "    Godown : " + GName + "       Region :" + RName);
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("--------------------------------------------------------------------------|");
             sw.WriteLine("StackNo       |Commodity               |No Bags      |Net Wt (in Kgs)/Nos |");
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("--------------------------------------------------------------------------|");
         }
 
         /// <summary>
@@ -108,9 +108,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine(" ");
             sw.WriteLine("Stock Receipt Register:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "  Godown : " + GName + "  Region :" + RName);
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------------------------------|");
             sw.WriteLine("Scheme             |Commodity             |No Bags       |Net Wt (Kgs/Nos)    |");
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------------------------------|");
         }
 
         /// <summary>
@@ -124,9 +124,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine(" ");
             sw.WriteLine("Stock Receipt Register:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "    Godown : " + GName + "   Region :" + RName);
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
-            sw.WriteLine("RECD.TYPE       |RECD.FROM      |Scheme         |Commodity             |No Bags     |Net Wt (Kgs/Nos)  |Packing Type         |");
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("RECD.TYPE       |RECD.FROM      |Scheme         |Commodity            |No Bags     |Net Wt (Kgs/Nos)  |Packing Type         |");
+            sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------|");
         }
 
         /// <summary>
@@ -140,9 +140,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine(" ");
             sw.WriteLine("Stock Receipt Register:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "    Godown : " + GName + "    Region :" + RName);
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------|");
             sw.WriteLine("Commodity              |No Bags     |Net Wt (Kgs/Nos) |");
-            sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("------------------------------------------------------|");
         }
 
         /// <summary>
@@ -198,12 +198,12 @@ namespace TNCSCAPI.ManageAllReports
                     sw.Write(report.StringFormat(row["Commodity"].ToString(), 15, 2));
                     sw.Write(report.StringFormat(report.DecimalformatForWeight(row["NetWt"].ToString()), 10, 1));
                     sw.WriteLine("");
-                    i = CheckRepeatValue == false ? i + 1 : i; 
+                    i = CheckRepeatValue == false ? i + 1 : i;
                 }
                 sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.WriteLine((char)12);
             }
-            if(!isDataAvailable)
+            if (!isDataAvailable)
             {
                 sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.WriteLine((char)12);
@@ -221,6 +221,7 @@ namespace TNCSCAPI.ManageAllReports
         {
             int count = 11;
             var resultSet = from d in list
+                            orderby d.Commodity ascending 
                             group d by new { d.Stackno, d.Commodity } into groupedData
                             select new
                             {
@@ -235,17 +236,18 @@ namespace TNCSCAPI.ManageAllReports
                 if (count >= 50)
                 {
                     count = 11;
-                    sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------|");
+                    sw.WriteLine("--------------------------------------------------------------------------|");
                     sw.WriteLine((char)12);
                     AddHeaderforAbstractStackAndCommodity(sw, entity);
                 }
-                sw.Write(report.StringFormat(item.GroupByNames.Stackno, 14, 1));
+                sw.Write(report.StringFormat(item.GroupByNames.Stackno, 14, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 24, 2));
                 sw.Write(report.StringFormat(item.No_Bags.ToString(), 13, 2));
                 sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 20, 1));
                 count++;
                 sw.WriteLine("");
             }
+            sw.WriteLine("--------------------------------------------------------------------------|");
             sw.WriteLine((char)12);
         }
 
@@ -259,6 +261,7 @@ namespace TNCSCAPI.ManageAllReports
         {
             int count = 11;
             var resultSet = from d in list
+                            orderby d.Scheme ascending
                             group d by new { d.Scheme, d.Commodity } into groupedData
                             select new
                             {
@@ -273,7 +276,7 @@ namespace TNCSCAPI.ManageAllReports
                 if (count >= 50)
                 {
                     count = 11;
-                    sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------|");
+                    sw.WriteLine("------------------------------------------------------------------------------|");
                     sw.WriteLine((char)12);
                     AddHeaderforAbstractSchemeAndCommodityWise(sw, entity);
                 }
@@ -284,6 +287,7 @@ namespace TNCSCAPI.ManageAllReports
                 count++;
                 sw.WriteLine("");
             }
+            sw.WriteLine("------------------------------------------------------------------------------|");
             sw.WriteLine((char)12);
         }
 
@@ -297,6 +301,7 @@ namespace TNCSCAPI.ManageAllReports
         {
             int count = 11;
             var resultSet = from d in list
+                            orderby d.RecdType, d.Scheme ascending
                             group d by new { d.Scheme, d.RecdType, d.From_Whom_Received, d.Commodity, d.Packingtype } into groupedData
                             select new
                             {
@@ -311,20 +316,21 @@ namespace TNCSCAPI.ManageAllReports
                 if (count >= 50)
                 {
                     count = 11;
-                    sw.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------|");
+                    sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------|");
                     sw.WriteLine((char)12);
                     AddHeaderforAbstractRecTypeAndSchemeWise(sw, entity);
                 }
                 sw.Write(report.StringFormat(item.GroupByNames.RecdType, 16, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.From_Whom_Received, 15, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Scheme, 15, 2));
-                sw.Write(report.StringFormat(item.GroupByNames.Packingtype, 21, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 21, 2));
-                sw.Write(report.StringFormat(item.No_Bags.ToString(), 24, 2));
+                sw.Write(report.StringFormat(item.No_Bags.ToString(), 12, 2));
                 sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 18, 1));
+                sw.Write(report.StringFormat(item.GroupByNames.Packingtype, 21, 2));
                 count++;
                 sw.WriteLine("");
             }
+            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------|");
             sw.WriteLine((char)12);
         }
 
@@ -338,6 +344,7 @@ namespace TNCSCAPI.ManageAllReports
         {
             int count = 11;
             var resultSet = from d in list
+                            orderby d.Commodity ascending
                             group d by new { d.Commodity } into groupedData
                             select new
                             {
@@ -352,16 +359,17 @@ namespace TNCSCAPI.ManageAllReports
                 if (count >= 50)
                 {
                     count = 11;
-                    sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------|");
+                    sw.WriteLine("------------------------------------------------------|");
                     sw.WriteLine((char)12);
                     AddHeaderforAbstractCommodityWise(sw, entity);
                 }
-                sw.Write(report.StringFormat(item.GroupByNames.Commodity, 18, 2));
+                sw.Write(report.StringFormat(item.GroupByNames.Commodity, 23, 2));
                 sw.Write(report.StringFormat(item.No_Bags.ToString(), 12, 1));
                 sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 22, 1));
                 count++;
                 sw.WriteLine("");
             }
+            sw.WriteLine("------------------------------------------------------|");
             sw.WriteLine((char)12);
         }
     }
