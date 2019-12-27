@@ -27,7 +27,6 @@ namespace TNCSCAPI.Controllers
             try
             {
                 var file = Request.Form.Files[0];
-                string folderName = "Upload";
                 string webRootPath = _hostingEnvironment.WebRootPath;
                 string newPath = GlobalVariable.ImagePath;
                 if (!Directory.Exists(newPath))
@@ -42,14 +41,6 @@ namespace TNCSCAPI.Controllers
                     {
                         file.CopyTo(stream);
                     }
-                    //List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                    //ManageSQLConnection manageSQL = new ManageSQLConnection();
-                    //sqlParameters.Add(new KeyValuePair<string, string>("@ID", ID));
-                    //sqlParameters.Add(new KeyValuePair<string, string>("@Notes", notification.Notes));
-                    //sqlParameters.Add(new KeyValuePair<string, string>("@Reason", notification.Reason));
-                    //sqlParameters.Add(new KeyValuePair<string, string>("@isActive", notification.isActive));
-                    //sqlParameters.Add(new KeyValuePair<string, string>("@ImageName", fileName));
-                    //manageSQL.InsertData("InsertNotificationPopup", sqlParameters);
                 }
                 return Json("Upload Successful.");
             }

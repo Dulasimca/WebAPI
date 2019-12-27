@@ -3,10 +3,10 @@
     public class GlobalVariable
     {
         //Testing connection
-        public const string ConnectionString = "data source=180.179.49.72;initial catalog=TNCSCSCM;user id = sqladmin; password =sql@svc&ac!72;";
+        public const string ConnectionString = "data source=localhost;initial catalog=TNCSCSCM;user id = sqladmin; password =sql@svc&ac!72;";
         public const string ReportPath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//";
-        //public const string ImagePath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//layout//images//NotificationPopup//";
-        public const string ImagePath = "180.179.49.72//assets//layout//images//NotificationPopup//";
+        public const string ImagePath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//NotificationPopup//";
+        //public const string ImagePath = "180.179.49.72//assets//layout//images//NotificationPopup//";
 
         //Live connection
         //public const string ConnectionString = "data source=localhost;initial catalog=TNCSCSCM;user id =sqladmin; password =sql@svc&ac!34;";
@@ -86,5 +86,9 @@
         public const string FSSAI2 = "  2. Received the Stock in Pest Free Conditions";
         public const string FSSAI3 = "  3. Received Jointly Signed Sealed Samples Satisfied with Good Quality and Quantity";
         public const string FSSAISign =  "                   Sign. of the Authorised Person. ";
+
+        //IMAGE UPLOAD
+        public const string PopupImage = "Image";
+
     }
 }
