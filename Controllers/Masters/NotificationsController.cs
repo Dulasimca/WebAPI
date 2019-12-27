@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Newtonsoft.Json;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace TNCSCAPI.Controllers.Masters
 {
@@ -23,8 +25,15 @@ namespace TNCSCAPI.Controllers.Masters
                 if (Type == 1)
                 {
                     ds = manageSQLConnection.GetDataSetValues("GetNotificationPopup");
-                    //return JsonConvert.SerializeObject(ds.Tables[0]);
-                }
+                    //string ImageName = ds.ImageName;
+
+                    string newPath = GlobalVariable.ImagePath;
+                    if (Directory.Exists(newPath))
+                    {
+                        var ImageName = newPath + "/";
+                    }
+                        //return JsonConvert.SerializeObject(ds.Tables[0]);
+                    }
                 else
                 {
                     ds = manageSQLConnection.GetDataSetValues("GetNotificationsData");
@@ -39,7 +48,7 @@ namespace TNCSCAPI.Controllers.Masters
 
 
         [HttpPost("{id}")]
-        public bool Post(NotificationEntity notification)
+        public bool Post(NotificationPopupEntity notification)
         {
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             ManageSQLConnection manageSQL = new ManageSQLConnection();
@@ -65,7 +74,7 @@ namespace TNCSCAPI.Controllers.Masters
     }
 }
 
-public class NotificationEntity
+public class NotificationPopupEntity
     {
         public int Type { get; set; }
         public string ID { get; set; }
@@ -73,4 +82,5 @@ public class NotificationEntity
         public string Reason { get; set; }
         public string isActive { get; set; }
         public string ImageName { get; set; }
-    }
+
+}
