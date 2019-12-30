@@ -104,7 +104,8 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue(keyValuePair.Key, keyValuePair.Value);
                 }
                 int affected = sqlCommand.ExecuteNonQuery();
-                return affected > 0 ? true : false;
+              //  AuditLog.WriteError(affected.ToString());
+                return true;
             }
             catch (Exception ex)
             {
