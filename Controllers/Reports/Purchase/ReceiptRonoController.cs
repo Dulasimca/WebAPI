@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using TNCSCAPI.Models;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports.Purchase;
+using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.Controllers.Reports.Purchase
 {
@@ -25,7 +27,21 @@ namespace TNCSCAPI.Controllers.Reports.Purchase
             sqlParameters.Add(new KeyValuePair<string, string>("@Godcode", reportParameter.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@orderno", reportParameter.OrderNo));
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", reportParameter.RCode));
-            ds = manageSQLConnection.GetDataSetValues("Getrono", sqlParameters);           
+            ds = manageSQLConnection.GetDataSetValues("Getrono", sqlParameters);
+            RoNoController RoNoPurchase = new RoNoController();
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                CommonEntity entity = new CommonEntity
+                {
+                    dataSet = ds,
+                    GCode = reportParameter.GCode,
+                    FromDate = reportParameter.FromDate,
+                    Todate = reportParameter.ToDate,
+                    UserName = reportParameter.UserName
+                };
+                Task.Run(() => RoNoPurchase.GenerateRoNoPurchase(entity));
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }
