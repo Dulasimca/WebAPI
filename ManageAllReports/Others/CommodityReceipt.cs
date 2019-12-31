@@ -44,8 +44,8 @@ namespace TNCSCAPI.ManageAllReports
                 streamWriter = new StreamWriter(filePath, true);
                 DateWiseCommodityReceiptReport(streamWriter, entity);
 
-                List<CommodityReceiptList> commodityReceiptList = new List<CommodityReceiptList>();
-                commodityReceiptList = report.ConvertDataTableToList<CommodityReceiptList>(entity.dataSet.Tables[0]);
+                //List<CommodityReceiptList> commodityReceiptList = new List<CommodityReceiptList>();
+                //commodityReceiptList = report.ConvertDataTableToList<CommodityReceiptList>(entity.dataSet.Tables[0]);
                 streamWriter.Flush();
 
             }
@@ -98,7 +98,8 @@ namespace TNCSCAPI.ManageAllReports
             foreach (DataRow date in dateList.Rows)
             {
                 isDataAvailable = true;
-               
+                Bags = 0;
+                Qty = 0;
                 string ackNoNext = string.Empty;
                 AddHeader(sw, entity);
                 DataRow[] data = entity.dataSet.Tables[0].Select("Commodity='" + date["Commodity"] + "'");
