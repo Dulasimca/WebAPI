@@ -21,7 +21,7 @@ namespace TNCSCAPI.Controllers.Masters
             DataSet ds = new DataSet();
             try
             {
-                ds = manageSQLConnection.GetDataSetValues("GetDesignationMaster");
+                ds = manageSQLConnection.GetDataSetValues("GetEmployeeDesignationMaster");
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
             finally

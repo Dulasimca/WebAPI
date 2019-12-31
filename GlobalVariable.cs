@@ -67,7 +67,7 @@
 
         public const string HoPurchaseFileName = "HOPURCHASE";
         public const string RoPurchaseFileName = "ROPURCHASE";
-        //public const string RoNoPurchaseFileName = "RONOPURCHASE";
+        public const string RoNoPurchaseFileName = "RONOPURCHASE";
 
         public const string IssueMemoSocietyAbstractFileName = "ISSUESOCIETYABSTRACT";
         public const string IssueMemoSocietyDateWiseFileName = "ISSUESOCIETYDATWISE";

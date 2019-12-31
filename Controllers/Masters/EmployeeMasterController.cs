@@ -22,23 +22,24 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@empname", employeeDetails.Empname));
             sqlParameters.Add(new KeyValuePair<string, string>("@designation", employeeDetails.Designation));
             sqlParameters.Add(new KeyValuePair<string, string>("@refno", employeeDetails.Refno));
-            sqlParameters.Add(new KeyValuePair<string, string>("@refdate", employeeDetails.Refdate.ToString("MM/dd/yyyy")));
-            sqlParameters.Add(new KeyValuePair<string, string>("@jrdate", employeeDetails.Jrdate.ToString("MM/dd/yyyy")));
+            sqlParameters.Add(new KeyValuePair<string, string>("@refdate", employeeDetails.Refdate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@jrdate", employeeDetails.Jrdate));
             sqlParameters.Add(new KeyValuePair<string, string>("@jrtype", employeeDetails.Jrtype));
             sqlParameters.Add(new KeyValuePair<string, string>("@rcode", employeeDetails.RCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@gcode", employeeDetails.GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ExportFlag", employeeDetails.ExportFlag)); 
             return manageSQL.InsertData("InsertEmployeeDetails", sqlParameters);
         }
 
         [HttpGet("{id}")]
-        public string Get(string GCode, string RCode, string roleId)
+        public string Get(string Empno, string RCode, string roleId)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@Empno", Empno));
             sqlParameters.Add(new KeyValuePair<string, string>("@Roleid", roleId));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Gcode", GCode ));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
             ds = manageSQLConnection.GetDataSetValues("GetEmployeedetails", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
@@ -51,11 +52,12 @@ namespace TNCSCAPI.Controllers.Masters
         public string Empname { get; set; }
         public string Designation { get; set; }
         public string Refno { get; set; }
-        public DateTime Refdate { get; set; }
-        public DateTime Jrdate { get; set; }
+        public string Refdate { get; set; }
+        public string Jrdate { get; set; }
         public string Jrtype { get; set; }
         public string RCode { get; set; }
         public string GCode { get; set; }
         public string roleId { get; set; }
+        public string ExportFlag { get; set; }
     }
 }
