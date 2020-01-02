@@ -23,6 +23,7 @@ namespace TNCSCAPI.ManageAllReports.QA
                 List<KeyValuePair<string, string>> sqlMasterParameters = new List<KeyValuePair<string, string>>();
                 sqlMasterParameters.Add(new KeyValuePair<string, string>("@GCode", quantityAccountEntity.GCode));
                 sqlMasterParameters.Add(new KeyValuePair<string, string>("@RCode", quantityAccountEntity.RCode));
+                sqlMasterParameters.Add(new KeyValuePair<string, string>("@FromDate", quantityAccountEntity.FromDate));
 
                 dataSetMaster = manageSQLConnection.GetDataSetValues("GetMasterDataForQuantityAccountCB", sqlMasterParameters);
                 DataSet todayIssues = new DataSet();
