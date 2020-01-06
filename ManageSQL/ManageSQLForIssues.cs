@@ -112,30 +112,33 @@ namespace TNCSCAPI
                     stockIssuesItemEntities = issueList.IssueItemList;
                     foreach (var item in stockIssuesItemEntities)
                     {
-                        sqlCommand.Parameters.Clear();
-                        sqlCommand.Dispose();
+                        if (item.TStockNo.ToUpper() != "TOTAL")
+                        {
+                            sqlCommand.Parameters.Clear();
+                            sqlCommand.Dispose();
 
-                        sqlCommand = new SqlCommand();
-                       sqlCommand.Transaction = objTrans;
-                        sqlCommand.Connection = sqlConnection;
-                        sqlCommand.CommandText = "InsertSIItemDetails";
-                        sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.AddWithValue("@RowId", RowID);
-                        sqlCommand.Parameters.AddWithValue("@SINo", SINo);
-                        sqlCommand.Parameters.AddWithValue("@TStockNo", item.TStockNo);
-                        sqlCommand.Parameters.AddWithValue("@ICode", item.ICode);
-                        sqlCommand.Parameters.AddWithValue("@IPCode", item.IPCode);
-                        sqlCommand.Parameters.AddWithValue("@NoPacking", item.NoPacking);
-                        sqlCommand.Parameters.AddWithValue("@WTCode", item.WTCode);
-                        sqlCommand.Parameters.AddWithValue("@GKgs", item.GKgs);
-                        sqlCommand.Parameters.AddWithValue("@Nkgs", item.Nkgs);
-                        sqlCommand.Parameters.AddWithValue("@Moisture", item.Moisture);
-                        sqlCommand.Parameters.AddWithValue("@Scheme", item.Scheme);
-                        sqlCommand.Parameters.AddWithValue("@RCode", issueList.RCode);
-                        sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
-                        sqlCommand.Parameters.AddWithValue("@flag1", item.StackYear); //StackYear
-                        sqlCommand.Parameters.AddWithValue("@Flag2", "-");
-                        sqlCommand.ExecuteNonQuery();
+                            sqlCommand = new SqlCommand();
+                            sqlCommand.Transaction = objTrans;
+                            sqlCommand.Connection = sqlConnection;
+                            sqlCommand.CommandText = "InsertSIItemDetails";
+                            sqlCommand.CommandType = CommandType.StoredProcedure;
+                            sqlCommand.Parameters.AddWithValue("@RowId", RowID);
+                            sqlCommand.Parameters.AddWithValue("@SINo", SINo);
+                            sqlCommand.Parameters.AddWithValue("@TStockNo", item.TStockNo);
+                            sqlCommand.Parameters.AddWithValue("@ICode", item.ICode);
+                            sqlCommand.Parameters.AddWithValue("@IPCode", item.IPCode);
+                            sqlCommand.Parameters.AddWithValue("@NoPacking", item.NoPacking);
+                            sqlCommand.Parameters.AddWithValue("@WTCode", item.WTCode);
+                            sqlCommand.Parameters.AddWithValue("@GKgs", item.GKgs);
+                            sqlCommand.Parameters.AddWithValue("@Nkgs", item.Nkgs);
+                            sqlCommand.Parameters.AddWithValue("@Moisture", item.Moisture);
+                            sqlCommand.Parameters.AddWithValue("@Scheme", item.Scheme);
+                            sqlCommand.Parameters.AddWithValue("@RCode", issueList.RCode);
+                            sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
+                            sqlCommand.Parameters.AddWithValue("@flag1", item.StackYear); //StackYear
+                            sqlCommand.Parameters.AddWithValue("@Flag2", "-");
+                            sqlCommand.ExecuteNonQuery();
+                        }
                     }
 
                     //Insert data into IssueMemoDoNo Item details
