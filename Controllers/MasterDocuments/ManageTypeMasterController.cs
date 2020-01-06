@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Data;
 
 namespace TNCSCAPI.Controllers.MasterDocuments
 {
@@ -19,7 +21,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList.Add(new KeyValuePair<string, string>("@TYTransaction", typeMasterEntity.TYTransaction));
                 parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", typeMasterEntity.DeleteFlag));
                 parameterList.Add(new KeyValuePair<string, string>("@Activeflag", typeMasterEntity.Activeflag));
-                parameterList.Add(new KeyValuePair<string, string>("@TRCode", typeMasterEntity.TRCode));
+                //parameterList.Add(new KeyValuePair<string, string>("@TRCode", typeMasterEntity.TRCode));
                 return manageSQLConnection.InsertData("InsertTypeMaster", parameterList);
             }
             finally

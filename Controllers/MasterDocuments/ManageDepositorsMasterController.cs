@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Data;
 
 namespace TNCSCAPI.Controllers.MasterDocuments
 {
@@ -29,7 +31,18 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList = null;
             }
         }
-    }
+             [HttpGet("{id}")]
+             public string Get(string DepositorType)
+             {
+                DataSet ds = new DataSet();
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@DepositorType", DepositorType));
+                ds = manageSQLConnection.GetDataSetValues("GetDepositorMasterByType", sqlParameters);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+        }
+
     public class DepositorEntity
     {
         public string DepositorCode { get; set; }

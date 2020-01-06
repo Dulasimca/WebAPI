@@ -30,8 +30,12 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@CommodityName", purchaseTax.CommodityName));
             sqlParameters.Add(new KeyValuePair<string, string>("@Quantity", purchaseTax.Quantity));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rate", purchaseTax.Rate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@TaxType", purchaseTax.TaxType));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Measurement", purchaseTax.Measurement));
             sqlParameters.Add(new KeyValuePair<string, string>("@Amount", purchaseTax.Amount));
             sqlParameters.Add(new KeyValuePair<string, string>("@Percentage", purchaseTax.Percentage));
+            sqlParameters.Add(new KeyValuePair<string, string>("@CGST", purchaseTax.CGST));
+            sqlParameters.Add(new KeyValuePair<string, string>("@SGST", purchaseTax.SGST));
             sqlParameters.Add(new KeyValuePair<string, string>("@VatAmount", purchaseTax.VatAmount));
             sqlParameters.Add(new KeyValuePair<string, string>("@Total", purchaseTax.Total));
             sqlParameters.Add(new KeyValuePair<string, string>("@AccRegion", purchaseTax.AccRegion));
@@ -86,5 +90,9 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string GCode { get; set; }
         public string RCode { get; set; }
         public string RoleId { get; set; }
+        public string Measurement { get; set; }
+        public string CGST { get; set; }
+        public string SGST { get; set; }
+        public string TaxType { get; set; }
     }
 }
