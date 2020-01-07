@@ -189,7 +189,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(manageReport.StringFormat(i.ToString(), 6, 2));
                 streamWriter.Write(manageReport.StringFormat(item.ITDescription, 25, 2));
                 streamWriter.Write(manageReport.StringFormat(item.SchemeName, 19, 2));
-                streamWriter.Write(manageReport.StringFormat(item.NetWeight.ToString(), 21, 2));
+                streamWriter.Write(manageReport.StringFormat(manageReport.DecimalformatForWeight(item.NetWeight.ToString()), 21, 2));
                 streamWriter.Write(manageReport.StringFormat(item.Rate.ToString(), 11, 1));
                 streamWriter.Write(manageReport.StringFormat(item.Total.ToString(), 13, 1));
                 streamWriter.Write("    |");
@@ -228,7 +228,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(manageReport.StringFormat(i.ToString(), 6, 2));
                 streamWriter.Write(manageReport.StringFormat(item.ITDescription, 25, 2));
                 streamWriter.Write(manageReport.StringFormat(item.SchemeName, 19, 2));
-                streamWriter.Write(manageReport.StringFormat(item.MarginNkgs.ToString(), 21, 2));
+                streamWriter.Write(manageReport.StringFormat(manageReport.DecimalformatForWeight(item.MarginNkgs.ToString()), 21, 2));
                 streamWriter.Write(manageReport.StringFormat(item.MarginRate.ToString(), 11, 1));
                 streamWriter.Write(manageReport.StringFormat(item.MarginAmount.ToString(), 13, 1));
                 streamWriter.Write("    |");
