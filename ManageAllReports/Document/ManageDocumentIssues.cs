@@ -124,21 +124,24 @@ namespace TNCSCAPI.ManageAllReports.Document
             foreach (var item in stockIssuesEntity.IssueItemList)
             {
                 i = i + 1;
-                streamWriter.Write("||");
-                streamWriter.Write(report.StringFormat(i.ToString(), 3, 2));
-                streamWriter.Write(report.StringFormat(item.TStockNo, 12, 2));
-                streamWriter.Write(report.StringFormat(item.CommodityName, 31, 2));
-                streamWriter.Write(report.StringFormat(item.SchemeName, 14, 2));
-                streamWriter.Write(report.StringFormat(item.PackingName, 13, 2));
-                streamWriter.Write(report.StringFormat(item.NoPacking.ToString(), 10, 1));
-                streamWriter.Write(report.StringFormat(item.Nkgs.ToString(), 13, 1));
-                streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 5, 1));
-                streamWriter.WriteLine(" ");
-                units = units + item.NoPacking;
-                netKgs = netKgs + Convert.ToDouble(item.Nkgs);
+                if (item.TStockNo.ToUpper() != "TOTAL")
+                {
+                    streamWriter.Write("||");
+                    streamWriter.Write(report.StringFormat(i.ToString(), 3, 2));
+                    streamWriter.Write(report.StringFormat(item.TStockNo, 12, 2));
+                    streamWriter.Write(report.StringFormat(item.CommodityName, 31, 2));
+                    streamWriter.Write(report.StringFormat(item.SchemeName, 14, 2));
+                    streamWriter.Write(report.StringFormat(item.PackingName, 13, 2));
+                    streamWriter.Write(report.StringFormat(item.NoPacking.ToString(), 10, 1));
+                    streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(item.Nkgs.ToString()), 13, 1));
+                    streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 5, 1));
+                    streamWriter.WriteLine(" ");
+                    units = units + item.NoPacking;
+                    netKgs = netKgs + Convert.ToDouble(item.Nkgs);
+                }
             }
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
-            streamWriter.WriteLine("||                                                               |Total        |" + report.StringFormatWithoutPipe(units.ToString(), 9, 1) + "|" + report.StringFormatWithoutPipe(netKgs.ToString(), 12, 1) + "|     |");
+            streamWriter.WriteLine("||                                                               |Total        |" + report.StringFormatWithoutPipe(units.ToString(), 9, 1) + "|" + report.StringFormatWithoutPipe(report.DecimalformatForWeight(netKgs.ToString()), 12, 1) + "|     |");
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
 
         }

@@ -125,8 +125,8 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(report.StringFormat(item.SchemeName, 14, 2));
                 streamWriter.Write(report.StringFormat(item.PackingName, 13, 2));
                 streamWriter.Write(report.StringFormat(item.NoPacking.ToString(), 6, 1));
-                streamWriter.Write(report.StringFormat(item.GKgs.ToString(), 10, 1));
-                streamWriter.Write(report.StringFormat(item.Nkgs.ToString(), 10, 1));
+                streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(item.GKgs.ToString()), 10, 1));
+                streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(item.Nkgs.ToString()), 10, 1));
                 streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 8, 1) +"|");
                 streamWriter.WriteLine(" ");
             }
