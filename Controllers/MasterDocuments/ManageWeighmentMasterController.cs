@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace TNCSCAPI.Controllers.MasterDocuments
 {
@@ -18,7 +20,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList.Add(new KeyValuePair<string, string>("@Activeflag", masterEntity.Activeflag));
                 parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", masterEntity.DeleteFlag));
                 parameterList.Add(new KeyValuePair<string, string>("@WEType", masterEntity.WEType));
-                parameterList.Add(new KeyValuePair<string, string>("@WECode", Convert.ToString(masterEntity.WECode)));
+                parameterList.Add(new KeyValuePair<string, string>("@WECode", masterEntity.WECode));
                 return manageSQLConnection.InsertData("InsertWeighmentMaster", parameterList);
             }
             finally
@@ -26,10 +28,25 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList = null;
             }
         }
+        [HttpGet]
+        public string Get()
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            DataSet ds = new DataSet();
+            try
+            {
+                ds = manageSQLConnection.GetDataSetValues("GetWeighmentMaster");
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            finally
+            {
+                ds.Dispose();
+            }
+        }
     }
     public class WeighmentMasterEntity
     {
-        public int WECode { get; set; }
+        public string WECode { get; set; }
         public string WEType { get; set; }
         public string DeleteFlag { get; set; }
         public string Activeflag { get; set; }

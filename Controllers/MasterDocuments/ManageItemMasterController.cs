@@ -15,20 +15,32 @@ namespace TNCSCAPI.Controllers.MasterDocuments
             List<KeyValuePair<string, string>> parameterList = new List<KeyValuePair<string, string>>();
             try
             {
-                parameterList.Add(new KeyValuePair<string, string>("@ITCode", commodityEntity.ITCode));
-                parameterList.Add(new KeyValuePair<string, string>("@ITDescription", commodityEntity.ITDescription));
-                parameterList.Add(new KeyValuePair<string, string>("@ITBweighment", commodityEntity.ITBweighment));
-                parameterList.Add(new KeyValuePair<string, string>("@ittax", commodityEntity.ittax));
-                parameterList.Add(new KeyValuePair<string, string>("@GRName", commodityEntity.GRName));
-                parameterList.Add(new KeyValuePair<string, string>("@ItemType", commodityEntity.ItemType));
-                parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", commodityEntity.DeleteFlag));
-                parameterList.Add(new KeyValuePair<string, string>("@Activeflag", commodityEntity.ActiveFlag));
-                parameterList.Add(new KeyValuePair<string, string>("@Allotmentgroup", commodityEntity.Allotmentgroup));
-                parameterList.Add(new KeyValuePair<string, string>("@SFlag", Convert.ToString(commodityEntity.SFlag)));
-                parameterList.Add(new KeyValuePair<string, string>("@CBFlag", Convert.ToString(commodityEntity.CBFlag)));
-                parameterList.Add(new KeyValuePair<string, string>("@Unit", commodityEntity.Unit));
-                return manageSQLConnection.InsertData("InsertItemMaster", parameterList);
+                if (commodityEntity.Type == 1)
+                {
+                    parameterList.Add(new KeyValuePair<string, string>("@ITCode", commodityEntity.ITCode));
+                    parameterList.Add(new KeyValuePair<string, string>("@ITDescription", commodityEntity.ITDescription));
+                    parameterList.Add(new KeyValuePair<string, string>("@ItemType", commodityEntity.ItemType));
+                    return manageSQLConnection.InsertData("InsertItemMasterCereal", parameterList);
+                }
+                else
+                {
+                    parameterList.Add(new KeyValuePair<string, string>("@ITCode", commodityEntity.ITCode));
+                    parameterList.Add(new KeyValuePair<string, string>("@ITDescription", commodityEntity.ITDescription));
+                    parameterList.Add(new KeyValuePair<string, string>("@ITBweighment", commodityEntity.ITBweighment));
+                    parameterList.Add(new KeyValuePair<string, string>("@ittax", commodityEntity.ittax));
+                    parameterList.Add(new KeyValuePair<string, string>("@GRName", commodityEntity.GRName));
+                    parameterList.Add(new KeyValuePair<string, string>("@ItemType", commodityEntity.ItemType));
+                    parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", commodityEntity.DeleteFlag));
+                    parameterList.Add(new KeyValuePair<string, string>("@Activeflag", commodityEntity.ActiveFlag));
+                    parameterList.Add(new KeyValuePair<string, string>("@Allotmentgroup", commodityEntity.Allotmentgroup));
+                    parameterList.Add(new KeyValuePair<string, string>("@SFlag", Convert.ToString(commodityEntity.SFlag)));
+                    parameterList.Add(new KeyValuePair<string, string>("@CBFlag", Convert.ToString(commodityEntity.CBFlag)));
+                    parameterList.Add(new KeyValuePair<string, string>("@Unit", Convert.ToString(commodityEntity.Unit)));
+                    return manageSQLConnection.InsertData("InsertItemMaster", parameterList);
+                }
+                //return manageSQLConnection.InsertData("InsertItemMaster", parameterList);
             }
+
             finally
             {
                 parameterList = null;
@@ -37,6 +49,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
     }
     public class CommodityEntity
     {
+        public int Type { get; set; }
         public string ITCode { get; set; }
         public string ITDescription { get; set; }
         public string ITBweighment { get; set; }
