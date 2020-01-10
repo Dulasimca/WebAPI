@@ -21,7 +21,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", masterEntity.DeleteFlag));
                 parameterList.Add(new KeyValuePair<string, string>("@SCCode", masterEntity.SCCode));
                 parameterList.Add(new KeyValuePair<string, string>("@CCode", masterEntity.CCode));
-                parameterList.Add(new KeyValuePair<string, string>("@RowId", Convert.ToString(masterEntity.RowId)));
+                parameterList.Add(new KeyValuePair<string, string>("@RowId", masterEntity.RowId));
                 return manageSQLConnection.InsertData("InsertSchemeCommodity", parameterList);
             }
             finally
@@ -42,7 +42,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
     }
     public class SchemesCommodityEntity
     {
-        public int RowId {get;set;}
+        public string RowId {get;set;}
         public string CCode	{get;set;}
 	    public string SCCode {get;set;}
 	    public string DeleteFlag {get;set;}

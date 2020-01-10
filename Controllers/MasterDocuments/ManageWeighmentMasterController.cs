@@ -21,6 +21,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", masterEntity.DeleteFlag));
                 parameterList.Add(new KeyValuePair<string, string>("@WEType", masterEntity.WEType));
                 parameterList.Add(new KeyValuePair<string, string>("@WECode", masterEntity.WECode));
+                parameterList.Add(new KeyValuePair<string, string>("@Type", masterEntity.Type));
                 return manageSQLConnection.InsertData("InsertWeighmentMaster", parameterList);
             }
             finally
@@ -46,6 +47,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
     }
     public class WeighmentMasterEntity
     {
+        public string Type { get; set; }
         public string WECode { get; set; }
         public string WEType { get; set; }
         public string DeleteFlag { get; set; }
