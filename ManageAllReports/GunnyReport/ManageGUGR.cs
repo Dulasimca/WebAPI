@@ -69,7 +69,7 @@ namespace TNCSCAPI.ManageAllReports.GunnyReport
             sw.WriteLine(HeaderTitle + entity.GName + " Godown");
             sw.WriteLine("      From : " + report.FormatDate(entity.FromDate) + "    To : " + report.FormatDate(entity.Todate) + "  Page No :" + pageNo.ToString());
             sw.WriteLine("--------------------------------------------------------------------------------------------------------");
-            sw.WriteLine("Ack.No     Date      Commodity       Bundles  Nos       STACK NO    SYEAR Stack Commodity");
+            sw.WriteLine("Ack.No     Date       Commodity       Bundles  Nos       STACK NO    SYEAR Stack Commodity");
             sw.WriteLine("--------------------------------------------------------------------------------------------------------");
         }
 
@@ -106,7 +106,7 @@ namespace TNCSCAPI.ManageAllReports.GunnyReport
                         }
                         sw.Write("");
                         sw.Write(report.StringFormatWithoutPipe(row["Ackno"].ToString(), 10, 2));
-                        sw.Write(report.StringFormatWithoutPipe(row["Date"].ToString(), 9, 2));
+                        sw.Write(report.StringFormatWithoutPipe(row["Date"].ToString(), 10, 2));
                         sw.Write(report.StringFormatWithoutPipe(row["Commodity"].ToString(), 16, 2));
                         sw.Write(report.StringFormatWithoutPipe("0", 8,2));
                         sw.Write(report.StringFormatWithoutPipe(row["Quantity"].ToString(), 9, 2));
@@ -120,13 +120,12 @@ namespace TNCSCAPI.ManageAllReports.GunnyReport
                         Bags += !string.IsNullOrEmpty(Convert.ToString(row["Quantity"])) ? Convert.ToInt32(row["Quantity"].ToString()) : 0;
                         i++;
                     }
-                  
                   //  count = count + 1;
                 }
                 sw.WriteLine("--------------------------------------------------------------------------------------------------------");
                 sw.Write("");
                 sw.Write(report.StringFormatWithoutPipe("", 10, 2));
-                sw.Write(report.StringFormatWithoutPipe("Total", 9, 2));
+                sw.Write(report.StringFormatWithoutPipe("Total", 10, 2));
                 sw.Write(report.StringFormatWithoutPipe("-", 16, 2));
                 sw.Write(report.StringFormatWithoutPipe("-", 8, 2));
                 sw.Write(report.StringFormatWithoutPipe((Convert.ToString(Bags)), 9, 2));
