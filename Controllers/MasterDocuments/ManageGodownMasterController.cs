@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using TNCSCAPI.Models;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace TNCSCAPI.Controllers.MasterDocuments
 {
@@ -8,6 +11,18 @@ namespace TNCSCAPI.Controllers.MasterDocuments
     [ApiController]
     public class ManageGodownMasterController : ControllerBase
     {
+        [HttpGet("{id}")]
+        public string Get(string RCode)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
+            //sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+            ds = manageSQLConnection.GetDataSetValues("GetGodownMasterData", sqlParameters);
+            return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
+
         [HttpPost("{id}")]
         public bool Post(GodownEntity godownEntity)
         {
