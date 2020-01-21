@@ -18,11 +18,13 @@ namespace TNCSCAPI.Controllers.MasterDocuments
             List<KeyValuePair<string, string>> parameterList = new List<KeyValuePair<string, string>>();
             try
             {
-                parameterList.Add(new KeyValuePair<string, string>("@WECode", Convert.ToString(masterEntity.WECode)));
-                parameterList.Add(new KeyValuePair<string, string>("@WEType", masterEntity.WEType));
+                parameterList.Add(new KeyValuePair<string, string>("@Pcode", masterEntity.Pcode));
+                parameterList.Add(new KeyValuePair<string, string>("@PName", masterEntity.PName));
+                parameterList.Add(new KeyValuePair<string, string>("@PWeight", Convert.ToString(masterEntity.PWeight)));
+                parameterList.Add(new KeyValuePair<string, string>("@PBWeight", masterEntity.PBWeight));
                 parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", masterEntity.DeleteFlag));
                 parameterList.Add(new KeyValuePair<string, string>("@Activeflag", masterEntity.Activeflag));
-                return manageSQLConnection.InsertData("InsertWeighmentMaster", parameterList);
+                return manageSQLConnection.InsertData("InsertPackingMaster", parameterList);
             }
             finally
             {
@@ -32,8 +34,10 @@ namespace TNCSCAPI.Controllers.MasterDocuments
     }
     public class PackingMasterEntity
     {
-        public int WECode { get; set; }
-        public string WEType { get; set; }
+        public string Pcode { get; set; }
+        public string PName { get; set; }
+        public float PWeight { get; set; }
+        public string PBWeight { get; set; }
         public string DeleteFlag { get; set; }
         public string Activeflag { get; set; }
     }

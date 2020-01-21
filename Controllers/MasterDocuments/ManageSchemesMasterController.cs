@@ -20,7 +20,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList.Add(new KeyValuePair<string, string>("@SCType", masterEntity.SCType));
                 parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", masterEntity.DeleteFlag));
                 parameterList.Add(new KeyValuePair<string, string>("@Activeflag", masterEntity.Activeflag));
-                parameterList.Add(new KeyValuePair<string, string>("@AnnavitranTNCSCID",Convert.ToString(masterEntity.AnnavitranTNCSCID)));
+                parameterList.Add(new KeyValuePair<string, string>("@AnnavitranTNCSCID",masterEntity.AnnavitranTNCSCID));
                 parameterList.Add(new KeyValuePair<string, string>("@AllotmentScheme", masterEntity.AllotmentScheme));
                 return manageSQLConnection.InsertData("InsertSchemesMaster", parameterList);
             }
@@ -37,7 +37,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
         public string SCType { get; set; }
         public string DeleteFlag { get; set; }
         public string Activeflag { get; set; }
-        public int AnnavitranTNCSCID { get; set; }
+        public string AnnavitranTNCSCID { get; set; }
         public string AllotmentScheme { get; set; }
     }
 }
