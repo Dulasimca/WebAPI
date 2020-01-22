@@ -23,5 +23,21 @@ namespace TNCSCAPI.Controllers.Masters
             ds = manageSQLConnection.GetDataSetValues("GetTypeCategoryMaster", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-    }
+
+        [HttpGet]
+        public string Get()
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            DataSet ds = new DataSet();
+            try
+            {
+                ds = manageSQLConnection.GetDataSetValues("GetDistinctCategoryMaster");
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            finally
+            {
+                ds.Dispose();
+            }
+        }
+        }
 }
