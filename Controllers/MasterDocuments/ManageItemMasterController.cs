@@ -30,6 +30,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                     parameterList.Add(new KeyValuePair<string, string>("@ittax", commodityEntity.ittax));
                     parameterList.Add(new KeyValuePair<string, string>("@GRName", commodityEntity.GRName));
                     parameterList.Add(new KeyValuePair<string, string>("@ItemType", commodityEntity.ItemType));
+                    parameterList.Add(new KeyValuePair<string, string>("@Hsncode", commodityEntity.Hsncode));
                     parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", commodityEntity.DeleteFlag));
                     parameterList.Add(new KeyValuePair<string, string>("@Activeflag", commodityEntity.ActiveFlag));
                     parameterList.Add(new KeyValuePair<string, string>("@Allotmentgroup", commodityEntity.Allotmentgroup));
@@ -56,6 +57,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
         public string ittax { get; set; }
         public string GRName { get; set; }
         public string ItemType { get; set; }
+        public string Hsncode { get; set; }
         public string DeleteFlag { get; set; }
         public string ActiveFlag { get; set; }
         public string Allotmentgroup { get; set; }
