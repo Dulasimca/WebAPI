@@ -15,7 +15,7 @@ namespace TNCSCAPI.Controllers.Masters
     {
 
         [HttpGet("{id}")]
-        public string Get(string GCode, string ITCode,string TRCode)
+        public string Get(string GCode, string ITCode,string TRCode,string SchemeCode = null)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -23,6 +23,7 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@CommodityCode", ITCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@TRCode", TRCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@SchemeCode", SchemeCode));
             ds = manageSQLConnection.GetDataSetValues("GetStackDetails", sqlParameters);
             ManageReport manageReport = new ManageReport();
             if (manageReport.CheckDataAvailable(ds))

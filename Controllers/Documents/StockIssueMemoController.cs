@@ -89,5 +89,6 @@ namespace TNCSCAPI.Controllers.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@SINo", entity.DOCNumber));
             return manageSQLConnection.UpdateValues("UpdateStockIssuesLoadingslip", sqlParameters);
         }
+
     }
 }
