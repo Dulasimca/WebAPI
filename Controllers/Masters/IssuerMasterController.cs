@@ -83,6 +83,7 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@ACSCode", issuerEntity.ACSCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", issuerEntity.GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", issuerEntity.RCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GSTNo", issuerEntity.GSTNumber));
             return manageSQLConnection.InsertData("InsertIssuerMaster", sqlParameters);
         }
 
@@ -103,5 +104,6 @@ namespace TNCSCAPI.Controllers.Masters
         public string CategoryId { get; set; }
         public string Tycode { get; set; }
         public string NoOfBeneficiaries { get; set; }
+        public string GSTNumber { get; set; }
     }
 }

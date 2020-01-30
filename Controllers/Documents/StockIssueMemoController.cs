@@ -72,11 +72,21 @@ namespace TNCSCAPI.Controllers.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
                 ds = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsByDate", sqlParameters);
             }
-            else
+            else if(Type == 2)
             {
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@SINo", value));
                 ds = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsBySINo", sqlParameters);
+            }
+            else if(Type == 3)
+            {
+                ds = manageSQLConnection.GetDataSetValues("GetTodayStockIssueDoc");
+            }
+            else
+            {
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@DocumentId", value));
+                ds = manageSQLConnection.GetDataSetValues("GetStockIssuesForAbstractPrint", sqlParameters);
             }
             return JsonConvert.SerializeObject(ds);
         }
