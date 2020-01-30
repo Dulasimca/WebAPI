@@ -27,6 +27,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
         [HttpPost("{id}")]
+
         public bool Post(StackMasterEntity stackMasterEntity)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
