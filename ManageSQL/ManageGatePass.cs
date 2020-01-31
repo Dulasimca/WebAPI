@@ -14,6 +14,7 @@ namespace TNCSCAPI.ManageSQL
             SqlTransaction objTrans = null;
             sqlCommand = new SqlCommand();
             sqlCommand = new SqlCommand();
+            objTrans = sqlConnection.BeginTransaction();
             sqlCommand.Transaction = objTrans;
             sqlCommand.Connection = sqlConnection;
             sqlCommand.CommandText = "InsertGatePass";
@@ -26,6 +27,7 @@ namespace TNCSCAPI.ManageSQL
             sqlCommand.Parameters.AddWithValue("@RCode", gatePass.RCode);
             sqlCommand.Parameters.AddWithValue("@DocumentNumber", gatePass.DocumentNumber);
             sqlCommand.ExecuteNonQuery();
+            objTrans.Commit();
         }
     }
 
