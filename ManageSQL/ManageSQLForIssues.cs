@@ -85,7 +85,8 @@ namespace TNCSCAPI
                         DocumentNumber = SINo
                     };
                     ManageGatePass gatePass = new ManageGatePass();
-                    Task.Run(()=> gatePass.InsertGatePass(gatePassEntity));
+                    gatePass.InsertGatePass(gatePassEntity);
+                    //Task.Run(()=> gatePass.InsertGatePass(gatePassEntity));
                     //#if (!DEBUG)
                     ManageDocumentIssues documentIssues = new ManageDocumentIssues();
                     Task.Run(() => documentIssues.GenerateIssues(issueList));
