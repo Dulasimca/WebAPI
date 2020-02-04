@@ -10,7 +10,7 @@ namespace TNCSCAPI.Controllers.Documents
     [ApiController]
     public class StockIssuesAbstractPrintController : ControllerBase
     {
-        [HttpPost("id")]
+        [HttpPost("{id}")]
         public Tuple<bool,string,DataSet> Post(GatePassCommonEntity gatePassCommon )
         {
             DataSet ds = new DataSet();
