@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using TNCSCAPI.ManageAllReports.Document;
+
 namespace TNCSCAPI.Controllers.Documents
 {
     [Route("api/[controller]")]
@@ -8,21 +11,16 @@ namespace TNCSCAPI.Controllers.Documents
     public class StockIssuesAbstractPrintController : ControllerBase
     {
         [HttpPost("id")]
-        public bool GeneratePrint(List<string> DocumentId)
+        public Tuple<bool,string,DataSet> Post(GatePassCommonEntity gatePassCommon )
         {
-            string documentid = string.Empty;
-            foreach (string item in DocumentId)
-            {
-                documentid = documentid + "~" + item;
-            }
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@DocumenteId", documentid));
+            sqlParameters.Add(new KeyValuePair<string, string>("@DocumenteId", gatePassCommon.DocNumber));
             ds = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsByDate", sqlParameters);
-
-            return false;
-
+            ManageIssuesAbstractPrint issuesAbstractPrint = new ManageIssuesAbstractPrint();
+            bool result= issuesAbstractPrint.GenerateAbstractPrint(ds, gatePassCommon);
+            return new Tuple<bool, string,DataSet>(result, result==true ? "Print Generated Successfully" :"Please contact Administrator", ds);
         }
     }
 }
