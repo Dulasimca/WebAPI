@@ -24,6 +24,7 @@ namespace TNCSCAPI.Models.Documents
       public string  GodownCode { get; set; }
       public string  CommodityCode { get; set; }
        public string  StackNo { get; set; }
+        public string CurrYear { get; set; }
        public string Bags { get; set; }
        public string Weights { get; set; }
        public string ObStackDate { get; set; }

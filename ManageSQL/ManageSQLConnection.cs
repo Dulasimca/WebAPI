@@ -417,6 +417,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@StackBalanceBags", stackOpeningEntity.Bags);
                     sqlCommand.Parameters.AddWithValue("@StackBalanceWeight", stackOpeningEntity.Weights);
                     sqlCommand.Parameters.AddWithValue("@ObStackDate", stackOpeningEntity.ObStackDate);
+                    sqlCommand.Parameters.AddWithValue("@CurYear", stackOpeningEntity.CurrYear);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.Parameters.AddWithValue("@RegionCode", stackOpeningEntity.RegionCode);
                     sqlCommand.Parameters.AddWithValue("@Flag1", "R");

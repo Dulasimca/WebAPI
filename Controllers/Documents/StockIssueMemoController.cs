@@ -80,7 +80,9 @@ namespace TNCSCAPI.Controllers.Documents
             }
             else if(Type == 3)
             {
-                ds = manageSQLConnection.GetDataSetValues("GetTodayStockIssueDoc");
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", value));
+                ds = manageSQLConnection.GetDataSetValues("GetGatePass", sqlParameters);
             }
             else
             {
