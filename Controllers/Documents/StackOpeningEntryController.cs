@@ -24,6 +24,7 @@ namespace TNCSCAPI.Controllers.Documents
                 DataSet ds = new DataSet();
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@OBDate", stackOpeningEntity.ObStackDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@CurYear", stackOpeningEntity.CurrYear));
                 sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stackOpeningEntity.GodownCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@StackNo", stackOpeningEntity.StackNo));
                 ds = manageSQL.GetDataSetValues("FetchStackCard", sqlParameters);

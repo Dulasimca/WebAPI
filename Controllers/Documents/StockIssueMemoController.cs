@@ -77,12 +77,13 @@ namespace TNCSCAPI.Controllers.Documents
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@SINo", value));
                 ds = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsBySINo", sqlParameters);
-            }
-            else
+            } 
+            else  
             {
-                ds = manageSQLConnection.GetDataSetValues("GetTodayStockIssueDoc");
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", value));
+                ds = manageSQLConnection.GetDataSetValues("GetGatePass", sqlParameters);
             }
-            
             return JsonConvert.SerializeObject(ds);
         }
 
