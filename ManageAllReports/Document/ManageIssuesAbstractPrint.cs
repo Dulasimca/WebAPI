@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Data;
 using System.IO;
-using TNCSCAPI.Models.Documents;
 
 namespace TNCSCAPI.ManageAllReports.Document
 {
-    public class ManageDocumentIssues
+    public class ManageIssuesAbstractPrint
     {
         ManageReport report = new ManageReport();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="stockIssuesEntity"></param>
-        public void GenerateIssues(DocumentStockIssuesEntity stockIssuesEntity)
+        public bool GenerateAbstractPrint(DataSet IssuesDataSet)
         {
             // AuditLog.WriteError("GeneratestockIssuesEntityRegister");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             bool isDuplicate = false;
+            bool isPrint = false;
             try
             {
                 fileName = stockIssuesEntity.IssuingCode + GlobalVariable.DocumentIssueFileName;
@@ -34,10 +35,11 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AddDetails(streamWriter, stockIssuesEntity);
                 AddDODetails(streamWriter, stockIssuesEntity);
                 AddFooter(streamWriter, stockIssuesEntity);
-
+                isPrint = true;
             }
             catch (Exception ex)
             {
+                isPrint = false;
                 AuditLog.WriteError(ex.Message + " " + ex.StackTrace);
             }
             finally
@@ -47,6 +49,7 @@ namespace TNCSCAPI.ManageAllReports.Document
                 fPath = string.Empty; fileName = string.Empty;
                 streamWriter = null;
             }
+            return isPrint;
         }
 
         /// <summary>

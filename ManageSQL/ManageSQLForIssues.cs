@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using TNCSCAPI.DataTransfer;
 using TNCSCAPI.ManageAllReports.Document;
+using TNCSCAPI.ManageSQL;
 using TNCSCAPI.Models.Documents;
 
 namespace TNCSCAPI
@@ -13,11 +13,11 @@ namespace TNCSCAPI
     {
         SqlConnection sqlConnection = new SqlConnection();
         SqlCommand sqlCommand = new SqlCommand();
-        public Tuple<bool, string,string> InsertIssuesEntry(DocumentStockIssuesEntity issueList)
+        public Tuple<bool, string, string> InsertIssuesEntry(DocumentStockIssuesEntity issueList)
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, SINo = string.Empty;
-          //  bool isNewDoc = true;
+            //  bool isNewDoc = true;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
                 DataSet ds = new DataSet();
@@ -75,6 +75,18 @@ namespace TNCSCAPI
                     SINo = Convert.ToString(sqlCommand.Parameters["@SINo"].Value);
                     issueList.SINo = SINo;
 
+                    //insert record into gatepass table
+                    GatePassEntity gatePassEntity = new GatePassEntity
+                    {
+                        LorryNumber = issueList.LorryNo,
+                        DocumentTye = 2,
+                        GCode = issueList.IssuingCode,
+                        RCode = issueList.RCode,
+                        DocumentNumber = SINo
+                    };
+                    ManageGatePass gatePass = new ManageGatePass();
+                    gatePass.InsertGatePass(gatePassEntity);
+                    //Task.Run(()=> gatePass.InsertGatePass(gatePassEntity));
                     //#if (!DEBUG)
                     ManageDocumentIssues documentIssues = new ManageDocumentIssues();
                     Task.Run(() => documentIssues.GenerateIssues(issueList));
@@ -172,14 +184,14 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
 
-                    return new Tuple<bool, string,string>(true, GlobalVariable.SavedMessage + SINo, SINo);
+                    return new Tuple<bool, string, string>(true, GlobalVariable.SavedMessage + SINo, SINo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
-                   objTrans.Rollback();
-                    return new Tuple<bool, string,string>(false, GlobalVariable.ErrorMessage,"");
+                    objTrans.Rollback();
+                    return new Tuple<bool, string, string>(false, GlobalVariable.ErrorMessage, "");
                 }
                 finally
                 {
