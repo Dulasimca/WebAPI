@@ -68,7 +68,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             string receiverdetais = string.Empty;
             foreach (var item in distReceiver)
             {
-                receiverdetais = receiverdetais + item.SINo + "-" + item.ReceivorName + ",";
+                receiverdetais = receiverdetais + item.SINo + "-" + item.ReceivorName.Trim() + ",";
             }
             receiverdetais = receiverdetais.TrimEnd(',');
 
@@ -87,7 +87,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("DATE     : ");
             streamWriter.Write(report.StringFormatWithoutPipe(ManageReport.GetCurrentDate(), 19, 2));
             streamWriter.Write("TIME : ");
-            streamWriter.Write(report.StringFormat(report.GetCurrentTime(DateTime.Now), 14, 21));
+            streamWriter.Write(report.StringFormat(report.GetCurrentTime(DateTime.Now), 21, 2));
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|   ISSUING GODOWN   : ");
@@ -95,15 +95,15 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("Doc DATE : ");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockIssuesEntity[0].SIDate.ToString()), 19, 2));
             streamWriter.Write(report.StringFormatWithoutPipe((stockIssuesEntity[0].IssueRegularAdvance.ToUpper() == "R" ? "REGULAR" : "ADVANCE"), 9, 2));
-            streamWriter.Write(report.StringFormat(stockIssuesEntity[0].IRelates, 19, 2));
+            streamWriter.Write(report.StringFormat(stockIssuesEntity[0].IRelates, 18, 2));
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
-            streamWriter.WriteLine("||                              									                                          |");
-            streamWriter.WriteLine("|| Issuer Details:			                                                                                  |");
+            streamWriter.WriteLine("||                                                                                                            |");
+            streamWriter.WriteLine("|| Issuer Details:                                                                                            |");
             streamWriter.Write("||  ");
-            streamWriter.Write(report.StringFormat(receiverdetais, 196, 2));
+            streamWriter.Write(report.StringFormat(receiverdetais, 106, 2));
             streamWriter.WriteLine(" ");
-            report.AddMoreContentForGatePass(streamWriter, receiverdetais, 196);
+            report.AddMoreContentForGatePass(streamWriter, receiverdetais, 106);
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
             streamWriter.WriteLine("||SNo|  STACK NO  |    COMMODITY                  |  SCHEME      |UNIT WEIGHT  |NO.OFUNITS|   NET Wt/Nos|MOI% |");
             streamWriter.WriteLine("||------------------------------------------------------------------------------------------------------|-----|");
@@ -184,13 +184,13 @@ namespace TNCSCAPI.ManageAllReports.Document
         public string TransporterName { get; set; }
         public string LorryNo { get; set; }
         public string TStockNo { get; set; }
-        public string Moisture { get; set; }
+        public double Moisture { get; set; }
         public string SchemeName { get; set; }
         public string ITName { get; set; }
         public string PName { get; set; }
         public int NoPacking { get; set; }
-        public float GKgs { get; set; }
-        public float Nkgs { get; set; }
+        public double GKgs { get; set; }
+        public double Nkgs { get; set; }
         public string IssueRegularAdvance { get; set; }
     }
 
