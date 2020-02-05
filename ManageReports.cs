@@ -601,9 +601,9 @@ namespace TNCSCAPI
                 }
                 return obj;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
 
         }
