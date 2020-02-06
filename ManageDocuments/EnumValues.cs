@@ -29,7 +29,10 @@ namespace TNCSCAPI.ManageDocuments
         SALESRETURN = 20,
         TotalOtherReceipt = 21,
         TotalReceipt = 22,
-        GrandTotalReceipt = 23
+        GrandTotalReceipt = 23,
+        PURCHASE = 24,
+        GUNNYRELEASE = 25,
+        HULLING = 26
     }
     public enum EnumQAIssuesHeaderParameter
     {
@@ -59,6 +62,9 @@ namespace TNCSCAPI.ManageDocuments
         PURCHASERETURN = 24,
         TotalOtherIssues = 25,
         TotalIssues = 26,
-        BalanceQty = 27
+        BalanceQty = 27,
+        MENDING = 28,
+        SALES = 29,
+        GU = 30
     }
 }
