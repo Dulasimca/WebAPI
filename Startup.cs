@@ -56,7 +56,7 @@ namespace TNCSCAPI
             //options.WithOrigins("http://localhost:4200", "http://180.179.49.72:8083", "https://tncsc-scm.in:80", "https://tncsc-scm.in", "http://tncsc-scm.in", "http://localhost:443", "https://tncsc-scm.in:443", "https://www.tncsc-scm.in")
             //); 
             app.UseCors(options =>
-           options.WithOrigins("http://localhost:4200", "http://180.179.49.72:8083", "https://tncsc-scm.in:80", "https://tncsc-scm.in", "http://tncsc-scm.in", "http://localhost:443", "https://tncsc-scm.in:443", "https://www.tncsc-scm.in")
+           options.WithOrigins("http://localhost:4200", "http://180.179.49.72:8083", "https://tncsc-scm.in:80", "https://tncsc-scm.in", "http://tncsc-scm.in", "http://localhost:443", "https://tncsc-scm.in:443", "https://www.tncsc-scm.in", "http://180.179.49.72:8085", "https://www.master.tncsc-scm.in", "https://master.tncsc-scm.in")
            .AllowAnyMethod()
            .AllowAnyHeader()
            .AllowCredentials()

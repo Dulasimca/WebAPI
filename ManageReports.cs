@@ -601,9 +601,9 @@ namespace TNCSCAPI
                 }
                 return obj;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
 
         }
@@ -677,6 +677,42 @@ namespace TNCSCAPI
             return numberofLines;
         }
 
+        /// <summary>
+        /// Add more content to display next line.
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="sData"></param>
+        /// <param name="dataLength"></param>
+        /// <param name="addSpace"></param>
+        public void AddMoreContentForGatePass(StreamWriter streamWriter, string sData, int dataLength)
+        {
+            //Add all data for issuer
+            if (sData.Length > dataLength)
+            {
+                int ilength = sData.Length - dataLength;
+                int index = dataLength;
+                int record = 0;
+
+                while (ilength > 0)
+                {
+                    if (ilength >= dataLength)
+                    {
+                        record = dataLength;
+                        ilength = ilength - dataLength;
+                    }
+                    else
+                    {
+                        record = ilength;
+                        ilength = 0;
+                    }
+                    string sremainValue = sData.Substring(index, record);
+                    streamWriter.Write("||  ");
+                    streamWriter.Write(StringFormat(sremainValue, dataLength, 2));
+                    streamWriter.WriteLine(" ");
+                    index = index + record;
+                }
+            }
+        }
         public DataTable ConvertDataRowToTable(DataRow[] dataRows, DataTable ndt)
         {
             DataTable dt = ndt.Clone();

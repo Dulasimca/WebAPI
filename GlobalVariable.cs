@@ -75,7 +75,7 @@
         public const string IssueMemoSocietySchemeWiseFileName = "ISSUESOCIETYSCHEMEWISE";
 
         public const string StockStatementFileName = "STOCKSTATEMENT";
-
+        public const string IssueGatePassFileName = "GATEPASS";
 
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
