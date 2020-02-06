@@ -43,13 +43,14 @@ namespace TNCSCAPI.Controllers.Documents
         }
         
         [HttpGet("{id}")]
-        public string Get(string ICode, string GCode)
+        public string Get(string ICode, string GCode, string CurYear)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@ICode", ICode));
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@CurYear", CurYear));
             ds = manageSQLConnection.GetDataSetValues("GetStackDetailsByDate", sqlParameters);
             return JsonConvert.SerializeObject(ds);
         }
