@@ -20,7 +20,7 @@ namespace TNCSCAPI.Controllers.Masters
             DataSet ds = new DataSet();
             try
             {
-                ds = manageSQLConnection.GetDataSetValues("GetMASMAJORITEMEMASTER");
+                ds = manageSQLConnection.GetDataSetValues("GetMajorItemMaster");
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
             finally

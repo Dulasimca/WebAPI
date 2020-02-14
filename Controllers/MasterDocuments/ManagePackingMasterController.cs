@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace TNCSCAPI.Controllers.MasterDocuments
 {
@@ -29,6 +31,23 @@ namespace TNCSCAPI.Controllers.MasterDocuments
             finally
             {
                 parameterList = null;
+            }
+        }
+        [HttpGet]
+        public string Get(int Type)
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> parameterList = new List<KeyValuePair<string, string>>();
+            DataSet ds = new DataSet();
+            try
+            {
+                parameterList.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                ds = manageSQLConnection.GetDataSetValues("GetPackingandWeighment", parameterList);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            finally
+            {
+                ds.Dispose();
             }
         }
     }
