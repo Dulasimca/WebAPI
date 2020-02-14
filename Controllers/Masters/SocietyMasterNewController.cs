@@ -27,6 +27,7 @@ namespace TNCSCAPI.Controllers.Masters
             //ManageEmployeeDetailsSQL manageEmployee = new ManageEmployeeDetailsSQL();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             ManageSQLConnection manageSQL = new ManageSQLConnection();
+            sqlParameters.Add(new KeyValuePair<string, string>("@SlNo", societyMasterNewEntry.SlNo));
             sqlParameters.Add(new KeyValuePair<string, string>("@soccode", societyMasterNewEntry.SocietyCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@socname", societyMasterNewEntry.SocietyName));
             sqlParameters.Add(new KeyValuePair<string, string>("@soctype", societyMasterNewEntry.SocietyType));
@@ -39,6 +40,7 @@ namespace TNCSCAPI.Controllers.Masters
 
     public class SocietyMasterNewEntity
     {
+        public string SlNo { get; set; }
         public string SocietyCode { get; set; }
         public string SocietyName { get; set; }
         public string SocietyType { get; set; }
