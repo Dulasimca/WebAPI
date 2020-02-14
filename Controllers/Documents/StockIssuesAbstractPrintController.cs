@@ -23,6 +23,17 @@ namespace TNCSCAPI.Controllers.Documents
             bool result= issuesAbstractPrint.GenerateAbstractPrint(ds, gatePassCommon);
             return new Tuple<bool, string,string>(result, result==true ? "Gate Pass Generated Successfully" :"Please contact Administrator", JsonConvert.SerializeObject(ds.Tables[0]));
         }
+        [HttpGet("{id}")]
+        public string Get(string GCode,string DocDate)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@DocDate", DocDate));
+            ds = manageSQLConnection.GetDataSetValues("GetGatePassNumber", sqlParameters);
+            return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
 
         [HttpPut("{id}")]
         public bool Put(GatePassCommonEntity entity)

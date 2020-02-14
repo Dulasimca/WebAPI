@@ -17,7 +17,7 @@ namespace TNCSCAPI
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, SINo = string.Empty;
-            //  bool isNewDoc = true;
+            bool isNewDoc = true;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
                 DataSet ds = new DataSet();
@@ -25,10 +25,10 @@ namespace TNCSCAPI
                 sqlCommand = new SqlCommand();
                 try
                 {
-                    //if (issueList.SINo.Length > 5)
-                    //{
-                    //    isNewDoc = false;
-                    //}
+                    if (issueList.SINo.Length > 5)
+                    {
+                        isNewDoc = false;
+                    }
                     if (sqlConnection.State == 0)
                     {
                         sqlConnection.Open();
@@ -76,17 +76,21 @@ namespace TNCSCAPI
                     issueList.SINo = SINo;
 
                     //insert record into gatepass table
-                    GatePassEntity gatePassEntity = new GatePassEntity
+                    if (isNewDoc)
                     {
-                        LorryNumber = issueList.LorryNo,
-                        DocumentTye = 2,
-                        GCode = issueList.IssuingCode,
-                        RCode = issueList.RCode,
-                        DocumentNumber = SINo
-                    };
-                    ManageGatePass gatePass = new ManageGatePass();
-                    gatePass.InsertGatePass(gatePassEntity);
-                    //Task.Run(()=> gatePass.InsertGatePass(gatePassEntity));
+                        GatePassEntity gatePassEntity = new GatePassEntity
+                        {
+                            LorryNumber = issueList.LorryNo,
+                            DocumentTye = 2,
+                            GCode = issueList.IssuingCode,
+                            RCode = issueList.RCode,
+                            DocumentNumber = SINo
+                        };
+                        ManageGatePass gatePass = new ManageGatePass();
+                       // gatePass.InsertGatePass(gatePassEntity);
+                        Task.Run(()=> gatePass.InsertGatePass(gatePassEntity));
+                    }
+
                     //#if (!DEBUG)
                     ManageDocumentIssues documentIssues = new ManageDocumentIssues();
                     Task.Run(() => documentIssues.GenerateIssues(issueList));

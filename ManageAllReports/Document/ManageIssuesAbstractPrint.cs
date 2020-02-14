@@ -62,7 +62,7 @@ namespace TNCSCAPI.ManageAllReports.Document
         /// <param name="isDuplicate"></param>
         public void AddDocHeaderForIssues(StreamWriter streamWriter, List<GatePassIssuesEntity> stockIssuesEntity, GatePassCommonEntity gatePassCommon)
         {
-            var distReceiver= stockIssuesEntity.GroupBy(o => new { o.SINo,o.ReceivorName })
+            var distReceiver = stockIssuesEntity.GroupBy(o => new { o.SINo, o.ReceivorName })
                                    .Select(o => o.FirstOrDefault());
 
             string receiverdetais = string.Empty;
@@ -80,22 +80,29 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write(report.StringFormat(gatePassCommon.RName, 53, 2));
             streamWriter.WriteLine("");
             streamWriter.WriteLine("|                                                                                                             |");
-            streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                Abstract Print                 |");
+            if (gatePassCommon.Type == 2)
+            {
+                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                Abstract Duplicate Print       |");
+            }
+            else
+            {
+                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                Abstract Print                 |");
+            }
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.Write("|   GATE PASS NUMBER : ");
             streamWriter.Write(report.StringFormatWithoutPipe(gatePassCommon.GatePassNo, 27, 2));
-            streamWriter.Write("DATE     : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(ManageReport.GetCurrentDate(), 19, 2));
+            streamWriter.Write("GATE PASS DATE: ");
+            streamWriter.Write(report.StringFormatWithoutPipe(ManageReport.GetCurrentDate(), 15, 2));
             streamWriter.Write("TIME : ");
             streamWriter.Write(report.StringFormat(report.GetCurrentTime(DateTime.Now), 21, 2));
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|   ISSUING GODOWN   : ");
             streamWriter.Write(report.StringFormatWithoutPipe(gatePassCommon.GName, 27, 2));
-            streamWriter.Write("Doc DATE : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockIssuesEntity[0].SIDate.ToString()), 19, 2));
-            streamWriter.Write(report.StringFormatWithoutPipe((stockIssuesEntity[0].IssueRegularAdvance.ToUpper() == "R" ? "REGULAR" : "ADVANCE"), 9, 2));
-            streamWriter.Write(report.StringFormat(stockIssuesEntity[0].IRelates, 18, 2));
+            streamWriter.Write("Doc DATE      : ");
+            streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockIssuesEntity[0].SIDate.ToString()), 42, 2));
+            //streamWriter.Write(report.StringFormatWithoutPipe((stockIssuesEntity[0].IssueRegularAdvance.ToUpper() == "R" ? "REGULAR" : "ADVANCE"), 9, 2));
+            //streamWriter.Write(report.StringFormat(stockIssuesEntity[0].IRelates, 18, 2));
             streamWriter.WriteLine(" ");
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine("||                                                                                                            |");
@@ -121,13 +128,13 @@ namespace TNCSCAPI.ManageAllReports.Document
             double netKgs = 0;
             var resultSet = (from d in stockIssuesEntity
                              orderby d.ITName ascending
-                            group d by new { d.ITName, d.TStockNo,d.SchemeName,d.PName,d.Moisture } into groupedData
-                            select new
-                            {
-                                Netwt_Kgs = groupedData.Sum(s => s.Nkgs),
-                                No_Bags = groupedData.Sum(s => s.NoPacking),
-                                GroupByNames = groupedData.Key
-                            });
+                             group d by new { d.ITName, d.TStockNo, d.SchemeName, d.PName, d.Moisture } into groupedData
+                             select new
+                             {
+                                 Netwt_Kgs = groupedData.Sum(s => s.Nkgs),
+                                 No_Bags = groupedData.Sum(s => s.NoPacking),
+                                 GroupByNames = groupedData.Key
+                             });
 
             foreach (var item in resultSet)
             {
@@ -202,5 +209,6 @@ namespace TNCSCAPI.ManageAllReports.Document
         public string DocNumber { get; set; }
         public string GatePassNo { get; set; }
         public string UserID { get; set; }
+        public int Type { get; set; }
     }
 }
