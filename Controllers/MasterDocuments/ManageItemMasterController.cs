@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace TNCSCAPI.Controllers.MasterDocuments
 {
@@ -45,6 +47,23 @@ namespace TNCSCAPI.Controllers.MasterDocuments
             finally
             {
                 parameterList = null;
+            }
+        }
+        [HttpGet]
+        public string Get(int ItemType)
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> parameterList = new List<KeyValuePair<string, string>>();
+            DataSet ds = new DataSet();
+            try
+            {
+                parameterList.Add(new KeyValuePair<string, string>("@Type", ItemType.ToString()));
+                ds = manageSQLConnection.GetDataSetValues("GetItemMaster", parameterList);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
+            finally
+            {
+                ds.Dispose();
             }
         }
     }
