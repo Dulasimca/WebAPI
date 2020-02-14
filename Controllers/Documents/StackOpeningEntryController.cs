@@ -16,10 +16,14 @@ namespace TNCSCAPI.Controllers.Documents
         public Tuple<bool, bool> Post(StackOpeningEntity stackOpeningEntity = null)
         {
             ManageSQLConnection manageSQL = new ManageSQLConnection();
-             ManageStackCard manageStack = new ManageStackCard();
+            ManageStackCard manageStack = new ManageStackCard();
 
-            if (!string.IsNullOrEmpty(stackOpeningEntity.StackNo))
+            if (!string.IsNullOrEmpty(stackOpeningEntity.StackNo) && !string.IsNullOrEmpty(stackOpeningEntity.CurrYear))
             {
+                if (stackOpeningEntity.CurrYear.Length != 4 || stackOpeningEntity.CurrYear.ToUpper() == "NULL")
+                {
+                    return new Tuple<bool, bool>(false, false);
+                }
                 bool isInserted = false;
                 DataSet ds = new DataSet();
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
@@ -41,7 +45,7 @@ namespace TNCSCAPI.Controllers.Documents
                 return new Tuple<bool, bool>(false, false);
             }
         }
-        
+
         [HttpGet("{id}")]
         public string Get(string ICode, string GCode, string CurYear)
         {
@@ -62,7 +66,7 @@ namespace TNCSCAPI.Controllers.Documents
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@RowId", stackCardEntity.RowId));
-            sqlParameters.Add(new KeyValuePair<string, string>("@ClosedDate",  stackCardEntity.ClosedDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ClosedDate", stackCardEntity.ClosedDate));
             return manageSQLConnection.UpdateValues("UpdateStackDetails", sqlParameters);
         }
     }

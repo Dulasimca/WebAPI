@@ -40,8 +40,8 @@ namespace TNCSCAPI.ManageAllReports.Purchase
 
                 streamWriter = new StreamWriter(filePath, true);
                 WriteHoPurchase(streamWriter, entity);
-                List<HoPurchaseEntity> HoPurchase = new List<HoPurchaseEntity>();
-                HoPurchase = report.ConvertDataTableToList<HoPurchaseEntity>(entity.dataSet.Tables[0]);
+                //List<HoPurchaseEntity> HoPurchase = new List<HoPurchaseEntity>();
+                //HoPurchase = report.ConvertDataTableToList<HoPurchaseEntity>(entity.dataSet.Tables[0]);
 
                 streamWriter.Flush();
 
@@ -67,68 +67,91 @@ namespace TNCSCAPI.ManageAllReports.Purchase
         {
             int iCount = 10;
             var distinctCoop = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Depositor");
+            var distinctCommodity = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Commodity");
             //var distinctCommodity = entity.dataSet.Tables[0].DefaultView.ToTable(true, "Commodity");
             int i = 1;
             string sAckno = string.Empty;
             string sDepositor = string.Empty;
             string sCommodity = string.Empty;
             decimal dTotal = 0;
-            //decimal gTotal = 0;
+            decimal gTotal = 0;
+            bool dAvailable = false;
             AddHeaderForHoPurchase(sw, entity);
-            foreach (DataRow dateValue in distinctCoop.Rows)
-            {
-                iCount = 11;
-                bool CheckRepeatValue = false;
-                sAckno = string.Empty;
-                sDepositor = string.Empty;
-                DataRow[] datas = entity.dataSet.Tables[0].Select("Depositor='" + dateValue["Depositor"] + "'");
 
-                foreach (var item in datas)
+            foreach (DataRow CommodityValue in distinctCommodity.Rows)
+            {
+                gTotal = 0;
+                foreach (DataRow dateValue in distinctCoop.Rows)
                 {
-                    if (iCount >= 50)
+                    dAvailable = false;
+                    iCount = 11;
+                    bool CheckRepeatValue = false;
+                    sAckno = string.Empty;
+                    sDepositor = string.Empty;
+                    DataRow[] datas = entity.dataSet.Tables[0].Select("Depositor='" + dateValue["Depositor"] + "' and Commodity='"+ CommodityValue["Commodity"] + "'");
+
+                    foreach (var item in datas)
                     {
-                        //Add header again
-                        iCount = 11;
-                        sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------|");
-                        sw.WriteLine((char)12);
-                        AddHeaderForHoPurchase(sw, entity);
+                        dAvailable = true;
+                        if (iCount >= 50)
+                        {
+                            //Add header again
+                            iCount = 11;
+                            sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                            sw.WriteLine((char)12);
+                            AddHeaderForHoPurchase(sw, entity);
+                        }
+                        sDepositor = Convert.ToString(item["Depositor"]);
+                        if (sAckno == sDepositor)
+                        {
+                            CheckRepeatValue = true;
+                        }
+                        else
+                        {
+                            CheckRepeatValue = false;
+                            sAckno = sDepositor;
+                        }
+                        sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
+                        sw.Write(report.StringFormatWithoutPipe(item["Ackno"].ToString(), 11, 2));
+                        sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(item["Date"].ToString()), 10, 2));
+                        sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? sDepositor : " ", 35, 2));
+                        sw.Write(report.StringFormatWithoutPipe(item["Commodity"].ToString(), 27, 2));
+                        sw.Write(report.StringFormatWithoutPipe(item["Bags"].ToString(), 6, 1));
+                        sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item["Quantity"].ToString()), 14, 1));
+                        sw.Write(report.StringFormatWithoutPipe((item["TruckMen"].ToString()), 16, 2));
+                        sw.Write(report.StringFormatWithoutPipe((item["orderno"].ToString()), 14, 2));
+                        sw.Write(report.StringFormatWithoutPipe((item["Lorryno"].ToString()), 13, 2));
+                        sw.WriteLine("");
+                        iCount = iCount + 1;
+                        dTotal += Convert.ToDecimal(item["Quantity"].ToString());
+                        // gTotal += Convert.ToDecimal(item["Quantity"].ToString());
+
+                        i = i + 1;
                     }
-                    sDepositor = Convert.ToString(item["Depositor"]);
-                    if (sAckno == sDepositor)
+                    if (dAvailable)
                     {
-                        CheckRepeatValue = true;
+                        sw.Write(" ");
+                        sw.Write(report.StringFormatWithoutPipe(" ", 34, 2));
+                        sw.Write(report.StringFormatWithoutPipe("", 27, 2));
+                        sw.Write(report.StringFormatWithoutPipe("Total".ToString(), 11, 2));
+                        sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(dTotal.ToString()), 37, 1));
+                        gTotal += dTotal;
+                        dTotal = 0;
+                        sw.WriteLine("");
                     }
-                    else
-                    {
-                        CheckRepeatValue = false;
-                        sAckno = sDepositor;
-                    }
-                    sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
-                    sw.Write(report.StringFormatWithoutPipe(item["Ackno"].ToString(), 11, 2));
-                    sw.Write(report.StringFormatWithoutPipe(report.FormatDirectDate(item["Date"].ToString()), 10, 2));
-                    sw.Write(report.StringFormatWithoutPipe(CheckRepeatValue == false ? sDepositor : " ", 35, 2));
-                    sw.Write(report.StringFormatWithoutPipe(item["Commodity"].ToString(), 27, 2));
-                    sw.Write(report.StringFormatWithoutPipe(item["Bags"].ToString(), 6, 1));
-                    sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item["Quantity"].ToString()), 14, 1));
-                    sw.Write(report.StringFormatWithoutPipe((item["TruckMen"].ToString()), 16, 2));
-                    sw.Write(report.StringFormatWithoutPipe((item["orderno"].ToString()), 14, 2));
-                    sw.Write(report.StringFormatWithoutPipe((item["Lorryno"].ToString()), 13, 2));
-                    sw.WriteLine("");
-                    iCount = iCount + 1;
-                    dTotal += Convert.ToDecimal(item["Quantity"].ToString());
-                   // gTotal += Convert.ToDecimal(item["Quantity"].ToString());
-                    i = i + 1;
                 }
-                //sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------|");
                 sw.Write(" ");
                 sw.Write(report.StringFormatWithoutPipe(" ", 34, 2));
                 sw.Write(report.StringFormatWithoutPipe("", 27, 2));
-                sw.Write(report.StringFormatWithoutPipe("Total".ToString(), 11, 2));
-                sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(dTotal.ToString()), 37, 1));
+                sw.Write(report.StringFormatWithoutPipe("Grand Total".ToString(), 11, 2));
+                sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(gTotal.ToString()), 37, 1));
                 dTotal = 0;
                 sw.WriteLine("");
-               // sw.WriteLine("------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+                sw.WriteLine("---------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+
             }
+
+
         }
         /// <summary>
         /// Add header for Transaction receipt
