@@ -14,7 +14,7 @@ namespace TNCSCAPI.Controllers.GPS
     public class ProcessToGPSController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string RCode, string GCode, string Date)
+        public string Get(string RCode, string GCode, string FromDate,string ToDate)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
@@ -23,7 +23,8 @@ namespace TNCSCAPI.Controllers.GPS
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@RCode", RCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
-                sqlParameters.Add(new KeyValuePair<string, string>("@Date", Date));
+                sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", FromDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
                 ds = manageSQLConnection.GetDataSetValues("GetProcessToGPSData", sqlParameters);
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
