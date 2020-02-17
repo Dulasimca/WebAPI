@@ -20,7 +20,6 @@ namespace TNCSCAPI.ManageAllReports
         /// <param name="entity"></param>
         public void GenerateStockReceiptRegister(CommonEntity entity)
         {
-            AuditLog.WriteError("GenerateStockReceiptRegister");
             string fPath = string.Empty, subF_Path = string.Empty, fileName = string.Empty, filePath = string.Empty;
             StreamWriter streamWriter = null;
             try
@@ -92,9 +91,9 @@ namespace TNCSCAPI.ManageAllReports
             sw.WriteLine(" ");
             sw.WriteLine(" ");
             sw.WriteLine("Abstract:" + report.FormatDate(entity.FromDate) + " - " + report.FormatDate(entity.Todate) + "    Godown : " + GName + "       Region :" + RName);
-            sw.WriteLine("------------------------------------------------------------------------------------ ------------|");
-            sw.WriteLine("StackNo       |Commodity               |Packing Type          |No Bags      |Net Wt (in Kgs)/Nos |");
-            sw.WriteLine("-------------------------------------------------------------------------------------------------|");
+            sw.WriteLine("--------------------------------------------------------------------------|");
+            sw.WriteLine("StackNo       |Commodity               |No Bags      |Net Wt (in Kgs)/Nos |");
+            sw.WriteLine("--------------------------------------------------------------------------|");
         }
 
         /// <summary>
@@ -222,7 +221,7 @@ namespace TNCSCAPI.ManageAllReports
             int count = 11;
             var resultSet = from d in list
                             orderby d.Commodity ascending 
-                            group d by new { d.Stackno, d.Commodity,d.Packingtype } into groupedData
+                            group d by new { d.Stackno, d.Commodity } into groupedData
                             select new
                             {
                                 Netwt_Kgs = groupedData.Sum(s => s.NetWt),
@@ -236,19 +235,19 @@ namespace TNCSCAPI.ManageAllReports
                 if (count >= 50)
                 {
                     count = 11;
-                    sw.WriteLine("------------------------------------------------------------------------------------ ------------|");
+                    sw.WriteLine("--------------------------------------------------------------------------|");
                     sw.WriteLine((char)12);
                     AddHeaderforAbstractStackAndCommodity(sw, entity);
                 }
                 sw.Write(report.StringFormat(item.GroupByNames.Stackno, 14, 2));
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 24, 2));
-                sw.Write(report.StringFormat(item.GroupByNames.Packingtype.ToString(), 22, 2));
+               // sw.Write(report.StringFormat(item.GroupByNames.Packingtype.ToString(), 22, 2));
                 sw.Write(report.StringFormat(item.No_Bags.ToString(), 13, 2));
                 sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 20, 1));
                 count++;
                 sw.WriteLine("");
             }
-            sw.WriteLine("------------------------------------------------------------------------------------ ------------|");
+            sw.WriteLine("--------------------------------------------------------------------------|");
             sw.WriteLine((char)12);
         }
 
@@ -365,7 +364,7 @@ namespace TNCSCAPI.ManageAllReports
                     AddHeaderforAbstractCommodityWise(sw, entity);
                 }
                 sw.Write(report.StringFormat(item.GroupByNames.Commodity, 23, 2));
-                sw.Write(report.StringFormat(item.GroupByNames.Packingtype.ToString(), 22, 1));
+                sw.Write(report.StringFormat(item.GroupByNames.Packingtype.ToString(), 22, 2));
                 sw.Write(report.StringFormat(item.No_Bags.ToString(), 12, 1));
                 sw.Write(report.StringFormat(report.DecimalformatForWeight(item.Netwt_Kgs.ToString()), 22, 1));
                 count++;
