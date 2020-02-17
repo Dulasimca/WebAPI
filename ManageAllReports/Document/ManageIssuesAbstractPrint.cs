@@ -94,13 +94,13 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("GATE PASS DATE: ");
             streamWriter.Write(report.StringFormatWithoutPipe(ManageReport.GetCurrentDate(), 15, 2));
             streamWriter.Write("TIME : ");
-            streamWriter.Write(report.StringFormat(report.GetCurrentTime(DateTime.Now), 21, 2));
+            streamWriter.Write(report.StringFormat(report.GetCurrentTime(DateTime.Now), 20, 2));
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|   ISSUING GODOWN   : ");
             streamWriter.Write(report.StringFormatWithoutPipe(gatePassCommon.GName, 27, 2));
             streamWriter.Write("Doc DATE      : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockIssuesEntity[0].SIDate.ToString()), 42, 2));
+            streamWriter.Write(report.StringFormat(report.FormatDate(stockIssuesEntity[0].SIDate.ToString()), 43, 2));
             //streamWriter.Write(report.StringFormatWithoutPipe((stockIssuesEntity[0].IssueRegularAdvance.ToUpper() == "R" ? "REGULAR" : "ADVANCE"), 9, 2));
             //streamWriter.Write(report.StringFormat(stockIssuesEntity[0].IRelates, 18, 2));
             streamWriter.WriteLine(" ");
