@@ -87,8 +87,11 @@ namespace TNCSCAPI
                             DocumentNumber = SINo
                         };
                         ManageGatePass gatePass = new ManageGatePass();
-                       // gatePass.InsertGatePass(gatePassEntity);
-                        Task.Run(()=> gatePass.InsertGatePass(gatePassEntity));
+                        gatePass.InsertGatePass(gatePassEntity);
+                        //lock (gatePass)
+                        //{
+                        //    Task.Run(() => gatePass.InsertGatePass(gatePassEntity));
+                        //}
                     }
 
                     //#if (!DEBUG)
@@ -202,7 +205,7 @@ namespace TNCSCAPI
                     sqlConnection.Close();
                     sqlCommand.Dispose();
                     ds.Dispose();
-
+                    isNewDoc = false;
                 }
             }
         }
