@@ -23,6 +23,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", stackEntity.StackDate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@StacKNo", stackEntity.TStockNo));
                 sqlParameters.Add(new KeyValuePair<string, string>("@DocNo", stackEntity.DocNo));
+                sqlParameters.Add(new KeyValuePair<string, string>("@StackYear", stackEntity.StackYear));
                 ds = manageSQLConnection.GetDataSetValues("GetStackBalance", sqlParameters);
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }

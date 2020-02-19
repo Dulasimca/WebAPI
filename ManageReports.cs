@@ -410,6 +410,31 @@ namespace TNCSCAPI
 
         }
 
+        /// <summary>
+        /// Change the Date Format dd-MM-yyyy
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>Format dd-MM-yyyy</returns>
+        public string FormatDirectDate(DateTime date)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Convert.ToString(date)))
+                {
+                    return Convert.ToDateTime(date).ToString("MM/dd/yyyy");
+                }
+                return " ";
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("FormatDirectDate : " + ex.Message + " " + ex.StackTrace);
+                return " ";
+
+            }
+
+        }
+
+
 
         /// <summary>
         /// Change the Date Format dd-MM-yyyy

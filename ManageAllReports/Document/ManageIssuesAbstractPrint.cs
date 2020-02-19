@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using TNCSCAPI.DataTransfer;
 
 namespace TNCSCAPI.ManageAllReports.Document
 {
@@ -94,13 +96,13 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("GATE PASS DATE: ");
             streamWriter.Write(report.StringFormatWithoutPipe(ManageReport.GetCurrentDate(), 15, 2));
             streamWriter.Write("TIME : ");
-            streamWriter.Write(report.StringFormat(report.GetCurrentTime(DateTime.Now), 21, 2));
+            streamWriter.Write(report.StringFormat(report.GetCurrentTime(DateTime.Now), 20, 2));
             streamWriter.WriteLine(" ");
 
             streamWriter.Write("|   ISSUING GODOWN   : ");
             streamWriter.Write(report.StringFormatWithoutPipe(gatePassCommon.GName, 27, 2));
             streamWriter.Write("Doc DATE      : ");
-            streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockIssuesEntity[0].SIDate.ToString()), 42, 2));
+            streamWriter.Write(report.StringFormat(report.FormatDate(stockIssuesEntity[0].SIDate.ToString()), 43, 2));
             //streamWriter.Write(report.StringFormatWithoutPipe((stockIssuesEntity[0].IssueRegularAdvance.ToUpper() == "R" ? "REGULAR" : "ADVANCE"), 9, 2));
             //streamWriter.Write(report.StringFormat(stockIssuesEntity[0].IRelates, 18, 2));
             streamWriter.WriteLine(" ");
@@ -161,7 +163,6 @@ namespace TNCSCAPI.ManageAllReports.Document
 
         }
 
-
         /// <summary>
         /// Add footer for document receipt
         /// </summary>
@@ -181,6 +182,54 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine((char)12);
         }
+
+        public string GetDocumentNumber(List<GatePassIssuesEntity> gatePassIssues)
+        {
+            string documents = string.Empty;
+            var result = gatePassIssues.GroupBy(a => a.SINo).Select(g => g.First()).ToList();
+            foreach (var item in result)
+            {
+                documents += item.SINo + ",";
+            }
+            return documents.TrimEnd(',');
+        }
+
+        public void ProcessDataToGPS(DataSet dataSet, GatePassCommonEntity gatePassCommon)
+        {
+            List<GatePassIssuesEntity> stockIssueList = new List<GatePassIssuesEntity>();
+            stockIssueList = report.ConvertDataTableToList<GatePassIssuesEntity>(dataSet.Tables[0]);
+            InsertForGPS(stockIssueList, gatePassCommon);
+        }
+
+        public void InsertForGPS(List<GatePassIssuesEntity> gatePassIssues, GatePassCommonEntity gatePassCommon)
+        {
+            try
+            {
+                ManageDataTransfer dataTransfer = new ManageDataTransfer();
+                var distvalue = gatePassIssues.FirstOrDefault();
+                if (distvalue.IssueType == "TY002" || distvalue.IssueType == "TY003" || distvalue.IssueType == "TY004")
+                {
+                    ManageReport report = new ManageReport();
+                    DataTransferEntity dataTransferEntity = new DataTransferEntity
+                    {
+                        GCode = gatePassCommon.GCode,
+                        RCode = distvalue.IssuingCode,
+                        DocType = 2,
+                        TripType = 2,
+                        G2GStatus = 4,
+                        GPSStatus = 0,
+                        DocDate = report.FormatDirectDate(distvalue.SIDate),
+                        DocNumber = GetDocumentNumber(gatePassIssues)
+                    };
+                    dataTransfer.InsertDataTransfer(dataTransferEntity);
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message);
+            }
+
+        }
     }
     public class GatePassIssuesEntity
     {
@@ -199,6 +248,8 @@ namespace TNCSCAPI.ManageAllReports.Document
         public double GKgs { get; set; }
         public double Nkgs { get; set; }
         public string IssueRegularAdvance { get; set; }
+        public string IssueType { get; set; }
+        public string IssuingCode { get; set; }
     }
 
     public class GatePassCommonEntity

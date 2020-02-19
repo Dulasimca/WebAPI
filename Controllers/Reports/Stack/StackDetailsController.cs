@@ -25,7 +25,15 @@ namespace TNCSCAPI.Controllers.Reports.Stack
                 sqlParameters.Add(new KeyValuePair<string, string>("@Fyear", stackEntity.StackYear));
                 ds = manageSQLConnection.GetDataSetValues("GetStackcardDetails", sqlParameters);
                 return JsonConvert.SerializeObject(ds.Tables[0]);
-            }      
+            }     
+            else if (stackEntity.Type == 2)
+            {
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", stackEntity.GCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", stackEntity.ItemCode));
+                ds = manageSQLConnection.GetDataSetValues("GetStackCardByCommodity", sqlParameters);
+                return JsonConvert.SerializeObject(ds.Tables[0]);
+            }
             return string.Empty;
         }
     }
@@ -34,7 +42,7 @@ namespace TNCSCAPI.Controllers.Reports.Stack
         public string GCode { get; set; }
         public string StackYear { get; set; }
         public int Type { get; set; }
-
+        public string ItemCode { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }
         public string UserName { get; set; }
