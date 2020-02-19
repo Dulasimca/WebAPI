@@ -24,8 +24,9 @@ namespace TNCSCAPI.Controllers.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@GCode", entity.GCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Remarks", entity.Remarks));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Status", entity.Status));
-                ds = manageSQL.GetDataSetValues("UpdateStackDetails", sqlParameters);
-                return new Tuple<bool, string> (true, JsonConvert.SerializeObject(ds.Tables[0]));
+                sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", entity.FromDate));
+            ds = manageSQL.GetDataSetValues("UpdateStackDetails", sqlParameters);
+                return new Tuple<bool, string> (true, JsonConvert.SerializeObject(ds));
             
         }
     }
