@@ -207,7 +207,12 @@ namespace TNCSCAPI.ManageAllReports.Document
             {
                 ManageDataTransfer dataTransfer = new ManageDataTransfer();
                 var distvalue = gatePassIssues.FirstOrDefault();
-                if (distvalue.IssueType == "TY002" || distvalue.IssueType == "TY003" || distvalue.IssueType == "TY004")
+                if (distvalue.IssueType == "TY005" || distvalue.IssueType == "TY006" || distvalue.IssueType == "TY004" ||
+                   distvalue.IssueType == "TY007" || distvalue.IssueType == "TY008" || distvalue.IssueType == "TY009" ||
+                   distvalue.IssueType == "TY011" || distvalue.IssueType == "TY012" || distvalue.IssueType == "TY016" ||
+                   distvalue.IssueType == "TY017" || distvalue.IssueType == "TY023" || distvalue.IssueType == "TY024" ||
+                   distvalue.IssueType == "TY025" || distvalue.IssueType == "TY026" || distvalue.IssueType == "TY029" ||
+                   distvalue.IssueType == "TY030")
                 {
                     ManageReport report = new ManageReport();
                     DataTransferEntity dataTransferEntity = new DataTransferEntity
