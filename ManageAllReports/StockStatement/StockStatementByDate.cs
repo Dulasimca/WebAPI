@@ -167,7 +167,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
     public class DailyStockDetailsEntity
     {
         public string ItemCode { get; set; }
-        public string Date { get; set; }
+        public string DocDate { get; set; }
         public string GName { get; set; }
         public decimal TNCSCapacity { get; set; }
         public string RName { get; set; }
