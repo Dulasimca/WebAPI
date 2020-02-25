@@ -207,12 +207,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             {
                 ManageDataTransfer dataTransfer = new ManageDataTransfer();
                 var distvalue = gatePassIssues.FirstOrDefault();
-                if (distvalue.IssueType == "TY005" || distvalue.IssueType == "TY006" || distvalue.IssueType == "TY004" ||
-                   distvalue.IssueType == "TY007" || distvalue.IssueType == "TY008" || distvalue.IssueType == "TY009" ||
-                   distvalue.IssueType == "TY011" || distvalue.IssueType == "TY012" || distvalue.IssueType == "TY016" ||
-                   distvalue.IssueType == "TY017" || distvalue.IssueType == "TY023" || distvalue.IssueType == "TY024" ||
-                   distvalue.IssueType == "TY025" || distvalue.IssueType == "TY026" || distvalue.IssueType == "TY029" ||
-                   distvalue.IssueType == "TY030")
+                if (GPSInsert(distvalue.IssueType))
                 {
                     ManageReport report = new ManageReport();
                     DataTransferEntity dataTransferEntity = new DataTransferEntity
@@ -234,6 +229,28 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AuditLog.WriteError(ex.Message);
             }
 
+        }
+
+        public bool GPSInsert(string Value)
+        {
+            bool isInsert = false;
+            try
+            {
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+
+                List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
+                sqlParameters1.Add(new KeyValuePair<string, string>("@TypeValue", Value));
+                var result1 = manageSQLConnection.GetDataSetValues("GetDataInsertTOGPS", sqlParameters1);
+                if (result1.Tables[0].Rows.Count > 0)
+                {
+                    isInsert = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GPSInsert : " + ex.Message);
+            }
+            return isInsert;
         }
     }
     public class GatePassIssuesEntity

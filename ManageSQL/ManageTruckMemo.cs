@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using TNCSCAPI.DataTransfer;
 using TNCSCAPI.ManageAllReports.Document;
 using TNCSCAPI.Models.Documents;
-using System.Collections.Generic;
-using TNCSCAPI.DataTransfer;
 
 namespace TNCSCAPI.ManageSQL
 {
@@ -21,7 +21,7 @@ namespace TNCSCAPI.ManageSQL
         /// </summary>
         /// <param name="deliveryOrderEntity">Delivery order details entity</param>
         /// <returns></returns>
-        public Tuple<bool, string,string> InsertTruckMemoEntry(DocumentStockTransferDetails documentStockTransferDetails)
+        public Tuple<bool, string, string> InsertTruckMemoEntry(DocumentStockTransferDetails documentStockTransferDetails)
         {
             SqlTransaction objTrans = null;
             string RowID = string.Empty, STNo = string.Empty;
@@ -33,7 +33,7 @@ namespace TNCSCAPI.ManageSQL
                 sqlCommand = new SqlCommand();
                 try
                 {
-                    if(documentStockTransferDetails.STNo.Length>5)
+                    if (documentStockTransferDetails.STNo.Length > 5)
                     {
                         isNewDoc = false;
                     }
@@ -74,26 +74,25 @@ namespace TNCSCAPI.ManageSQL
                     STNo = (string)sqlCommand.Parameters["@STNo"].Value;
 
                     documentStockTransferDetails.STNo = STNo;
-
-                    //#if (!DEBUG)
                     ManageDocumentTruckMemo documentTruckMemo = new ManageDocumentTruckMemo();
                     Task.Run(() => documentTruckMemo.GenerateTruckMemo(documentStockTransferDetails));
 
-                    if(isNewDoc)
+                    if (isNewDoc)
                     {
-                        ManageDataTransfer dataTransfer = new ManageDataTransfer();
-                        DataTransferEntity transferEntity = new DataTransferEntity();
-                        transferEntity.DocNumber = STNo;
-                        transferEntity.DocDate = documentStockTransferDetails.STDate;
-                        transferEntity.DocType = 3;
-                        transferEntity.TripType = 1;
-                        transferEntity.RCode = documentStockTransferDetails.RCode;
-                        transferEntity.GCode = documentStockTransferDetails.IssuingCode;
-                        transferEntity.G2GStatus = 4;
-                        transferEntity.GPSStatus = 0;
-                        // dataTransfer.InsertDataTransfer(transferEntity);
-                        Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
-                        
+                        if (CheckValidGodown(documentStockTransferDetails.ReceivingCode.Trim()))
+                        {
+                            ManageDataTransfer dataTransfer = new ManageDataTransfer();
+                            DataTransferEntity transferEntity = new DataTransferEntity();
+                            transferEntity.DocNumber = STNo;
+                            transferEntity.DocDate = documentStockTransferDetails.STDate;
+                            transferEntity.DocType = 3;
+                            transferEntity.TripType = 1;
+                            transferEntity.RCode = documentStockTransferDetails.RCode;
+                            transferEntity.GCode = documentStockTransferDetails.IssuingCode;
+                            transferEntity.G2GStatus = 4;
+                            transferEntity.GPSStatus = 0;
+                            dataTransfer.InsertDataTransfer(transferEntity);
+                        }
                     }
 
                     //Delete Sr Item Details
@@ -178,14 +177,14 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
                     objTrans.Commit();
-                    return new Tuple<bool, string,string>(true, GlobalVariable.SavedMessage + STNo, STNo);
+                    return new Tuple<bool, string, string>(true, GlobalVariable.SavedMessage + STNo, STNo);
 
                 }
                 catch (Exception ex)
                 {
                     AuditLog.WriteError(ex.Message + " : " + ex.StackTrace);
                     objTrans.Rollback();
-                    return new Tuple<bool, string,string>(false, GlobalVariable.ErrorMessage, "");
+                    return new Tuple<bool, string, string>(false, GlobalVariable.ErrorMessage, "");
                 }
                 finally
                 {
@@ -195,8 +194,31 @@ namespace TNCSCAPI.ManageSQL
                     dataAdapter = null;
                 }
             }
-
         }
+        public bool CheckValidGodown(string GCode)
+        {
+            bool isActive = false;
+            try
+            {
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
+                sqlParameters1.Add(new KeyValuePair<string, string>("@TNCSCode", GCode));
+                var result1 = manageSQLConnection.GetDataSetValues("GetValidGodownForGPS", sqlParameters1);
+                if (result1 != null)
+                {
+                    if (result1.Tables[0].Rows.Count > 0)
+                    {
+                        isActive = true;
+                    }
+                }
 
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("CheckValidGodown : " + ex.Message + " " + ex.StackTrace);
+                isActive = false;
+            }
+            return isActive;
+        }
     }
 }

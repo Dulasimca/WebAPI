@@ -223,7 +223,8 @@ namespace TNCSCAPI
 
                     if (isNewDoc)
                     {
-                        if (receiptList.Trcode == "TR004" || receiptList.Trcode == "TR021") // ACK only Transfer and Internal Transfer
+                        ManageIssuesAbstractPrint issuesAbstractPrint = new ManageIssuesAbstractPrint();
+                        if (issuesAbstractPrint.GPSInsert(receiptList.Trcode)) // ACK only Transfer and Internal Transfer
                         {
                             ManageDataTransfer dataTransfer = new ManageDataTransfer();
                             DataTransferEntity transferEntity = new DataTransferEntity();
