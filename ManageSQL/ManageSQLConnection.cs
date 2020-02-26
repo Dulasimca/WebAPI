@@ -223,19 +223,22 @@ namespace TNCSCAPI
 
                     if (isNewDoc)
                     {
-                        ManageDataTransfer dataTransfer = new ManageDataTransfer();
-                        DataTransferEntity transferEntity = new DataTransferEntity();
-                        transferEntity.DocNumber = SRNo;
-                        transferEntity.DocDate = receiptList.SRDate;
-                        transferEntity.DocType = 1;
-                        transferEntity.TripType = 3;
-                        transferEntity.RCode = receiptList.RCode;
-                        transferEntity.GCode = receiptList.ReceivingCode;
-                        transferEntity.G2GStatus = 4;
-                        transferEntity.GPSStatus = 0;
-                        // dataTransfer.InsertDataTransfer(transferEntity);
-                        Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
-
+                        ManageIssuesAbstractPrint issuesAbstractPrint = new ManageIssuesAbstractPrint();
+                        if (issuesAbstractPrint.GPSInsert(receiptList.Trcode)) // ACK only Transfer and Internal Transfer
+                        {
+                            ManageDataTransfer dataTransfer = new ManageDataTransfer();
+                            DataTransferEntity transferEntity = new DataTransferEntity();
+                            transferEntity.DocNumber = SRNo;
+                            transferEntity.DocDate = receiptList.SRDate;
+                            transferEntity.DocType = 1;
+                            transferEntity.TripType = 3;
+                            transferEntity.RCode = receiptList.RCode;
+                            transferEntity.GCode = receiptList.ReceivingCode;
+                            transferEntity.G2GStatus = 4;
+                            transferEntity.GPSStatus = 0;
+                            // dataTransfer.InsertDataTransfer(transferEntity);
+                            Task.Run(() => dataTransfer.InsertDataTransfer(transferEntity));
+                        }
                     }
                     //Delete Sr Item Details
                     sqlCommand.Parameters.Clear();

@@ -207,7 +207,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             {
                 ManageDataTransfer dataTransfer = new ManageDataTransfer();
                 var distvalue = gatePassIssues.FirstOrDefault();
-                if (distvalue.IssueType == "TY002" || distvalue.IssueType == "TY003" || distvalue.IssueType == "TY004")
+                if (GPSInsert(distvalue.IssueType))
                 {
                     ManageReport report = new ManageReport();
                     DataTransferEntity dataTransferEntity = new DataTransferEntity
@@ -229,6 +229,28 @@ namespace TNCSCAPI.ManageAllReports.Document
                 AuditLog.WriteError(ex.Message);
             }
 
+        }
+
+        public bool GPSInsert(string Value)
+        {
+            bool isInsert = false;
+            try
+            {
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+
+                List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
+                sqlParameters1.Add(new KeyValuePair<string, string>("@TypeValue", Value));
+                var result1 = manageSQLConnection.GetDataSetValues("GetDataInsertTOGPS", sqlParameters1);
+                if (result1.Tables[0].Rows.Count > 0)
+                {
+                    isInsert = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GPSInsert : " + ex.Message);
+            }
+            return isInsert;
         }
     }
     public class GatePassIssuesEntity
