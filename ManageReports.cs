@@ -462,6 +462,24 @@ namespace TNCSCAPI
         /// </summary>
         /// <param name="date"></param>
         /// <returns>Format dd-MM-yyyy</returns>
+        public string FormatIndianDate(DateTime date)
+        {
+            try
+            {
+                return date.ToString("dd-MM-yyyy");
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("FormatIndianDate : " + ex.Message);
+                return " ";
+            }
+
+        }
+        /// <summary>
+        /// Change the Date Format dd-MM-yyyy
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>Format dd-MM-yyyy</returns>
         public string GetTime(string date)
         {
             try

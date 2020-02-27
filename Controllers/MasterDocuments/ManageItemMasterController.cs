@@ -39,6 +39,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                     parameterList.Add(new KeyValuePair<string, string>("@SFlag", Convert.ToString(commodityEntity.SFlag)));
                     parameterList.Add(new KeyValuePair<string, string>("@CBFlag", Convert.ToString(commodityEntity.CBFlag)));
                     parameterList.Add(new KeyValuePair<string, string>("@Unit", Convert.ToString(commodityEntity.Unit)));
+                    parameterList.Add(new KeyValuePair<string, string>("@Group", Convert.ToString(commodityEntity.Group)));
                     return manageSQLConnection.InsertData("InsertItemMaster", parameterList);
                 }
                 //return manageSQLConnection.InsertData("InsertItemMaster", parameterList);
@@ -83,5 +84,6 @@ namespace TNCSCAPI.Controllers.MasterDocuments
         public bool SFlag { get; set; }
         public bool CBFlag { get; set; }
         public string Unit { get; set; }
+        public int Group { get; set; }
     }
 }

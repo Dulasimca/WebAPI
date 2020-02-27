@@ -78,16 +78,19 @@ namespace TNCSCAPI
                     //insert record into gatepass table
                     if (isNewDoc)
                     {
-                        GatePassEntity gatePassEntity = new GatePassEntity
+                        if (issueList.IssuingCode.Trim() != issueList.Receivorcode.Trim())
                         {
-                            LorryNumber = issueList.LorryNo,
-                            DocumentTye = 2,
-                            GCode = issueList.IssuingCode,
-                            RCode = issueList.RCode,
-                            DocumentNumber = SINo
-                        };
-                        ManageGatePass gatePass = new ManageGatePass();
-                        gatePass.InsertGatePass(gatePassEntity);
+                            GatePassEntity gatePassEntity = new GatePassEntity
+                            {
+                                LorryNumber = issueList.LorryNo,
+                                DocumentTye = 2,
+                                GCode = issueList.IssuingCode,
+                                RCode = issueList.RCode,
+                                DocumentNumber = SINo
+                            };
+                            ManageGatePass gatePass = new ManageGatePass();
+                            gatePass.InsertGatePass(gatePassEntity);
+                        }
                         //lock (gatePass)
                         //{
                         //    Task.Run(() => gatePass.InsertGatePass(gatePassEntity));
