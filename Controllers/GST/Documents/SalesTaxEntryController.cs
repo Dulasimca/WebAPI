@@ -20,10 +20,6 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Month", salesTax.Month));
             sqlParameters.Add(new KeyValuePair<string, string>("@Year", salesTax.Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@CompanyName", salesTax.CompanyName));
-            sqlParameters.Add(new KeyValuePair<string, string>("@TIN", salesTax.TIN));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Pan", salesTax.Pan));
-            sqlParameters.Add(new KeyValuePair<string, string>("@GSTNo", salesTax.GST));
-            sqlParameters.Add(new KeyValuePair<string, string>("@StateCode", salesTax.State));
             sqlParameters.Add(new KeyValuePair<string, string>("@AccYear", salesTax.AccYear));
             sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", salesTax.BillNo));
             sqlParameters.Add(new KeyValuePair<string, string>("@BillDate", salesTax.BillDate));
@@ -31,6 +27,9 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxType", salesTax.TaxType));
             sqlParameters.Add(new KeyValuePair<string, string>("@Measurement", salesTax.Measurement));
             sqlParameters.Add(new KeyValuePair<string, string>("@CreditSales", salesTax.CreditSales.ToString().ToLower() == "false" ? "0" : "1"));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GSTType", salesTax.GSTType));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Scheme", salesTax.Scheme));
+            sqlParameters.Add(new KeyValuePair<string, string>("@AADS", salesTax.AADS));
             sqlParameters.Add(new KeyValuePair<string, string>("@SGST", salesTax.SGST));
             sqlParameters.Add(new KeyValuePair<string, string>("@CGST", salesTax.CGST));
             sqlParameters.Add(new KeyValuePair<string, string>("@Hsncode", salesTax.Hsncode));
@@ -40,7 +39,6 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxPercentage", salesTax.TaxPercentage));
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxAmount", salesTax.TaxAmount));
             sqlParameters.Add(new KeyValuePair<string, string>("@Total", salesTax.Total));
-            sqlParameters.Add(new KeyValuePair<string, string>("@AccRegion", salesTax.AccRegion));
             sqlParameters.Add(new KeyValuePair<string, string>("@CreatedBy", salesTax.CreatedBy));
             sqlParameters.Add(new KeyValuePair<string, string>("@CreatedDate", salesTax.CreatedDate.ToString("MM/dd/yyyy")));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", salesTax.GCode));
@@ -49,7 +47,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
         }
 
         [HttpGet("{id}")]
-        public string Get(string RCode, string GCode, string Month, string Year, string AccountingYear)
+        public string Get(string RCode, string GCode, string Month, string Year, string AccountingYear, string GSTType)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -60,6 +58,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Month", Month));
             sqlParameters.Add(new KeyValuePair<string, string>("@Year", Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@AccountingYear", AccountingYear));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GType", GSTType));
             ds = manageSQLConnection.GetDataSetValues("GetSalesTaxdetails", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
@@ -72,7 +71,6 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string SalesID { get; set; }
         public string Year { get; set; }
         public string CompanyName { get; set; }
-        public string TIN { get; set; }
         public string BillNo { get; set; }
         public string BillDate { get; set; }
         public string CommodityName { get; set; }
@@ -90,13 +88,12 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string Total { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
-        public string AccRegion { get; set; }
         public string AccYear { get; set; }
-        public string State { get; set; }
-        public string GST { get; set; }
-        public string Pan { get; set; }
         public string GCode { get; set; }
         public string RCode { get; set; }
         public string RoleId { get; set; }
+        public string GSTType { get; set; }
+        public string Scheme { get; set; }
+        public string AADS { get; set; }
     }
 }
