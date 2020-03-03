@@ -112,7 +112,7 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
                                             EnumQAIssuesHeaderParameter.WRITEOFF.ToString());
 
 
-                            _Total = _RecPURCHASE + _RecHOPURCHASE + _RecHULLING + _RecGUNNYRELEASE + _RecEXCESS;
+                            _Total = _RecPURCHASE + _RecHOPURCHASE + _RecHULLING + _RecGUNNYRELEASE + _RecEXCESS + _RecTRANSFERWITHINREGION + _RecTRANSFEROTHERREGION;
                             objectEntity.OpeningBalance = _OpeningBalance;
                             objectEntity.RecPURCHASE = _RecPURCHASE;
                             objectEntity.RecHULLING = _RecHULLING;
@@ -130,7 +130,7 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
                             objectEntity.IsSALES = _IsSALES;
                             objectEntity.IsGUNNYRELEASE = _IsGUNNYRELEASE;
                             objectEntity.IsMENDING = _IsMENDING;
-                            _IsTotalSales = _IsSALES + _IsGUNNYRELEASE + _IsMENDING + _IsWRITEOFF;
+                            _IsTotalSales = _IsSALES + _IsGUNNYRELEASE + _IsMENDING + _IsWRITEOFF + _IsTRANSFERWITHINREGION + _IsTRANSFEROTHERREGION;
                             objectEntity.IsTotalSales = _IsTotalSales;
                             objectEntity.IsTRANSFERWITHINREGION = _IsTRANSFERWITHINREGION;
                             objectEntity.IsTRANSFEROTHERREGION = _IsTRANSFEROTHERREGION;
