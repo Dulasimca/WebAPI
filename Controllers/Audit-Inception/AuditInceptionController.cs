@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TNCSCAPI.ManageSQL;
 
 namespace TNCSCAPI.Controllers.Audit_Inception
@@ -19,7 +21,20 @@ namespace TNCSCAPI.Controllers.Audit_Inception
             manageSQL.InsertInceptionDetails(entity);
             return new Tuple<bool, string>(true, "Saved Successfully!");
         }
+
+        [HttpGet("{id}")]
+        public string Get(string IDate, string GCode)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@IDate", IDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+            ds = manageSQLConnection.GetDataSetValues("GetInceptionDetails", sqlParameters);
+            return JsonConvert.SerializeObject(ds);
+        }
     }
+
 
     public class AuditInceptionEntity
     {

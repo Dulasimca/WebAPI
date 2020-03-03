@@ -46,6 +46,7 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.AddWithValue("@InceptionDate", entity.InceptionDate);
                     sqlCommand.Parameters.AddWithValue("@Remarks", entity.Remarks);
                     sqlCommand.Parameters.AddWithValue("@GCode", entity.GCode);
+                    sqlCommand.Parameters.AddWithValue("@RCode", entity.RCode);
                     sqlCommand.Parameters.AddWithValue("@InceptionID1", entity.InceptionID);
                     sqlCommand.Parameters.Add("@InceptionID", SqlDbType.Int, 30);
                     sqlCommand.Parameters["@InceptionID"].Direction = ParameterDirection.Output;
