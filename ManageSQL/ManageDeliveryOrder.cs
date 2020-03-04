@@ -186,6 +186,50 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.ExecuteNonQuery();
                     }
 
+                    if (deliveryOrderEntity.DOTaxStatus == "YES") {
+                        var creditSales = (deliveryOrderEntity.TransactionCode == "TR019") ? true : false;
+                        double gst = 0, taxPercent = 0, taxAmnt = 0, rate = 0, amnt = 0;
+                        foreach (var item in deliveryOrderEntity.documentDeliveryItems)
+                        {
+                            sqlCommand.Parameters.Clear();
+                            sqlCommand.Dispose();
+                            sqlCommand = new SqlCommand();
+                            sqlCommand.Transaction = objTrans;
+                            sqlCommand.Connection = sqlConnection;
+                            sqlCommand.CommandText = "InsertIntoGSTSalesTax";
+                            sqlCommand.CommandType = CommandType.StoredProcedure;
+                            sqlCommand.Parameters.AddWithValue("@BillNo", SRNo);
+                            sqlCommand.Parameters.AddWithValue("@BillDate", deliveryOrderEntity.DoDate);
+                            sqlCommand.Parameters.AddWithValue("@Month", deliveryOrderEntity.Month);
+                            sqlCommand.Parameters.AddWithValue("@Year", deliveryOrderEntity.Year);
+                            sqlCommand.Parameters.AddWithValue("@CompanyID", deliveryOrderEntity.ReceivorCode);
+                            sqlCommand.Parameters.AddWithValue("@CreditSales", creditSales);
+                            sqlCommand.Parameters.AddWithValue("@TaxPercentage", item.TaxPercent);
+                            sqlCommand.Parameters.AddWithValue("@CommodityID", item.Itemcode);
+                            sqlCommand.Parameters.AddWithValue("@TaxType", "CGST");
+                            sqlCommand.Parameters.AddWithValue("@Measurement", item.Wtype);
+                            sqlCommand.Parameters.AddWithValue("@Quantity", item.NetWeight);
+                            taxPercent = (Convert.ToDouble(item.TaxPercent) / 2);
+                            rate = ((Convert.ToDouble(item.Rate)) - ((Convert.ToDouble(item.Rate) * Convert.ToDouble(item.TaxPercent)) / 100));
+                            sqlCommand.Parameters.AddWithValue("@Rate", rate);
+                            amnt = (Convert.ToDouble(item.NetWeight) * rate);
+                            sqlCommand.Parameters.AddWithValue("@Amount", amnt);
+                            gst = ((amnt * taxPercent) / 100);
+                            sqlCommand.Parameters.AddWithValue("@CGST", gst);
+                            sqlCommand.Parameters.AddWithValue("@SGST", gst);
+                            taxAmnt = (gst * 2);
+                            sqlCommand.Parameters.AddWithValue("@TaxAmount", taxAmnt);
+                            sqlCommand.Parameters.AddWithValue("@Total", (amnt + taxAmnt));
+                            sqlCommand.Parameters.AddWithValue("@RCode", item.Rcode);
+                            sqlCommand.Parameters.AddWithValue("@GCode", deliveryOrderEntity.IssuerCode);
+                            sqlCommand.Parameters.AddWithValue("@CreatedBy", deliveryOrderEntity.UserID);
+                            sqlCommand.Parameters.AddWithValue("@Scheme", item.Scheme);
+                            sqlCommand.Parameters.AddWithValue("@DORate", item.Rate);
+                            sqlCommand.Parameters.AddWithValue("@DOTotal", item.Total);
+                            sqlCommand.ExecuteNonQuery();
+                        }
+                    }
+
                     //Insert SRT Details table
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();

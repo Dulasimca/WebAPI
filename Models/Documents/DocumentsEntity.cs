@@ -153,6 +153,8 @@ namespace TNCSCAPI.Models.Documents
         public string Flag1 { get; set; }
         public string Flag2 { get; set; }
         public string dotime { get; set; }
+        public string Month { get; set; }
+        public string Year { get; set; }
 
         public string GodownName { get; set; }
         public string TransactionName { get; set; }
@@ -160,6 +162,7 @@ namespace TNCSCAPI.Models.Documents
         public string UserID { get; set; }
         public string ReceivorName { get; set; }
         public int Type { get; set; }
+        public string DOTaxStatus { get; set; }
 
         public List<DocumentDeliveryItemDetails> documentDeliveryItems { get; set; }
         public List<DocumentDeliveryAdjustmentDetails> deliveryAdjustmentDetails { get; set; }
@@ -180,6 +183,7 @@ namespace TNCSCAPI.Models.Documents
         public string Flag2 { get; set; }
         public string ITDescription { get; set; }
         public string SchemeName { get; set; }
+        public string TaxPercent { get; set; }
     }
     public class DocumentDeliveryAdjustmentDetails
     {
