@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data;
 
 namespace TNCSCAPI.Controllers.Reports.GtoG
 {
     public class ManageGtoG
     {
-        public Tuple<bool,GToGEntity> CheckIssueMemoNumber(string IssueMomo)
+        public Tuple<bool, GToGEntity> CheckIssueMemoNumber(string IssueMomo)
         {
             GToGEntity gEntity = new GToGEntity();
             bool isAvailable = false;
@@ -19,7 +17,7 @@ namespace TNCSCAPI.Controllers.Reports.GtoG
                 ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", IssueMomo));
-                dataset= manageSQLConnection.GetDataSetValues("CheckIssueMomo", sqlParameters);
+                dataset = manageSQLConnection.GetDataSetValues("CheckIssueMomo", sqlParameters);
                 ManageReport manageReport = new ManageReport();
                 if (manageReport.CheckDataAvailable(dataset))
                 {
@@ -37,7 +35,7 @@ namespace TNCSCAPI.Controllers.Reports.GtoG
             }
             catch (Exception ex)
             {
-                AuditLog.WriteError(ex.Message);
+                AuditLog.WriteError(ex.Message + " " + ex.StackTrace);
                 gEntity.StatusCode = "2000";
                 gEntity.Message = "Internal Error";
                 gEntity.IssueMemoNumber = IssueMomo;
