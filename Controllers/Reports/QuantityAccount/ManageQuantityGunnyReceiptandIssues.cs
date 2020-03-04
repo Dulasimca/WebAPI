@@ -34,10 +34,10 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
                 sqlParameters.Add(new KeyValuePair<string, string>("@RCode", quantityAccountEntity.RCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@FromDate", quantityAccountEntity.FromDate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", quantityAccountEntity.ToDate));
-                todayIssues = manageSQLConnection.GetDataSetValues("GetTodayIssuesForQuantityAccount", sqlParameters);
-                todayReceipt = manageSQLConnection.GetDataSetValues("GetTodayReceiptForQuantityAccount", sqlParameters);
-                issuesUptoYesterday = manageSQLConnection.GetDataSetValues("GetIssuesUptoYesterForQuantityAccount", sqlParameters);
-                receiptUptoYesterday = manageSQLConnection.GetDataSetValues("GetReceiptUptoYesterForQuantityAccount", sqlParameters);
+                todayIssues = manageSQLConnection.GetDataSetValues("GetTodayIssuesForGunnyQuantityAccount", sqlParameters);
+                todayReceipt = manageSQLConnection.GetDataSetValues("GetTodayReceiptForGunnyQuantityAccount", sqlParameters);
+                issuesUptoYesterday = manageSQLConnection.GetDataSetValues("GetIssuesUptoYesterForGunnyQuantityAccount", sqlParameters);
+                receiptUptoYesterday = manageSQLConnection.GetDataSetValues("GetReceiptUptoYesterForGunnyQuantityAccount", sqlParameters);
                 if (dataSetMaster.Tables.Count > 0)
                 {
                     foreach (DataRow item in dataSetMaster.Tables[1].Rows) // item master details.
