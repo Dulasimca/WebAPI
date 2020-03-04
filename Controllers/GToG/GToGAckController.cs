@@ -14,10 +14,11 @@ namespace TNCSCAPI.Controllers.GToG
         public GToGEntity Post(GToGParameter gtog)
         {
             bool isUpdated = false;
+            string details = JsonConvert.SerializeObject(gtog);
+            AuditLog.WriteError(details);
             if (!string.IsNullOrEmpty(gtog.IssueMemoNumber))
             {
                 ManageGtoG manageGtoG = new ManageGtoG();
-                AuditLog.WriteError("IssueMemoNumber is : " + gtog.IssueMemoNumber);
                 //Check issuememo number
                 var result = manageGtoG.CheckIssueMemoNumber(gtog.IssueMemoNumber);
                 if (result.Item1)
@@ -33,30 +34,38 @@ namespace TNCSCAPI.Controllers.GToG
                     return result.Item2;
                 }
             }
-            else
-            {
-                AuditLog.WriteError("IssueMemoNumber is : " + gtog.IssueMemoNumber);
-            }
-
             return GetNullIssuememo(gtog.IssueMemoNumber);
         }
 
         [HttpGet("{id}")]
-        public string Get(string IssueMemoNumber)
+        public GToGEntity Get(string IssueMemoNumber)
         {
             bool isUpdated = false;
-            if (!string.IsNullOrEmpty(IssueMemoNumber) && IssueMemoNumber.Length > 3)
+            if (!string.IsNullOrEmpty(IssueMemoNumber))
             {
-                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", IssueMemoNumber));
-                isUpdated = manageSQLConnection.UpdateValues("UpdateGToGAck", sqlParameters);
+                ManageGtoG manageGtoG = new ManageGtoG();
+                AuditLog.WriteError("IssueMemoNumber is : " + IssueMemoNumber);
+                //Check issuememo number
+                var result = manageGtoG.CheckIssueMemoNumber(IssueMemoNumber);
+                if (result.Item1)
+                {
+                    ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", IssueMemoNumber));
+                    isUpdated = manageSQLConnection.UpdateValues("UpdateGToGAck", sqlParameters);
+                    return GetMessage(IssueMemoNumber, isUpdated);
+                }
+                else
+                {
+                    return result.Item2;
+                }
             }
             else
             {
-                isUpdated = false;
+                AuditLog.WriteError("IssueMemoNumber is : " + IssueMemoNumber);
             }
-            return JsonConvert.SerializeObject(GetMessage(IssueMemoNumber, isUpdated));
+
+            return GetNullIssuememo(IssueMemoNumber);
 
         }
         public GToGEntity GetMessage(string IssueMemoNumber, bool isUpdated)
