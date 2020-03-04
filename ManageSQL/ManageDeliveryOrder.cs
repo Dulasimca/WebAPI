@@ -187,6 +187,15 @@ namespace TNCSCAPI.ManageSQL
                     }
 
                     if (deliveryOrderEntity.DOTaxStatus == "YES") {
+                        sqlCommand = new SqlCommand();
+                        sqlCommand.Transaction = objTrans;
+                        sqlCommand.Connection = sqlConnection;
+                        sqlCommand.CommandText = "DeleteDOSalesTaxDetails";
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@BillNo", SRNo);
+                        sqlCommand.Parameters.AddWithValue("@GCode", deliveryOrderEntity.IssuerCode);
+                        sqlCommand.ExecuteNonQuery();
+
                         var creditSales = (deliveryOrderEntity.TransactionCode == "TR019") ? true : false;
                         double gst = 0, taxPercent = 0, taxAmnt = 0, rate = 0, amnt = 0;
                         foreach (var item in deliveryOrderEntity.documentDeliveryItems)
@@ -202,9 +211,10 @@ namespace TNCSCAPI.ManageSQL
                             sqlCommand.Parameters.AddWithValue("@BillDate", deliveryOrderEntity.DoDate);
                             sqlCommand.Parameters.AddWithValue("@Month", deliveryOrderEntity.Month);
                             sqlCommand.Parameters.AddWithValue("@Year", deliveryOrderEntity.Year);
-                            sqlCommand.Parameters.AddWithValue("@CompanyID", deliveryOrderEntity.ReceivorCode);
+                            sqlCommand.Parameters.AddWithValue("@CompanyID", deliveryOrderEntity.PartyID);
                             sqlCommand.Parameters.AddWithValue("@CreditSales", creditSales);
                             sqlCommand.Parameters.AddWithValue("@TaxPercentage", item.TaxPercent);
+                            sqlCommand.Parameters.AddWithValue("@Hsncode", item.HsnCode);
                             sqlCommand.Parameters.AddWithValue("@CommodityID", item.Itemcode);
                             sqlCommand.Parameters.AddWithValue("@TaxType", "CGST");
                             sqlCommand.Parameters.AddWithValue("@Measurement", item.Wtype);

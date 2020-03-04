@@ -155,6 +155,7 @@ namespace TNCSCAPI.Models.Documents
         public string dotime { get; set; }
         public string Month { get; set; }
         public string Year { get; set; }
+        public string PartyID { get; set; }
 
         public string GodownName { get; set; }
         public string TransactionName { get; set; }
@@ -184,6 +185,7 @@ namespace TNCSCAPI.Models.Documents
         public string ITDescription { get; set; }
         public string SchemeName { get; set; }
         public string TaxPercent { get; set; }
+        public string HsnCode { get; set; }
     }
     public class DocumentDeliveryAdjustmentDetails
     {
