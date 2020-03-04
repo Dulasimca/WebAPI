@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using TNCSCAPI.Controllers.Reports.GtoG;
 
 namespace TNCSCAPI.Controllers.GToG
 {
@@ -10,16 +11,63 @@ namespace TNCSCAPI.Controllers.GToG
     public class GToGAckController : ControllerBase
     {
         [HttpPost("{id}")]
-        public string Post(GToGParameter gToG)
+        public GToGEntity Post(GToGParameter gtog)
         {
             bool isUpdated = false;
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", gToG.IssueMemoNumber));
-            isUpdated = manageSQLConnection.UpdateValues("UpdateGToGAck", sqlParameters);
-            return JsonConvert.SerializeObject(GetMessage(gToG.IssueMemoNumber, isUpdated));
+            string details = JsonConvert.SerializeObject(gtog);
+            AuditLog.WriteError(details);
+            if (!string.IsNullOrEmpty(gtog.IssueMemoNumber))
+            {
+                ManageGtoG manageGtoG = new ManageGtoG();
+                //Check issuememo number
+                var result = manageGtoG.CheckIssueMemoNumber(gtog.IssueMemoNumber);
+                if (result.Item1)
+                {
+                    ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", gtog.IssueMemoNumber));
+                    isUpdated = manageSQLConnection.UpdateValues("UpdateGToGAck", sqlParameters);
+                    return GetMessage(gtog.IssueMemoNumber, isUpdated);
+                }
+                else
+                {
+                    return result.Item2;
+                }
+            }
+            return GetNullIssuememo(gtog.IssueMemoNumber);
         }
 
+        [HttpGet("{id}")]
+        public GToGEntity Get(string IssueMemoNumber)
+        {
+            bool isUpdated = false;
+            if (!string.IsNullOrEmpty(IssueMemoNumber))
+            {
+                ManageGtoG manageGtoG = new ManageGtoG();
+                AuditLog.WriteError("IssueMemoNumber is : " + IssueMemoNumber);
+                //Check issuememo number
+                var result = manageGtoG.CheckIssueMemoNumber(IssueMemoNumber);
+                if (result.Item1)
+                {
+                    ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@DocNumber", IssueMemoNumber));
+                    isUpdated = manageSQLConnection.UpdateValues("UpdateGToGAck", sqlParameters);
+                    return GetMessage(IssueMemoNumber, isUpdated);
+                }
+                else
+                {
+                    return result.Item2;
+                }
+            }
+            else
+            {
+                AuditLog.WriteError("IssueMemoNumber is : " + IssueMemoNumber);
+            }
+
+            return GetNullIssuememo(IssueMemoNumber);
+
+        }
         public GToGEntity GetMessage(string IssueMemoNumber, bool isUpdated)
         {
             try
@@ -45,16 +93,24 @@ namespace TNCSCAPI.Controllers.GToG
             }
         }
 
+        public GToGEntity GetNullIssuememo(string IssueMemoNumber)
+        {
+            try
+            {
+                GToGEntity gEntity = new GToGEntity();
+                gEntity.IssueMemoNumber = IssueMemoNumber;
+                gEntity.StatusCode = "2000";
+                gEntity.Message = "Issuememo number is null, please check your parameter";
+                return gEntity;
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError(ex.Message);
+                return null;
+            }
+        }
     }
-    public class GToGParameter
-    {
-        public string IssueMemoNumber { get; set; }
-        public string FpsAckDate { get; set; }
-    }
-    public class GToGEntity
-    {
-        public string IssueMemoNumber { get; set; }
-        public string StatusCode { get; set; }
-        public string Message { get; set; }
-    }
+
+
+
 }

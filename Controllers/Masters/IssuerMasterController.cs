@@ -52,6 +52,8 @@ namespace TNCSCAPI.Controllers.Masters
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", issuerEntity.IssuerCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@PartyID", issuerEntity.PartyID));
+                sqlParameters.Add(new KeyValuePair<string, string>("@IssuerNo", issuerEntity.IssuerNo));
+                sqlParameters.Add(new KeyValuePair<string, string>("@GSTNumber", issuerEntity.GSTNumber));
                 sqlParameters.Add(new KeyValuePair<string, string>("@RCode", issuerEntity.RCode));
                 return manageSQLConnection.UpdateValues("UpdateIssuerPartyMaster", sqlParameters);
             }
