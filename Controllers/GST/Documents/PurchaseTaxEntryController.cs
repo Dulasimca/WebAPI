@@ -45,18 +45,20 @@ namespace TNCSCAPI.Controllers.GST.Documents
         }
 
         [HttpGet("{id}")]
-        public string Get(string RCode, string GCode, string Month, string Year, string AccountingYear)
+        public string Get(string RCode, string GCode, string Month, string Year, string AccountingYear, string GSTType)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-           // sqlParameters.Add(new KeyValuePair<string, string>("@RoleId", RoleId));
+            var commandText = (GSTType == "3") ? "GetGSTPurchaseTaxDetails" : "GetPurchaseTaxdetails";
+            // sqlParameters.Add(new KeyValuePair<string, string>("@RoleId", RoleId));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Gcode", GCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Month", Month));
             sqlParameters.Add(new KeyValuePair<string, string>("@Year", Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@AccountingYear", AccountingYear));
-            ds = manageSQLConnection.GetDataSetValues("GetPurchaseTaxdetails", sqlParameters);
+            sqlParameters.Add(new KeyValuePair<string, string>("@GType", GSTType));
+            ds = manageSQLConnection.GetDataSetValues(commandText, sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
 

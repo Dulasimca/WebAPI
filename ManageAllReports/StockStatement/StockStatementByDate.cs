@@ -180,6 +180,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
         public decimal TotalReceipt { get; set; }
         public decimal IssueSales { get; set; }
         public decimal IssueOthers { get; set; }
+        public decimal TotalIssues { get; set; }
         public DateTime LastUpdated { get; set; }
         public string GodownCode { get; set; }
         public string RegionCode { get; set; }
