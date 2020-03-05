@@ -20,17 +20,16 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Month", purchaseTax.Month)); 
             sqlParameters.Add(new KeyValuePair<string, string>("@Year", purchaseTax.Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@CompanyName", purchaseTax.CompanyName));
-            sqlParameters.Add(new KeyValuePair<string, string>("@TIN", purchaseTax.TIN));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Pan", purchaseTax.Pan));
-            sqlParameters.Add(new KeyValuePair<string, string>("@GSTNo", purchaseTax.GST));
-            sqlParameters.Add(new KeyValuePair<string, string>("@StateCode", purchaseTax.State));
             sqlParameters.Add(new KeyValuePair<string, string>("@AccYear", purchaseTax.AccYear));
             sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", purchaseTax.BillNo));
             sqlParameters.Add(new KeyValuePair<string, string>("@BillDate", purchaseTax.BillDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@CommodityName", purchaseTax.CommodityName));
             sqlParameters.Add(new KeyValuePair<string, string>("@Quantity", purchaseTax.Quantity));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rate", purchaseTax.Rate));
-            sqlParameters.Add(new KeyValuePair<string, string>("@TaxType", purchaseTax.TaxType));
+            sqlParameters.Add(new KeyValuePair<string, string>("@TaxType", purchaseTax.TaxType)); 
+            sqlParameters.Add(new KeyValuePair<string, string>("@GSTType", purchaseTax.GSTType));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Scheme", purchaseTax.Scheme));
+            sqlParameters.Add(new KeyValuePair<string, string>("@AADS", purchaseTax.AADS));
             sqlParameters.Add(new KeyValuePair<string, string>("@Measurement", purchaseTax.Measurement));
             sqlParameters.Add(new KeyValuePair<string, string>("@Amount", purchaseTax.Amount));
             sqlParameters.Add(new KeyValuePair<string, string>("@Percentage", purchaseTax.Percentage));
@@ -38,7 +37,6 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@SGST", purchaseTax.SGST));
             sqlParameters.Add(new KeyValuePair<string, string>("@VatAmount", purchaseTax.VatAmount));
             sqlParameters.Add(new KeyValuePair<string, string>("@Total", purchaseTax.Total));
-            sqlParameters.Add(new KeyValuePair<string, string>("@AccRegion", purchaseTax.AccRegion));
             sqlParameters.Add(new KeyValuePair<string, string>("@CreatedBy", purchaseTax.CreatedBy));
             sqlParameters.Add(new KeyValuePair<string, string>("@CreatedDate", purchaseTax.CreatedDate.ToString("MM/dd/yyyy")));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", purchaseTax.GCode));
@@ -93,6 +91,9 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string Measurement { get; set; }
         public string CGST { get; set; }
         public string SGST { get; set; }
+        public string GSTType { get; set; }
+        public string AADS { get; set; }
+        public string Scheme { get; set; }
         public string TaxType { get; set; }
     }
 }
