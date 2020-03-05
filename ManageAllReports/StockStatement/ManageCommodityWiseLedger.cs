@@ -150,6 +150,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                             stockDetailsEntity.TotalReceipt = _receipttotay;
                             stockDetailsEntity.IssueSales = _issuestoday;
                             stockDetailsEntity.IssueOthers = _otherIssuestoday;
+                            stockDetailsEntity.TotalIssues = _issuestoday + _otherIssuestoday;
                             stockDetailsEntity.LastUpdated = DateTime.Now;
                             stockDetailsEntity.Remarks = string.Empty;
                             stockDetailsEntity.Flag = true;
