@@ -31,6 +31,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Scheme", purchaseTax.Scheme));
             sqlParameters.Add(new KeyValuePair<string, string>("@AADS", purchaseTax.AADS));
             sqlParameters.Add(new KeyValuePair<string, string>("@Measurement", purchaseTax.Measurement));
+            sqlParameters.Add(new KeyValuePair<string, string>("@Hsncode", purchaseTax.Hsncode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Amount", purchaseTax.Amount));
             sqlParameters.Add(new KeyValuePair<string, string>("@Percentage", purchaseTax.Percentage));
             sqlParameters.Add(new KeyValuePair<string, string>("@CGST", purchaseTax.CGST));
@@ -97,5 +98,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string AADS { get; set; }
         public string Scheme { get; set; }
         public string TaxType { get; set; }
+        public string Hsncode { get; set; }
+        
     }
 }
