@@ -21,9 +21,6 @@ namespace TNCSCAPI.Controllers.GST.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@Year", serviceProvider.Year));
                 sqlParameters.Add(new KeyValuePair<string, string>("@CompanyName", serviceProvider.CompanyName));
                 sqlParameters.Add(new KeyValuePair<string, string>("@TIN", serviceProvider.TIN));
-                sqlParameters.Add(new KeyValuePair<string, string>("@Pan", serviceProvider.Pan));
-                sqlParameters.Add(new KeyValuePair<string, string>("@GSTNo", serviceProvider.GST));
-                sqlParameters.Add(new KeyValuePair<string, string>("@StateCode", serviceProvider.State));
                 sqlParameters.Add(new KeyValuePair<string, string>("@AccYear", serviceProvider.AccYear));
                 sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", serviceProvider.BillNo));
                 sqlParameters.Add(new KeyValuePair<string, string>("@BillDate", serviceProvider.BillDate));
@@ -35,7 +32,6 @@ namespace TNCSCAPI.Controllers.GST.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@TaxPercentage", serviceProvider.TaxPercentage));
                 sqlParameters.Add(new KeyValuePair<string, string>("@TaxAmount", serviceProvider.TaxAmount));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Total", serviceProvider.Total));
-                sqlParameters.Add(new KeyValuePair<string, string>("@AccRegion", serviceProvider.AccRegion));
                 sqlParameters.Add(new KeyValuePair<string, string>("@CreatedBy", serviceProvider.CreatedBy));
                 sqlParameters.Add(new KeyValuePair<string, string>("@CreatedDate", serviceProvider.CreatedDate.ToString("MM/dd/yyyy")));
                 sqlParameters.Add(new KeyValuePair<string, string>("@GCode", serviceProvider.GCode));
