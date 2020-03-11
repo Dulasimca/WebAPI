@@ -29,29 +29,29 @@ namespace TNCSCAPI.Controllers.GST.Master
             sqlParameters.Add(new KeyValuePair<string, string>("@IFSC", partyLedger.IFSC));
             sqlParameters.Add(new KeyValuePair<string, string>("@Favour", partyLedger.Favour));
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.RCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@AADSType", partyLedger.AADSType));
             sqlParameters.Add(new KeyValuePair<string, string>("@Flag", partyLedger.Flag));
             return manageSQL.InsertData("InsertPartyLedgerdetails", sqlParameters);
         }
 
         [HttpGet("{id}")]
-        public string Get(string RCode, string Type = "Active")
+        public string Get(string Type = "URD", string TIN = null)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
             try
             {
-                if (Type == "InActive")
+                if (Type == "Registered")
                 {
                     List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                     sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
-                    sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@TIN", TIN));
                     ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
                 }
                 else
                 {
                     List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                     sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
-                    sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", RCode));
                     ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
                 }
                 return JsonConvert.SerializeObject(ds.Tables[0]);
@@ -80,5 +80,7 @@ public class PartyLedgerEntryEntity
         public string StateCode { get; set; }
         public string Tin { get; set; }
         public string Flag { get; set; }
+        public string AADSType { get; set; }
+        
     }
 }
