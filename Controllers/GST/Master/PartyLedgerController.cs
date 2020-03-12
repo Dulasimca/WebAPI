@@ -48,7 +48,7 @@ namespace TNCSCAPI.Controllers.GST.Master
         }
 
         [HttpGet("{id}")]
-        public string Get(string Type = "URD", string TIN = null)
+        public string Get(string Type, string TIN = null, string PartyName = null)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
@@ -65,6 +65,7 @@ namespace TNCSCAPI.Controllers.GST.Master
                 {
                     List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                     sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@PartyName", PartyName.ToString()));
                     ds = manageSQLConnection.GetDataSetValues("GetPartyLedgerdetails", sqlParameters);
                 }
                 return JsonConvert.SerializeObject(ds.Tables[0]);
