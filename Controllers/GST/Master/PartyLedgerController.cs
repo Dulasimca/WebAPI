@@ -16,21 +16,34 @@ namespace TNCSCAPI.Controllers.GST.Master
         {
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             ManageSQLConnection manageSQL = new ManageSQLConnection();
-            sqlParameters.Add(new KeyValuePair<string, string>("@LedgerID", partyLedger.LedgerID));
-            sqlParameters.Add(new KeyValuePair<string, string>("@PCode", partyLedger.PCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Pan", partyLedger.Pan));
-            sqlParameters.Add(new KeyValuePair<string, string>("@PartyName", partyLedger.PartyName));
-            sqlParameters.Add(new KeyValuePair<string, string>("@TIN", partyLedger.Tin));
-            sqlParameters.Add(new KeyValuePair<string, string>("@StateCode", partyLedger.StateCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@GSTNo", partyLedger.GST));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Account", partyLedger.Account));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Bank", partyLedger.Bank));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Branch", partyLedger.Branch));
-            sqlParameters.Add(new KeyValuePair<string, string>("@IFSC", partyLedger.IFSC));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Favour", partyLedger.Favour));
-            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.RCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@AADSType", partyLedger.AADSType));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Flag", partyLedger.Flag));
+            if (partyLedger.Type == 1)
+            {
+                sqlParameters.Add(new KeyValuePair<string, string>("@LedgerID", partyLedger.LedgerID));
+                sqlParameters.Add(new KeyValuePair<string, string>("@PCode", partyLedger.PCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@PartyName", partyLedger.PartyName));
+                sqlParameters.Add(new KeyValuePair<string, string>("@TIN", partyLedger.Tin));
+                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.RCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@AADSType", partyLedger.AADSType));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Flag", partyLedger.Flag));
+            }
+            else
+            {
+                sqlParameters.Add(new KeyValuePair<string, string>("@LedgerID", partyLedger.LedgerID));
+                sqlParameters.Add(new KeyValuePair<string, string>("@PCode", partyLedger.PCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Pan", partyLedger.Pan));
+                sqlParameters.Add(new KeyValuePair<string, string>("@PartyName", partyLedger.PartyName));
+                sqlParameters.Add(new KeyValuePair<string, string>("@TIN", partyLedger.Tin));
+                sqlParameters.Add(new KeyValuePair<string, string>("@StateCode", partyLedger.StateCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@GSTNo", partyLedger.GST));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Account", partyLedger.Account));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Bank", partyLedger.Bank));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Branch", partyLedger.Branch));
+                sqlParameters.Add(new KeyValuePair<string, string>("@IFSC", partyLedger.IFSC));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Favour", partyLedger.Favour));
+                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.RCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@AADSType", partyLedger.AADSType));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Flag", partyLedger.Flag));
+            }
             return manageSQL.InsertData("InsertPartyLedgerdetails", sqlParameters);
         }
 
@@ -65,6 +78,7 @@ namespace TNCSCAPI.Controllers.GST.Master
 
 public class PartyLedgerEntryEntity
     {
+        public int Type { get; set; }
         public string Pan { get; set; }
         public string PartyName { get; set; }
         public string PCode { get; set; }
