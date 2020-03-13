@@ -567,7 +567,7 @@ namespace TNCSCAPI
         public string GetDays(string FromDate, string ToDate)
         {
             try
-            {
+            {                
                 TimeSpan different = Convert.ToDateTime(ToDate) - Convert.ToDateTime(FromDate);
                 return (different.Days + 1).ToString();
             }
@@ -578,6 +578,35 @@ namespace TNCSCAPI
             }
 
         }
+
+
+        /// <summary>
+        /// Change the Date Format dd-MM-yyyy
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>Format dd-MM-yyyy</returns>
+        public string GetDayDiff(string FromDate, string ToDate)
+        {
+            try
+            {
+                FromDate = FromDate.Replace("-", "/");
+                DateTime Fromdt = DateTime.ParseExact(FromDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                ToDate = ToDate.Replace("-", "/");
+                DateTime Todt = DateTime.ParseExact(ToDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                TimeSpan different = Convert.ToDateTime(Todt) - Convert.ToDateTime(Fromdt);
+                return (different.Days + 1).ToString();
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GetDays : " + ex.Message);
+                return " ";
+            }
+
+        }
+
+
 
         /// <summary>
         ///  Check the Data availability
