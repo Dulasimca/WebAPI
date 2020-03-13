@@ -319,6 +319,7 @@ namespace TNCSCAPI.ManageAllReports
             int iCount = 11;
             // Gets the group by values based on ths column To_Whom_Issued, Commodity,Scheme
             var myResult = from a in dORegEntities
+                           orderby a.To_Whom_Issued ascending
                            group a by new { a.To_Whom_Issued, a.Commodity, a.Scheme, a.Rate_Rs } into gValue
                            select new
                            {
