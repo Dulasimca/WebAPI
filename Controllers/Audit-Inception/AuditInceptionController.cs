@@ -38,25 +38,25 @@ namespace TNCSCAPI.Controllers.Audit_Inception
 
     public class AuditInceptionEntity
     {
-        public int InceptionID { get; set; }
-        public string InceptionTeam { get; set; }
+        public int InspectionID { get; set; }
+        public string InspectionTeam { get; set; }
         public string Name { get; set; }
-        public DateTime InceptionDate { get; set; }
+        public DateTime InspectionDate { get; set; }
         public string Designation { get; set; }
         public string GCode { get; set; }
         public string RCode { get; set; }
         public string Remarks { get; set; }
-        public List<InceptionList> InceptionData { get; set; }
+        public List<InceptionList> InspectionData { get; set; }
 
     }
 
     public class InceptionList
     {
-        public string InceptionItemID { get; set; }
+        public string InspectionItemID { get; set; }
         public string ITCode { get; set; }
         public string StackRowId { get; set; }
         public string TypeCode { get; set; }
         public decimal Quantity { get; set; }
-        public string CurrYear { get; set; }
+        public string CurYear { get; set; }
     }
 }
