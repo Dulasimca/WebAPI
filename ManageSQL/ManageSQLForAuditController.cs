@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TNCSCAPI.Controllers.Audit_Inception;
+using TNCSCAPI.Controllers.AuditInception;
 
 namespace TNCSCAPI.ManageSQL
 {
@@ -19,7 +19,7 @@ namespace TNCSCAPI.ManageSQL
         public Tuple<bool, string> InsertInceptionDetails(AuditInceptionEntity entity)
         {
             SqlTransaction objTrans = null;
-            int InceptionID;
+            int InspectionID;
             using (sqlConnection = new SqlConnection(GlobalVariable.ConnectionString))
             {
                 DataSet ds = new DataSet();
@@ -40,20 +40,20 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Connection = sqlConnection;
                     sqlCommand.CommandText = "InsertInceptionDetails";
                     sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@InceptionTeam", entity.InceptionTeam);
+                    sqlCommand.Parameters.AddWithValue("@InceptionTeam", entity.InspectionTeam);
                     sqlCommand.Parameters.AddWithValue("@Name", entity.Name);
                     sqlCommand.Parameters.AddWithValue("@Designation", entity.Designation);
-                    sqlCommand.Parameters.AddWithValue("@InceptionDate", entity.InceptionDate);
+                    sqlCommand.Parameters.AddWithValue("@InceptionDate", entity.InspectionDate);
                     sqlCommand.Parameters.AddWithValue("@Remarks", entity.Remarks);
                     sqlCommand.Parameters.AddWithValue("@GCode", entity.GCode);
                     sqlCommand.Parameters.AddWithValue("@RCode", entity.RCode);
-                    sqlCommand.Parameters.AddWithValue("@InceptionID1", entity.InceptionID);
+                    sqlCommand.Parameters.AddWithValue("@InceptionID1", entity.InspectionID);
                     sqlCommand.Parameters.Add("@InceptionID", SqlDbType.Int, 30);
                     sqlCommand.Parameters["@InceptionID"].Direction = ParameterDirection.Output;
                     sqlCommand.ExecuteNonQuery();
 
-                    InceptionID = Convert.ToInt32(sqlCommand.Parameters["@InceptionID"].Value);
-                    foreach (var i in entity.InceptionData)
+                    InspectionID = Convert.ToInt32(sqlCommand.Parameters["@InceptionID"].Value);
+                    foreach (var i in entity.InspectionData)
                     {
                         sqlCommand.Parameters.Clear();
                         sqlCommand.Dispose();
@@ -63,13 +63,13 @@ namespace TNCSCAPI.ManageSQL
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.CommandText = "InsertInceptionItemDetails";
                         sqlCommand.CommandType = CommandType.StoredProcedure;
-                        sqlCommand.Parameters.AddWithValue("@InceptionID", InceptionID);
-                        sqlCommand.Parameters.AddWithValue("@InceptionItemID", i.InceptionItemID);
+                        sqlCommand.Parameters.AddWithValue("@InceptionID", InspectionID);
+                        sqlCommand.Parameters.AddWithValue("@InceptionItemID", i.InspectionItemID);
                         sqlCommand.Parameters.AddWithValue("@ITCode", i.ITCode);
                         sqlCommand.Parameters.AddWithValue("@StackNoRowID", i.StackRowId);
                         sqlCommand.Parameters.AddWithValue("@TypeCode", i.TypeCode);
                         sqlCommand.Parameters.AddWithValue("@Quantity", i.Quantity);
-                        sqlCommand.Parameters.AddWithValue("@CurYear", i.CurrYear);
+                        sqlCommand.Parameters.AddWithValue("@CurYear", i.CurYear);
                         sqlCommand.ExecuteNonQuery();
                     }
                     objTrans.Commit();

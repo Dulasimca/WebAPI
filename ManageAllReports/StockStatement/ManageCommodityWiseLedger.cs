@@ -53,7 +53,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                         _itemCode = Convert.ToString(dataSetMaster.Tables[1].Rows[0]["ITCode"]);
                         _ITDescription = Convert.ToString(dataSetMaster.Tables[1].Rows[0]["ITDescription"]);
 
-                        int dayDiff = Convert.ToInt32(manageReport.GetDays(stockParameter.FDate, stockParameter.ToDate)) - 1;
+                        int dayDiff = Convert.ToInt32(manageReport.GetDayDiff(stockParameter.FDate, stockParameter.ToDate)) - 1;
                         decimal DailyOB = 0;
                         DataRow[] openingBalance = dataSetMaster.Tables[0].Select("GodownCode='" + stockParameter.GCode + "' and CommodityCode='" + _itemCode + "'");
                         DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[1].Select("GCode='" + stockParameter.GCode + "' and ITCode='" + _itemCode + "'");
