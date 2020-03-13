@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TNCSCAPI.ManageSQL;
 
-namespace TNCSCAPI.Controllers.Audit_Inception
+namespace TNCSCAPI.Controllers.AuditInception
 {
     [Route("api/[controller]")]
     [ApiController]

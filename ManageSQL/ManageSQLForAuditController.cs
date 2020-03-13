@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TNCSCAPI.Controllers.Audit_Inception;
+using TNCSCAPI.Controllers.AuditInception;
 
 namespace TNCSCAPI.ManageSQL
 {
