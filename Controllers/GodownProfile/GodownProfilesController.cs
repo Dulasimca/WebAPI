@@ -32,7 +32,7 @@ namespace TNCSCAPI.Controllers.GodownProfile
     }
     public class GodownProfileEntity
     {
-        public long RowId { get; set; }
+        public string RowId { get; set; }
         public string GodownCode { get; set; }
         public string Gname { get; set; }
         public string desig { get; set; }
