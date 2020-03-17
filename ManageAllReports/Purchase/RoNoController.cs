@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using TNCSCAPI.ManageAllReports;
 
 namespace TNCSCAPI.ManageAllReports.Purchase
 {
@@ -115,8 +113,8 @@ namespace TNCSCAPI.ManageAllReports.Purchase
                     sw.Write(report.StringFormatWithoutPipe(report.DecimalformatForWeight(item["NetWeight"].ToString()), 14, 1));
                     sw.Write(report.StringFormatWithoutPipe((item["TruckMemoNo"].ToString()), 15, 1));
                     sw.Write(report.StringFormatWithoutPipe((item["OrderNo"].ToString()), 14, 2));
-                    sw.Write(report.StringFormatWithoutPipe((item["Lorryno"].ToString()), 13, 2)); 
-                    sw.Write(report.StringFormatWithoutPipe((item["Scheme"].ToString()), 15, 2)); 
+                    sw.Write(report.StringFormatWithoutPipe((item["Lorryno"].ToString()), 13, 2));
+                    sw.Write(report.StringFormatWithoutPipe((item["Scheme"].ToString()), 15, 2));
                     sw.WriteLine("");
                     dTotal += Convert.ToDecimal(item["NetWeight"].ToString());
                     // gTotal += Convert.ToDecimal(item["Quantity"].ToString());
@@ -134,6 +132,122 @@ namespace TNCSCAPI.ManageAllReports.Purchase
                 // sw.WriteLine("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|");
             }
         }
+
+
+        /// <summary>
+        /// Write the Sales Customer Details
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="entity"></param>
+        public void WriteGodownWiseRoNoPurchase(StreamWriter sw, CommonEntity entity, List<RoNoPurchaseEntity> noPurchaseEntities)
+        {
+            int iCount = 10;
+            int i = 1;
+            string sAckno = string.Empty;
+            string sDepositor = string.Empty;
+            string sCommodity = string.Empty;
+            decimal dTotal = 0;
+            AddHeaderForGodownwiseAbstract(sw, entity);
+            var result = from d in noPurchaseEntities
+                         orderby d.Godownname ascending
+                         group d by new { d.Godownname } into groupedData
+                         select new
+                         {
+                             Netwt_Kgs = groupedData.Sum(s => s.NetWeight),
+                             No_Bags = groupedData.Sum(s => s.Bags),
+                             GroupByNames = groupedData.Key
+                         };
+            foreach (var item in result)
+            {
+                if (iCount >= 50)
+                {
+                    //Add header again
+                    iCount = 11;
+                    sw.WriteLine("-------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine((char)12);
+                    AddHeaderForGodownwiseAbstract(sw, entity);
+                }
+                sw.Write("                     ");
+                sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Godownname, 32, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.No_Bags.ToString(), 10, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.Netwt_Kgs.ToString(), 15, 1));
+                sw.WriteLine("");
+                dTotal += Convert.ToDecimal(item.Netwt_Kgs.ToString());
+                i = i + 1;
+                iCount++;
+            }
+            sw.WriteLine("-------------------------------------------------------------------------------------------------------");
+            sw.Write("                     ");
+            sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
+            sw.Write(report.StringFormatWithoutPipe("Grand Total", 32, 2));
+            sw.Write(report.StringFormatWithoutPipe("", 10, 2));
+            sw.Write(report.StringFormatWithoutPipe(dTotal.ToString(), 15, 1));
+            sw.WriteLine("");
+            dTotal = 0;
+            sw.WriteLine("");
+            sw.WriteLine("-------------------------------------------------------------------------------------------------------");
+        }
+
+        /// <summary>
+        /// Write the Sales Customer Details
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="entity"></param>
+        public void WriteCommodityWiseRoNoPurchase(StreamWriter sw, CommonEntity entity, List<RoNoPurchaseEntity> noPurchaseEntities)
+        {
+            int iCount = 10;
+            int i = 1;
+            string sAckno = string.Empty;
+            string sDepositor = string.Empty;
+            string sCommodity = string.Empty;
+            decimal dTotal = 0;
+            AddHeaderForCommoditywiseAbstract(sw, entity);
+            var result = from d in noPurchaseEntities
+                         orderby d.Godownname ascending
+                         group d by new { d.Godownname, d.Commodity } into groupedData
+                         select new
+                         {
+                             Netwt_Kgs = groupedData.Sum(s => s.NetWeight),
+                             No_Bags = groupedData.Sum(s => s.Bags),
+                             GroupByNames = groupedData.Key
+                         };
+            foreach (var item in result)
+            {
+                if (iCount >= 50)
+                {
+                    //Add header again
+                    iCount = 11;
+                    sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine((char)12);
+                    AddHeaderForCommoditywiseAbstract(sw, entity);
+                }
+                sw.Write("           ");
+                sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Godownname, 32, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.GroupByNames.Commodity, 31, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.No_Bags.ToString(), 10, 2));
+                sw.Write(report.StringFormatWithoutPipe(item.Netwt_Kgs.ToString(), 15, 1));
+                sw.WriteLine("");
+                dTotal += Convert.ToDecimal(item.Netwt_Kgs.ToString());
+                i = i + 1;
+                iCount++;
+            }
+            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+            sw.Write("           ");
+            sw.Write(report.StringFormatWithoutPipe(i.ToString(), 4, 2));
+            sw.Write(report.StringFormatWithoutPipe("Grand Total", 32, 2));
+            sw.Write(report.StringFormatWithoutPipe("", 32, 2));
+            sw.Write(report.StringFormatWithoutPipe("", 10, 2));
+            sw.Write(report.StringFormatWithoutPipe(dTotal.ToString(), 15, 1));
+            sw.WriteLine("");
+            dTotal = 0;
+            sw.WriteLine("");
+            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+        }
+
+
+
         /// <summary>
         /// Add header for Transaction receipt
         /// </summary>
@@ -152,6 +266,43 @@ namespace TNCSCAPI.ManageAllReports.Purchase
 
         }
 
+
+        /// <summary>
+        /// Add header for Transaction receipt
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="entity"></param>
+        public void AddHeaderForGodownwiseAbstract(StreamWriter sw, CommonEntity entity)
+        {
+            sw.WriteLine("               TAMILNADU CIVIL SUPPLIES CORPORATION        Report Date :   " + ManageReport.GetCurrentDate());
+            sw.WriteLine(" ");
+            sw.WriteLine("                 GodownWise  RONO Purchase Receipt Details");
+            sw.WriteLine(" ");
+            sw.WriteLine(" From: " + report.FormatDate(entity.FromDate) + " to " + report.FormatDate(entity.Todate) + " Weight in Kilo Grams");
+            sw.WriteLine("-------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("                     Slno Godown Name                      Bags        Qty(Kgs)/NOs                    ");
+            sw.WriteLine("-------------------------------------------------------------------------------------------------------");
+
+        }
+
+
+        /// <summary>
+        /// Add header for Transaction receipt
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="entity"></param>
+        public void AddHeaderForCommoditywiseAbstract(StreamWriter sw, CommonEntity entity)
+        {
+            sw.WriteLine("               TAMILNADU CIVIL SUPPLIES CORPORATION        Report Date :   " + ManageReport.GetCurrentDate());
+            sw.WriteLine(" ");
+            sw.WriteLine("              CommodityWise  RONO Purchase Receipt Details ");
+            sw.WriteLine(" ");
+            sw.WriteLine(" From: " + report.FormatDate(entity.FromDate) + " to " + report.FormatDate(entity.Todate) + "                                                                 Weight in Kilo Grams                             Page No: 1");
+            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+            sw.WriteLine("            Slno Godown Name                      Commodity                       Bags        Qty(Kgs)/NOs     ");
+            sw.WriteLine("---------------------------------------------------------------------------------------------------------------");
+
+        }
     }
 
 }
@@ -167,8 +318,10 @@ public class RoNoPurchaseEntity
     public string Lorryno { get; set; }
     public string Orderno { get; set; }
     public double Quantity { get; set; }
-    public string Bags { get; set; }
+    public double NetWeight { get; set; }
+    public int Bags { get; set; }
     public string TruckMen { get; set; }
     public string Type { get; set; }
+    public string Commodity { get; set; }
 
 }
