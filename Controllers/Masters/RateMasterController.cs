@@ -23,9 +23,9 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@ScCode", RateMaster.ScCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Allotment", RateMaster.Allotment));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rate", RateMaster.Rate));
-            sqlParameters.Add(new KeyValuePair<string, string>("@EffectDate", RateMaster.EffectDate.ToString()));
-            sqlParameters.Add(new KeyValuePair<string, string>("@EndDate", RateMaster.EndDate.ToString()));
-            sqlParameters.Add(new KeyValuePair<string, string>("@CreatedDate", RateMaster.CreatedDate.ToString()));
+            sqlParameters.Add(new KeyValuePair<string, string>("@EffectDate", RateMaster.EffectDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@EndDate", RateMaster.EndDate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@CreatedDate", RateMaster.CreatedDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Remark", RateMaster.Remark));
             sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", RateMaster.Activeflag));
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxPercentage", RateMaster.TaxPercentage));
@@ -40,8 +40,9 @@ namespace TNCSCAPI.Controllers.Masters
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             if(Type == 1)
                 {
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
                     sqlParameters.Add(new KeyValuePair<string, string>("@Scheme", Scheme));
-                    sqlParameters.Add(new KeyValuePair<string, string>("@AllotmentCode", Allotment));
+                   sqlParameters.Add(new KeyValuePair<string, string>("@AllotmentCode", Allotment));
                     ds = manageSQLConnection.GetDataSetValues("GetRateMaster", sqlParameters);
                 }
                 else
@@ -60,9 +61,9 @@ namespace TNCSCAPI.Controllers.Masters
             public string ScCode { get; set; }
             public string Allotment { get; set; }
             public string Rate { get; set; }
-            public DateTime EffectDate { get; set; }
-            public DateTime EndDate { get; set; }
-            public DateTime CreatedDate { get; set; }
+            public string EffectDate { get; set; }
+            public string EndDate { get; set; }
+            public string CreatedDate { get; set; }
             public string Remark { get; set; }
             public string Activeflag { get; set; }
             public string Hsncode { get; set; }
