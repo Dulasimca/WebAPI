@@ -23,13 +23,14 @@ namespace TNCSCAPI.Controllers.AuditInception
         }
 
         [HttpGet("{id}")]
-        public string Get(string IDate, string GCode)
+        public string Get(string IDate, string GCode, string ToDate=null)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@IDate", IDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+            sqlParameters.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
             ds = manageSQLConnection.GetDataSetValues("GetInceptionDetails", sqlParameters);
             return JsonConvert.SerializeObject(ds);
         }
