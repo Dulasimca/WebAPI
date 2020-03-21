@@ -28,23 +28,29 @@ namespace TNCSCAPI.Controllers.Masters
             sqlParameters.Add(new KeyValuePair<string, string>("@CreatedDate", RateMaster.CreatedDate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Remark", RateMaster.Remark));
             sqlParameters.Add(new KeyValuePair<string, string>("@Activeflag", RateMaster.Activeflag));
+            sqlParameters.Add(new KeyValuePair<string, string>("@TaxPercentage", RateMaster.TaxPercentage));
             sqlParameters.Add(new KeyValuePair<string, string>("@Hsncode", RateMaster.Hsncode));
             return manageSQL.InsertData("InsertRateMaster", sqlParameters);
         }
-        [HttpGet]
-        public string Get()
+        [HttpGet("{id}")]
+        public string Get(string Scheme, string Allotment, int Type = 0)
         {
-            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
-            try
-            {
-                ds = manageSQLConnection.GetDataSetValues("GetRateMaster");
-                return JsonConvert.SerializeObject(ds.Tables[0]);
-            }
-            finally
-            {
-                ds.Dispose();
-            }
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            if(Type == 1)
+                {
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Scheme", Scheme));
+                   sqlParameters.Add(new KeyValuePair<string, string>("@AllotmentCode", Allotment));
+                    ds = manageSQLConnection.GetDataSetValues("GetRateMaster", sqlParameters);
+                }
+                else
+                {
+                ds = manageSQLConnection.GetDataSetValues("GetRateMaster", sqlParameters);
+
+                 }
+            return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }
 
@@ -61,5 +67,7 @@ namespace TNCSCAPI.Controllers.Masters
             public string Remark { get; set; }
             public string Activeflag { get; set; }
             public string Hsncode { get; set; }
-        }
+            public string TaxPercentage { get; set; }
+        
+    }
     }
