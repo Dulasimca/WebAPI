@@ -19,7 +19,6 @@ namespace TNCSCAPI.Controllers.Allotment
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@RCode", entity.RCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", entity.GCode));
