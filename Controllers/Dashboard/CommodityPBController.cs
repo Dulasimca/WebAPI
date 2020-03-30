@@ -14,15 +14,18 @@ namespace TNCSCAPI.Controllers
     [ApiController]
     public class CommodityPBController : ControllerBase
     {
-        [HttpGet]
-        public string Get()
+        [HttpGet("{id}")]
+        public string Get(string Code, string Type)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             ManageStock manageStock = new ManageStock();
             try
             {
-                ds = manageSQLConnection.GetDataSetValues("GetCommodityPB");
+                sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Code", Code));
+                ds = manageSQLConnection.GetDataSetValues("GetCommodityPB", sqlParameters);
                 var result = manageStock.GetPhycialBalance(ds);
                 return JsonConvert.SerializeObject(result);
             }
