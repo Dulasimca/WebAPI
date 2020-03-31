@@ -15,17 +15,25 @@ namespace TNCSCAPI.Controllers.Dashboard
     public class DashboardAllotmentController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string Month, string Year, string GCode)
+        public string Get(string Month, string Year, string GCode, string Type)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             try
             {
-                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
-                sqlParameters.Add(new KeyValuePair<string, string>("@Month", Month));
-                sqlParameters.Add(new KeyValuePair<string, string>("@Year", Year));
-                ds = manageSQLConnection.GetDataSetValues("GetAllotmetforSociety", sqlParameters);
+                if (Type == "1")
+                {
+                    sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Month", Month));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@Year", Year));
+                    ds = manageSQLConnection.GetDataSetValues("GetAllotmetforSociety", sqlParameters);
+                } else
+                {
+                    sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
+                    sqlParameters.Add(new KeyValuePair<string, string>("@IRelates", Month));
+                    ds = manageSQLConnection.GetDataSetValues("GetAllotmentShopDetails", sqlParameters);
+                }
                 return JsonConvert.SerializeObject(ds);
             }
             finally
