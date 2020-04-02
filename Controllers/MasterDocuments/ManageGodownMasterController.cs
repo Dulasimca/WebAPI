@@ -44,6 +44,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList.Add(new KeyValuePair<string, string>("@NOOFSHOPCRS", Convert.ToString(godownEntity.NOOFSHOPCRS)));
                 parameterList.Add(new KeyValuePair<string, string>("@DocStatus", Convert.ToString(godownEntity.DocStatus)));
                 parameterList.Add(new KeyValuePair<string, string>("@CBStatement", Convert.ToString(godownEntity.CBStatement)));
+                parameterList.Add(new KeyValuePair<string, string>("@Allotment", Convert.ToString(godownEntity.Allotment)));
                 return manageSQLConnection.InsertData("InsertGodownMaster", parameterList);
             }
             finally
@@ -68,5 +69,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
         public int NOOFSHOPCRS { get; set; }
         public bool DocStatus { get; set; }
         public bool CBStatement { get; set; }
+        public bool Allotment { get; set; }
+        
     }
 }
