@@ -36,7 +36,7 @@ namespace TNCSCAPI.Controllers.Settings
                     sqlParameters.Add(new KeyValuePair<string, string>("@TNCSCKey", sValue));
                     sqlParameters.Add(new KeyValuePair<string, string>("@Type", Type.ToString()));
                     ds = manageSQL.GetDataSetValues("GetTNCSCSettings", sqlParameters);
-                    return JsonConvert.SerializeObject(ds.Tables[0]);
+                    return JsonConvert.SerializeObject(ds);
                 }
             }
             finally

@@ -23,7 +23,7 @@ namespace TNCSCAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public string Get(string Date)
+        public string Get(string Date ,string Rcode = "ALL")
         {
             ManageDashboard manageDashboard = new ManageDashboard();
             List<object> list = new List<object>();
@@ -33,6 +33,7 @@ namespace TNCSCAPI.Controllers
             {
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@SrDate", Date));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Rcode", Rcode));
                 ds = manageSQLConnection.GetDataSetValues("DashBordReportGraph", sqlParameters);
                 if (ds.Tables.Count > 1)
                 {
