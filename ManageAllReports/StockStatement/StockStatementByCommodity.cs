@@ -56,7 +56,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                             stockDetailsEntity.RegionCode = Convert.ToString(godown["RGCODE"]);
                             stockDetailsEntity.RName = Convert.ToString(godown["RGNAME"]);
                           //  stockDetailsEntity.GName = Convert.ToString(godown["TNCSName"]);
-                            stockDetailsEntity.TNCSCapacity = Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(godown["TNCSCapacity"])));
+                           // stockDetailsEntity.TNCSCapacity = Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(godown["TNCSCapacity"])));
                             // sqlParameters.Add(new KeyValuePair<string, string>("@ItemCode", _itemCode));
 
 
