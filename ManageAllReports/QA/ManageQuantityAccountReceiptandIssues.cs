@@ -55,11 +55,11 @@ namespace TNCSCAPI.ManageAllReports.QA
                             objectEntity.GName = godown["TNCSName"].ToString();
                             objectEntity.RName = godown["RGNAME"].ToString();
                             //get opening balance for particualr item.
-                            DataRow[] openingBalance = dataSetMaster.Tables[0].Select("GodownCode='" + objectEntity.GCode + "' and CommodityCode='" + _itemCode + "'");
+                            DataRow[] openingBalance = dataSetMaster.Tables[0].Select("CommodityCode='" + _itemCode + "'");
 
-                            DataRow[] receiptuptoYesterday = receiptUptoYesterday.Tables[0].Select("GCode='" + objectEntity.GCode + "' and ITCode='" + _itemCode + "'");
+                            DataRow[] receiptuptoYesterday = receiptUptoYesterday.Tables[0].Select("ITCode='" + _itemCode + "'");
                             // DataRow[] receipttotay = todayReceipt.Tables[0].Select("GCode='" + objectEntity.GCode + "' and ITCode='" + _itemCode + "'");
-                            DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[0].Select("GCode='" + objectEntity.GCode + "' and ITCode='" + _itemCode + "'");
+                            DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[0].Select("ITCode='" + _itemCode + "'");
                             // DataRow[] issuestoday = todayIssues.Tables[0].Select("GCode='" + objectEntity.GCode + "' and ITCode='" + _itemCode + "'");
                             ClearVariable();
 
@@ -286,11 +286,11 @@ namespace TNCSCAPI.ManageAllReports.QA
                     object objSum;
                     if (SchemeCode == "All")
                     {
-                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Trcode='" + TRCode + "' and GCode='" + objectEntity.GCode + "'");
+                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Trcode='" + TRCode + "' ");
                     }
                     else
                     {
-                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Scheme ='" + SchemeCode + "' and Trcode='" + TRCode + "' and GCode='" + objectEntity.GCode + "'");
+                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Scheme ='" + SchemeCode + "' and Trcode='" + TRCode + "'");
                     }
                     _qtyData = _qtyData + Convert.ToDecimal(manageReport.DecimalformatForWeight(objSum.ToString()));
                 }

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using TNCSCAPI.Controllers.Reports.QuantityAccount;
 using TNCSCAPI.ManageDocuments;
 
-namespace TNCSCAPI.Controllers.Reports.QuantityAccount
+namespace TNCSCAPI.ManageAllReports.QA
 {
     public class ManageQuantityGunnyReceiptandIssues : QuantityGunnyVariables
     {
@@ -54,20 +55,15 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
                             objectEntity.GName = godown["TNCSName"].ToString();
                             objectEntity.RName = godown["RGNAME"].ToString();
                             //get opening balance for particualr item.
-                            DataRow[] openingBalance = dataSetMaster.Tables[0].Select("GodownCode='" + objectEntity.GCode + "' and CommodityCode='" + _itemCode + "'");
+                            DataRow[] openingBalance = dataSetMaster.Tables[0].Select("CommodityCode='" + _itemCode + "'");
 
-                            DataRow[] receiptuptoYesterday = receiptUptoYesterday.Tables[0].Select("GCode='" + objectEntity.GCode + "' and ITCode='" + _itemCode + "'");
-                            // DataRow[] receipttotay = todayReceipt.Tables[0].Select("GCode='" + objectEntity.GCode + "' and ITCode='" + _itemCode + "'");
-                            DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[0].Select("GCode='" + objectEntity.GCode + "' and ITCode='" + _itemCode + "'");
-                            // DataRow[] issuestoday = todayIssues.Tables[0].Select("GCode='" + objectEntity.GCode + "' and ITCode='" + _itemCode + "'");
+                            DataRow[] receiptuptoYesterday = receiptUptoYesterday.Tables[0].Select("ITCode='" + _itemCode + "'");
+                            DataRow[] issuesuptoYesterday = issuesUptoYesterday.Tables[0].Select("ITCode='" + _itemCode + "'");
                             ClearVariable();
 
                             if (openingBalance != null && openingBalance.Count() > 0)
                             {
                                 _BookBalanceWeight = Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(openingBalance[0]["BookBalanceWeight"])));
-                                //_PhysicalBalanceWeight = Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(openingBalance[0]["PhysicalBalanceWeight"])));
-                                //_CumulitiveShortage = Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(openingBalance[0]["CumulitiveShortage"])));
-                                //_Shortage = Convert.ToDecimal(manageReport.DecimalformatForWeight(Convert.ToString(openingBalance[0]["WriteOff"])));
                             }
                             if (receiptuptoYesterday != null && receiptuptoYesterday.Count() > 0)
                             {
@@ -190,11 +186,11 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
                     object objSum;
                     if (SchemeCode == "All")
                     {
-                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Trcode='" + TRCode + "' and GCode='" + objectEntity.GCode + "'");
+                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Trcode='" + TRCode + "' ");
                     }
                     else
                     {
-                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Scheme ='" + SchemeCode + "' and Trcode='" + TRCode + "' and GCode='" + objectEntity.GCode + "'");
+                        objSum = dtQty.Compute("Sum(TOTAL)", "ITCode='" + objectEntity.ItemCode + "' and Scheme ='" + SchemeCode + "' and Trcode='" + TRCode + "' ");
                     }
                     _qtyData = _qtyData + Convert.ToDecimal(manageReport.DecimalformatForWeight(objSum.ToString()));
                 }
