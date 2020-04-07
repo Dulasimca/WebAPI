@@ -15,10 +15,19 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
     {
         [HttpPost("{id}")]
         public string Post([FromBody] StockParameterForCommodity stockParameter)
-        {          
-            StockStatementByCommodity statementByDate = new StockStatementByCommodity();
-            var result = statementByDate.ProcessStockStatement(stockParameter);
-            return JsonConvert.SerializeObject(result);
+        {
+            if (stockParameter.IsGodown == "YES")
+            {
+                StockStatementByGodown statementByDate = new StockStatementByGodown();
+                var result = statementByDate.ProcessStockStatement(stockParameter);
+                return JsonConvert.SerializeObject(result);
+            }
+            else
+            {
+                StockStatementByCommodity statementByDate = new StockStatementByCommodity();
+                var result = statementByDate.ProcessStockStatement(stockParameter);
+                return JsonConvert.SerializeObject(result);
+            }
         }
     }
 
@@ -28,5 +37,6 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
         public string CommodityName { get; set; }
         public string FromDate { get; set; }
         public string ToDate { get; set; }
+        public string IsGodown { get; set; }
     }
 }
