@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageAllReports.QA;
 
 namespace TNCSCAPI.Controllers.Reports.QuantityAccount
 {
