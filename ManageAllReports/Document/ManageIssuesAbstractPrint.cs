@@ -171,13 +171,14 @@ namespace TNCSCAPI.ManageAllReports.Document
         private void AddFooter(StreamWriter streamWriter, List<GatePassIssuesEntity> stockIssuesEntity)
         {
             streamWriter.WriteLine("| LORRY NO      :" + report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity[0].LorryNo), 17, 2) + "TC NAME     : " + report.StringFormatWithoutPipe(report.ConvertToUpper(stockIssuesEntity[0].TransporterName), 60, 2) + "|");
-            streamWriter.WriteLine("|                                                                                                             |");
+           // streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI1, 108, 2) + "|");
             streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI2, 108, 2) + "|");
             streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI3, 108, 2) + "|");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI4, 108, 2) + "|");
+            streamWriter.WriteLine("|" + report.StringFormatWithoutPipe(GlobalVariable.FSSAI5, 108, 2) + "|");
             streamWriter.WriteLine("|                                                                                                             |");
-            streamWriter.WriteLine("|          Sign. of the Authorised Person.                                     GODOWN INCHARGE                |");
-            streamWriter.WriteLine("|                                                                                                             |");
+            streamWriter.WriteLine("|          Signature of the representative.                                     GODOWN INCHARGE               |");
             streamWriter.WriteLine("|                                                                                                             |");
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.WriteLine((char)12);

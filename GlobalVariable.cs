@@ -4,7 +4,7 @@
     {
         //Testing connection
         public const string ConnectionString = "data source=localhost;initial catalog=TNCSCSCM;user id = sqladmin; password =sql@svc&ac!72;";
-        public const string ReportPath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//";
+        public const string ReportPath = "C://LocalRepository//TestingSite//TNCSCUI-Website//assets//";
         public const string ImagePath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//NotificationPopup//";
 
         //Live connection
@@ -85,7 +85,10 @@
         public const string FSSAI1 = "  1. Received the Stock within FSSAI Limits / Uniform Specifications";
         public const string FSSAI2 = "  2. Received the Stock in Pest Free Conditions";
         public const string FSSAI3 = "  3. Received Jointly Signed Sealed Samples Satisfied with Good Quality and Quantity";
-        public const string FSSAISign =  "                   Sign. of the Authorised Person. ";
+        public const string FSSAI4 = "  4. The stock was standardised, weighed and quality checked fully in the presence of ";
+        public const string FSSAI5 = "     Mr____________________________ and issued for movement.";
+
+        public const string FSSAISign = "                   Sign. of the Authorised Person. ";
 
     }
 }
