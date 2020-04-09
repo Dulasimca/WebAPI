@@ -21,9 +21,18 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             sqlParameters.Add(new KeyValuePair<string, string>("@RCODE", documentEntity.RegionCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@GCode", documentEntity.GodownCode));
-            sqlParameters.Add(new KeyValuePair<string, string>("@SDATE", documentEntity.DocumentDate.ToString()));
             sqlParameters.Add(new KeyValuePair<string, string>("@RoleId", documentEntity.RoleId.ToString()));
-            ds = manageSQLConnection.GetDataSetValues("GetReceiptByDate", sqlParameters);
+            if (documentEntity.Type == 1)
+            {
+                sqlParameters.Add(new KeyValuePair<string, string>("@ITCode", documentEntity.ITCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", documentEntity.FromDate.ToString()));
+                sqlParameters.Add(new KeyValuePair<string, string>("@TDATE", documentEntity.ToDate.ToString()));
+                ds = manageSQLConnection.GetDataSetValues("GetReceiptCommodityWise", sqlParameters);
+            } else
+            {
+                sqlParameters.Add(new KeyValuePair<string, string>("@SDATE", documentEntity.DocumentDate.ToString()));
+                ds = manageSQLConnection.GetDataSetValues("GetReceiptByDate", sqlParameters);
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
     }
@@ -34,5 +43,9 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
         public string RegionCode { get; set; }
         public string GodownCode { get; set; }
         public string DocumentDate { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
+        public string ITCode { get; set; }
+        public int Type { get; set; }
     }
 }
