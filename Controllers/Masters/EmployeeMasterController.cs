@@ -18,14 +18,14 @@ namespace TNCSCAPI.Controllers.Masters
             //ManageEmployeeDetailsSQL manageEmployee = new ManageEmployeeDetailsSQL();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             ManageSQLConnection manageSQL = new ManageSQLConnection();
-            sqlParameters.Add(new KeyValuePair<string, string>("@RowID", employeeDetails.RowID));
+            //sqlParameters.Add(new KeyValuePair<string, string>("@RowID", employeeDetails.RowID));
             sqlParameters.Add(new KeyValuePair<string, string>("@ecode", employeeDetails.Empno));
             sqlParameters.Add(new KeyValuePair<string, string>("@empname", employeeDetails.Empname));
             sqlParameters.Add(new KeyValuePair<string, string>("@designation", employeeDetails.Designation));
             sqlParameters.Add(new KeyValuePair<string, string>("@refno", employeeDetails.Refno));
             sqlParameters.Add(new KeyValuePair<string, string>("@refdate", employeeDetails.Refdate));
             sqlParameters.Add(new KeyValuePair<string, string>("@jdate", employeeDetails.Jrdate));
-            sqlParameters.Add(new KeyValuePair<string, string>("@rdate", employeeDetails.Rdate));
+            //sqlParameters.Add(new KeyValuePair<string, string>("@rdate", employeeDetails.Rdate));
             sqlParameters.Add(new KeyValuePair<string, string>("@jrtype", employeeDetails.Jrtype));
             sqlParameters.Add(new KeyValuePair<string, string>("@rcode", employeeDetails.RCode));
             sqlParameters.Add(new KeyValuePair<string, string>("@gcode", employeeDetails.GCode));
