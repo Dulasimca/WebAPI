@@ -36,6 +36,7 @@ namespace TNCSCAPI.ManageSQL
                     sqlCommand.Parameters.AddWithValue("@telno", godownProfile.telno);
                     sqlCommand.Parameters.AddWithValue("@mobno", godownProfile.mobno);
                     sqlCommand.Parameters.AddWithValue("@faxno", godownProfile.faxno);
+                    sqlCommand.Parameters.AddWithValue("@ImageName", godownProfile.ImageName);
                     sqlCommand.ExecuteNonQuery();
                     return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
 

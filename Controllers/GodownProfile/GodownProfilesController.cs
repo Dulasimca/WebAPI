@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using TNCSCAPI.ManageSQL;
 
 namespace TNCSCAPI.Controllers.GodownProfile
@@ -24,8 +25,14 @@ namespace TNCSCAPI.Controllers.GodownProfile
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            //string ImageName = ds.ImageName;
             sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", GCode));
             ds = manageSQLConnection.GetDataSetValues("GetGodownProfile", sqlParameters);
+            string newPath = GlobalVariable.SignaturePath;
+            if (Directory.Exists(newPath))
+            {
+                var ImageName = newPath + "/";
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
 
@@ -42,5 +49,6 @@ namespace TNCSCAPI.Controllers.GodownProfile
         public string telno { get; set; }
         public string mobno { get; set; }
         public string faxno { get; set; }
+        public string ImageName { get; set; }
     }
 }
