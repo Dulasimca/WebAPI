@@ -28,7 +28,8 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
                 sqlParameters.Add(new KeyValuePair<string, string>("@FDATE", documentEntity.FromDate.ToString()));
                 sqlParameters.Add(new KeyValuePair<string, string>("@TDATE", documentEntity.ToDate.ToString()));
                 ds = manageSQLConnection.GetDataSetValues("GetReceiptCommodityWise", sqlParameters);
-            } else
+            }
+            else
             {
                 sqlParameters.Add(new KeyValuePair<string, string>("@SDATE", documentEntity.DocumentDate.ToString()));
                 ds = manageSQLConnection.GetDataSetValues("GetReceiptByDate", sqlParameters);
