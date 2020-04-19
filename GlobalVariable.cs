@@ -83,6 +83,7 @@
         public const string SavedMessage = "Saved Successfully! : ";
         public const string ErrorMessage = "Please Contact Administrator.";
         public const string DocumentEditPermission = " Document Edit Permission is not Granted. Please Contact Administrator! ";
+        public const string DocumentEditByHO = " This Document is Locked by HO. Please get approval from HO to update this document ";
 
         //FSSAI description
         public const string FSSAI1 = "  1. Received the Stock within FSSAI Limits / Uniform Specifications";

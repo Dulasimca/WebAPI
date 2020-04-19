@@ -40,9 +40,9 @@ namespace TNCSCAPI.Controllers.Documents
         [HttpPost("{id}")]
         public Tuple<bool, string,string> Post(DocumentStockReceiptList stockReceipt = null)
         {
+            ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
             if (stockReceipt.Type == 2)
             {
-                ManageDocumentReceipt documentReceipt = new ManageDocumentReceipt();
                 ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
                   documentReceipt.GenerateReceipt(stockReceipt);
                 //update print
@@ -74,6 +74,10 @@ namespace TNCSCAPI.Controllers.Documents
                             return new Tuple<bool, string, string>(false,GlobalVariable.DocumentEditPermission, "");
                         }
                         // CheckDocumentEdit
+                    }
+                    else if(documentReceipt.CheckSRUpdateStatus(stockReceipt.SRNo))
+                    {
+                        return new Tuple<bool, string, string>(false, GlobalVariable.DocumentEditByHO, "");
                     }
                     StockReceipt receipt = new StockReceipt();
                     return receipt.InsertReceiptData(stockReceipt);
