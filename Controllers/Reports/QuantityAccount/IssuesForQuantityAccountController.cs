@@ -47,6 +47,8 @@ namespace TNCSCAPI.Controllers.Reports.QuantityAccount
         public string UserId { get; set; }
         public string GName { get; set; }
         public string RName { get; set; }
+        public string SchemeName { get; set; }
+        public string SchemeCode { get; set; }
     }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using TNCSCAPI.Models.Documents;
 
@@ -23,8 +24,8 @@ namespace TNCSCAPI.ManageAllReports.Document
                 //delete file if exists
                 filePath = subF_Path + "//" + fileName + ".txt";
                 report.DeleteFileIfExists(filePath);
-              //  isDuplicate = ReceiptId == "0" ? false : true;
-                isDuplicate = stockReceipt.UnLoadingSlip==null ? false: stockReceipt.UnLoadingSlip.ToUpper() == "Y" ? true : false;
+                //  isDuplicate = ReceiptId == "0" ? false : true;
+                isDuplicate = stockReceipt.UnLoadingSlip == null ? false : stockReceipt.UnLoadingSlip.ToUpper() == "Y" ? true : false;
                 streamWriter = new StreamWriter(filePath, true);
                 AddDocHeaderForReceipt(streamWriter, stockReceipt, isDuplicate);
                 AddDetails(streamWriter, stockReceipt);
@@ -61,9 +62,9 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|                                                                                                          |");
-            if(isDuplicate)
+            if (isDuplicate)
             {
-            streamWriter.WriteLine("|                                      STOCK RECEIPT ACKNOWLEDGMENT            DUPLICATE COPY              |");
+                streamWriter.WriteLine("|                                      STOCK RECEIPT ACKNOWLEDGMENT            DUPLICATE COPY              |");
             }
             else
             {
@@ -73,7 +74,7 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.Write("|ACKNOWLEDGEMENT NO:");
             streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.SRNo, 21, 2));
             streamWriter.Write("ALLOTMENT/RELEASE ORDER: ");
-            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.OrderNo +" " + stockReceipt.PAllotment, 16, 2));
+            streamWriter.Write(report.StringFormatWithoutPipe(stockReceipt.OrderNo + " " + stockReceipt.PAllotment, 16, 2));
             streamWriter.Write("GATE PASS : ");
             streamWriter.Write(report.StringFormatWithoutPipe("", 10, 2));
             streamWriter.Write("|");
@@ -81,7 +82,7 @@ namespace TNCSCAPI.ManageAllReports.Document
 
             streamWriter.Write("|              DATE:");
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockReceipt.SRDate.ToString()), 21, 2));
-            streamWriter.Write(report.StringFormatWithoutPipe("DATE: ",25,1));
+            streamWriter.Write(report.StringFormatWithoutPipe("DATE: ", 25, 1));
             streamWriter.Write(report.StringFormatWithoutPipe(report.FormatDate(stockReceipt.OrderDate.ToString()), 38, 2));
             streamWriter.Write("|");
             streamWriter.WriteLine(" ");
@@ -127,10 +128,10 @@ namespace TNCSCAPI.ManageAllReports.Document
                 streamWriter.Write(report.StringFormat(item.NoPacking.ToString(), 6, 1));
                 streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(item.GKgs.ToString()), 10, 1));
                 streamWriter.Write(report.StringFormat(report.DecimalformatForWeight(item.Nkgs.ToString()), 10, 1));
-                streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 8, 1) +"|");
+                streamWriter.Write(report.StringFormat(item.Moisture.ToString(), 8, 1) + "|");
                 streamWriter.WriteLine(" ");
             }
-           
+
         }
 
         /// <summary>
@@ -175,11 +176,11 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|  Sign. of the Authorised Person.                                            GODOWN INCHARGE              |");
             streamWriter.WriteLine("|                                                                                                          |");
             streamWriter.WriteLine("|REMARKS                                                                                                   |");
-            streamWriter.WriteLine("|   "+ report.StringFormatWithoutPipe(stockReceipt.Remarks, 102, 2)+"|");
+            streamWriter.WriteLine("|   " + report.StringFormatWithoutPipe(stockReceipt.Remarks, 102, 2) + "|");
             report.AddMoreContent(streamWriter, stockReceipt.Remarks, 102, 3);
             streamWriter.WriteLine("|----------------------------------------------------------------------------------------------------------|");
-            string receiptDateTime = stockReceipt.SRDate + " "+ report.GetCurrentTime(dateTime);
-            streamWriter.WriteLine(" Prepared DateTime:"+ receiptDateTime + "       Printing DateTime:"+DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss"));
+            string receiptDateTime = report.FormatDate(stockReceipt.SRDate.ToString()) + " " + report.GetCurrentTime(dateTime);
+            streamWriter.WriteLine(" Prepared DateTime:" + receiptDateTime + "       Printing DateTime:" + DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss"));
             streamWriter.WriteLine((char)12);
         }
         private string GetWTCode(DocumentStockReceiptList stockReceipt)
@@ -194,6 +195,21 @@ namespace TNCSCAPI.ManageAllReports.Document
                 return "0";
             }
         }
+
+        public bool CheckSRUpdateStatus(string documentNo)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@Doc", documentNo));
+            ds = manageSQLConnection.GetDataSetValues("GetSRDetailStatus", sqlParameters);
+            ManageReport manageReport = new ManageReport();
+            if (manageReport.CheckDataAvailable(ds))
+            {
+                return true;
+            }
+            return false;
+        }
     }
-   
+
 }
