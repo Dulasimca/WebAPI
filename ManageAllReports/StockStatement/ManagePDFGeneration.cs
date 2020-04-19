@@ -98,7 +98,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                 AddLorryInfo(document, stockReceipt);
                 AddSpace(document);
                 AddFSSAI(document);
-                AddSign(document);
+                AddSign(document, stockReceipt.ReceivingCode);
                 AddSpace(document);
                 AddRemarks(document, stockReceipt);
                 AddSpace(document);
