@@ -2,6 +2,8 @@
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.draw;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using TNCSCAPI.Models.Documents;
 
@@ -125,7 +127,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                 AuditLog.WriteError(" GeneratePDF :  " + ex.Message + " " + ex.StackTrace);
                 return new Tuple<bool, string>(false, "Please Contact system Admin");
             }
-            return new Tuple<bool, string> (true,"Print Generated Successfully");
+            return new Tuple<bool, string>(true, "Print Generated Successfully");
         }
         public void AddHRLine(iTextSharp.text.Document doc)
         {
@@ -143,13 +145,13 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
 
         public void AddheaderValues(iTextSharp.text.Document doc, DocumentStockReceiptList stockReceipt)
         {
-           PdfPTable table = new PdfPTable(6);
+            PdfPTable table = new PdfPTable(6);
             table.DefaultCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
             //table.setBorder(Border.NO_BORDER);
             //set overall width
             table.WidthPercentage = 100f;
             //set column widths
-            int[] firstTablecellwidth = { 20, 20,20,20,10,10 };
+            int[] firstTablecellwidth = { 20, 20, 20, 20, 10, 10 };
             table.SetWidths(firstTablecellwidth);
 
             PdfPCell cell = new PdfPCell(new Phrase("ACKNOWLEDGEMENT NO:", NormalFont));
@@ -167,7 +169,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             cell.Colspan = 4;
             cell.BorderWidth = 0;
             table.AddCell(cell);
-           
+
             cell = new PdfPCell(new Phrase("DATE:", NormalFont));
             cell.HorizontalAlignment = Element.ALIGN_RIGHT;
             cell.BorderWidth = 0;
@@ -244,7 +246,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
 
         }
 
-        public void AddDetails(iTextSharp.text.Document doc,DocumentStockReceiptList stockReceipt)
+        public void AddDetails(iTextSharp.text.Document doc, DocumentStockReceiptList stockReceipt)
         {
             //streamWriter.WriteLine("||SNo |STACK NO   |COMMODITY           | SCHEME       |UNIT WEIGHT  |NO.OF UNIT |  Gross WEIGHT        NET   |% OF MOISTURE   ||");
             //streamWriter.WriteLine("||    |           |                    |              |             |  UNIT|   WEIGHT in Kgs/NOs |MOISTURE||");
@@ -254,7 +256,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             //set overall width
             table.WidthPercentage = 100f;
             //set column widths
-            int[] firstTablecellwidth = {5, 8, 20, 12, 18,7, 10, 10,10 };
+            int[] firstTablecellwidth = { 5, 8, 20, 12, 18, 7, 10, 10, 10 };
             table.SetWidths(firstTablecellwidth);
 
             PdfPCell cell = new PdfPCell(new Phrase("SNo", NormalFont));
@@ -293,7 +295,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             table.AddCell(cell);
 
-           
+
 
             int i = 0;
             foreach (var item in stockReceipt.ItemList)
@@ -388,7 +390,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             cell.Colspan = 4;
             table.AddCell(cell);
 
-            cell = new PdfPCell(new Phrase("MODE OF WEIGHMENT : "+ GetWTCode(stockReceipt), NormalFont));
+            cell = new PdfPCell(new Phrase("MODE OF WEIGHMENT : " + GetWTCode(stockReceipt), NormalFont));
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.BorderWidth = 0;
             cell.Colspan = 2;
@@ -399,9 +401,9 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             cell.Colspan = 2;
             cell.BorderWidth = 0;
             table.AddCell(cell);
- 
 
-            cell = new PdfPCell(new Phrase("RR NO         : "+ stockReceipt.MTransport, NormalFont));
+
+            cell = new PdfPCell(new Phrase("RR NO         : " + stockReceipt.MTransport, NormalFont));
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.BorderWidth = 0;
             cell.Colspan = 4;
@@ -415,10 +417,10 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             Paragraph FSSAI = new Paragraph("     " + GlobalVariable.FSSAI1, FSSAIFont);
             FSSAI.Alignment = Element.ALIGN_LEFT;
             doc.Add(FSSAI);
-             FSSAI = new Paragraph("     " + GlobalVariable.FSSAI2, FSSAIFont);
+            FSSAI = new Paragraph("     " + GlobalVariable.FSSAI2, FSSAIFont);
             FSSAI.Alignment = Element.ALIGN_LEFT;
             doc.Add(FSSAI);
-             FSSAI = new Paragraph("     " + GlobalVariable.FSSAI3, FSSAIFont);
+            FSSAI = new Paragraph("     " + GlobalVariable.FSSAI3, FSSAIFont);
             FSSAI.Alignment = Element.ALIGN_LEFT;
             doc.Add(FSSAI);
 
@@ -426,7 +428,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
 
         }
 
-        public void AddSign(iTextSharp.text.Document doc)
+        public void AddSign(iTextSharp.text.Document doc,string GCode)
         {
             PdfPTable table = new PdfPTable(2);
             table.DefaultCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
@@ -435,13 +437,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             table.WidthPercentage = 100f;
             table.DefaultCell.Padding = 10;
             //set column widths
-            int[] firstTablecellwidth = { 60,40 };
+            int[] firstTablecellwidth = { 60, 40 };
             table.SetWidths(firstTablecellwidth);
-
-            string imagePath = GlobalVariable.ReportPath + "layout\\images\\InchargeSignature\\Sign.PNG";
-            iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(imagePath);
-            img.Alignment = Element.ALIGN_CENTER;
-            img.ScaleToFit(200f,800f);
 
             PdfPCell cell = new PdfPCell(new Phrase("Sign. of the Authorised Person.", FSSAIFont));
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -458,13 +455,32 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             cell.BorderWidth = 0;
             table.AddCell(cell);
 
-            cell = new PdfPCell(new Phrase("", NormalFont));
+            //Get the file name
+            var result = GetImageName(GCode);
+            if (result.Item1)
+            {
+                string imagePath = GlobalVariable.ReportPath + "layout\\images\\InchargeSignature\\" + result.Item2;
+                if (File.Exists(imagePath))
+                {
+                    iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(imagePath);
+                    img.Alignment = Element.ALIGN_CENTER;
+                    img.ScaleToFit(200f, 80f);
+                    cell = new PdfPCell(img);
+                }
+                else
+                {
+                    cell = new PdfPCell(new Phrase("", NormalFont));
+                }
+
+            }
+            else
+            {
+                cell = new PdfPCell(new Phrase("", NormalFont));
+            }
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.BorderWidth = 0;
             cell.MinimumHeight = 80f;
             table.AddCell(cell);
-
-          
             doc.Add(table);
 
         }
@@ -486,7 +502,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             ManageSQLConnection manageSQL = new ManageSQLConnection();
             DateTime dateTime = manageSQL.GetSRTime(stockReceipt.SRNo);
             string receiptDateTime = report.FormatDate(stockReceipt.SRDate.ToString()) + " " + report.GetCurrentTime(dateTime);
-            Paragraph FSSAI = new Paragraph("  Prepared DateTime:"+ receiptDateTime + "      Printing DateTime:"+DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss") +"   User : " + stockReceipt.UserID, NormalFont);
+            Paragraph FSSAI = new Paragraph("  Prepared DateTime:" + receiptDateTime + "      Printing DateTime:" + DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss") + "   User : " + stockReceipt.UserID, NormalFont);
             FSSAI.Alignment = Element.ALIGN_LEFT;
             doc.Add(FSSAI);
         }
@@ -501,6 +517,31 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             {
                 AuditLog.WriteError("GetWTCode : " + ex.Message);
                 return "0";
+            }
+        }
+
+        private Tuple<bool, string> GetImageName(string GCode)
+        {
+            try
+            {
+                DataSet ds = new DataSet();
+                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@GodownCode", GCode));
+                ds = manageSQLConnection.GetDataSetValues("GetGodownProfile", sqlParameters);
+                ManageReport manageReport = new ManageReport();
+                if (manageReport.CheckDataAvailable(ds))
+                {
+                    return new Tuple<bool, string>(true, Convert.ToString(ds.Tables[0].Rows[0]["ImageName"]));
+                }
+                return new Tuple<bool, string>(false,"" );
+
+            }
+            catch (Exception ex)
+            {
+                AuditLog.WriteError("GetImageName : " + ex.Message);
+                return new Tuple<bool, string>(false, "");
+
             }
         }
     }
