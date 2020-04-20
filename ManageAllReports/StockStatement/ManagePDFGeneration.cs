@@ -456,27 +456,28 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             table.AddCell(cell);
 
             //Get the file name
-            var result = GetImageName(GCode);
-            if (result.Item1)
-            {
-                string imagePath = GlobalVariable.ReportPath + "layout\\images\\InchargeSignature\\" + result.Item2;
-                if (File.Exists(imagePath))
-                {
-                    iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(imagePath);
-                    img.Alignment = Element.ALIGN_CENTER;
-                    img.ScaleToFit(200f, 80f);
-                    cell = new PdfPCell(img);
-                }
-                else
-                {
-                    cell = new PdfPCell(new Phrase("", NormalFont));
-                }
+            //var result = GetImageName(GCode);
+            //if (result.Item1)
+            //{
+            //    string imagePath = GlobalVariable.ReportPath + "layout\\images\\InchargeSignature\\" + result.Item2;
+            //    if (File.Exists(imagePath))
+            //    {
+            //        iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(imagePath);
+            //        img.Alignment = Element.ALIGN_CENTER;
+            //        img.ScaleToFit(200f, 80f);
+            //        cell = new PdfPCell(img);
+            //    }
+            //    else
+            //    {
+            //        cell = new PdfPCell(new Phrase("", NormalFont));
+            //    }
 
-            }
-            else
-            {
-                cell = new PdfPCell(new Phrase("", NormalFont));
-            }
+            //}
+            //else
+            //{
+            //    cell = new PdfPCell(new Phrase("", NormalFont));
+            //}
+            cell = new PdfPCell(new Phrase("", NormalFont));
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.BorderWidth = 0;
             cell.MinimumHeight = 80f;
@@ -502,7 +503,7 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             ManageSQLConnection manageSQL = new ManageSQLConnection();
             DateTime dateTime = manageSQL.GetSRTime(stockReceipt.SRNo);
             string receiptDateTime = report.FormatDate(stockReceipt.SRDate.ToString()) + " " + report.GetCurrentTime(dateTime);
-            Paragraph FSSAI = new Paragraph("  Prepared DateTime:" + receiptDateTime + "      Printing DateTime:" + DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss") + "   User : " + stockReceipt.UserID, NormalFont);
+            Paragraph FSSAI = new Paragraph("  Prepared DateTime:" + receiptDateTime + "      Download DateTime:" + DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss") + "   User : " + stockReceipt.UserID, NormalFont);
             FSSAI.Alignment = Element.ALIGN_LEFT;
             doc.Add(FSSAI);
         }
