@@ -89,7 +89,8 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
             sqlParameters1.Add(new KeyValuePair<string, string>("@RCode", downloadEntity.GCode));
             sqlParameters1.Add(new KeyValuePair<string, string>("@GCode", downloadEntity.RCode));
             DataSet ds = new DataSet();
-            ds = manageSQLConnection.GetDataSetValues("GetDocumentDownloadUser", sqlParameters1);
+            var commandText = (downloadEntity.Type == "1" ? "GetDocumentDownloadLog" : "GetDownloadedReceiptDetails");
+            ds = manageSQLConnection.GetDataSetValues(commandText, sqlParameters1);
             return JsonConvert.SerializeObject(ds);
 
         }
@@ -108,5 +109,6 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
         public string GCode { get; set; }
         public string RCode { get; set; }
         public string ToDate { get; set; }
+        public string Type { get; set; }
     }
 }
