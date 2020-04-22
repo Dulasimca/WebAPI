@@ -426,7 +426,6 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@Tycode", stackOpeningEntity.Tycode);
                     sqlCommand.Parameters.AddWithValue("@Flag1", "R");
                     sqlCommand.Parameters.AddWithValue("@Flag2", "0");
-                    sqlCommand.Parameters.AddWithValue("@Tycode",stackOpeningEntity.Tycode);
                     //sqlCommand.Parameters.AddWithValue("@clstackdate", stackOpeningEntity.clstackdate);
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.Parameters.Clear();

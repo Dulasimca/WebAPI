@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TNCSCAPI.ManageAllReports.StockStatement;
 using TNCSCAPI.Models.Documents;
 using System.Data;
+using Newtonsoft.Json;
 
 namespace TNCSCAPI.Controllers.Reports.DailyStock
 {
@@ -31,11 +32,27 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
                     sqlParameters.Add(new KeyValuePair<string, string>("@Doc", stockReceipt.SRNo));
                     sqlParameters.Add(new KeyValuePair<string, string>("@Status", "1"));
                     manageSQLConnection.UpdateValues("UpdateSRDetailStatus", sqlParameters);
+
+                    List<KeyValuePair<string, string>> InsertParameter = new List<KeyValuePair<string, string>>();
+                    InsertParameter.Add(new KeyValuePair<string, string>("@GCode", stockReceipt.ReceivingCode));
+                    InsertParameter.Add(new KeyValuePair<string, string>("@RCode", stockReceipt.RCode));
+                    InsertParameter.Add(new KeyValuePair<string, string>("@DocNumber", stockReceipt.SRNo));
+                    InsertParameter.Add(new KeyValuePair<string, string>("@UserName", stockReceipt.UserID));
+                    InsertParameter.Add(new KeyValuePair<string, string>("@DocType", "1"));
+                    manageSQLConnection.InsertData("GetDocumentDownloadUser", InsertParameter);
                 }
                 return result;
             }
             else
             {
+                List<KeyValuePair<string, string>> InsertParameter = new List<KeyValuePair<string, string>>();
+                InsertParameter.Add(new KeyValuePair<string, string>("@GCode", stockReceipt.ReceivingCode));
+                InsertParameter.Add(new KeyValuePair<string, string>("@RCode", stockReceipt.RCode));
+                InsertParameter.Add(new KeyValuePair<string, string>("@DocNumber", stockReceipt.SRNo));
+                InsertParameter.Add(new KeyValuePair<string, string>("@UserName", stockReceipt.UserID));
+                InsertParameter.Add(new KeyValuePair<string, string>("@DocType", "2"));
+                manageSQLConnection.InsertData("GetDocumentDownloadUser", InsertParameter);
+                //
                 return new Tuple<bool, string>(false, "Please contact HO");
             }
         }
@@ -62,6 +79,21 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
             }
         }
 
+        [HttpGet("{id}")]
+        public string Get(DownloadEntity downloadEntity)
+        {
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
+            sqlParameters1.Add(new KeyValuePair<string, string>("@FromDate", downloadEntity.FromDate));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@ToDate", downloadEntity.ToDate));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@RCode", downloadEntity.GCode));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@GCode", downloadEntity.RCode));
+            DataSet ds = new DataSet();
+            ds = manageSQLConnection.GetDataSetValues("GetDocumentDownloadUser", sqlParameters1);
+            return JsonConvert.SerializeObject(ds);
+
+        }
+
     }
     public class SrEntity
     {
@@ -70,5 +102,11 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
         public string UserId { get; set; }
     }
 
-
+    public class DownloadEntity
+    {
+        public string FromDate { get; set; }
+        public string GCode { get; set; }
+        public string RCode { get; set; }
+        public string ToDate { get; set; }
+    }
 }
