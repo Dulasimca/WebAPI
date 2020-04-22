@@ -32,6 +32,7 @@ namespace TNCSCAPI.Models.Documents
        public string RegionCode { get; set; }
        public string Flag1 { get; set; }
        public string Flag2 { get; set; }
+        public string Tycode { get; set; }
       // public DateTime clstackdate { get; set; }
     }
 }
