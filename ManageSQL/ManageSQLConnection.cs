@@ -423,6 +423,7 @@ namespace TNCSCAPI
                     sqlCommand.Parameters.AddWithValue("@CurYear", stackOpeningEntity.CurrYear);
                     sqlCommand.Parameters.AddWithValue("@ExportFlag", "N");
                     sqlCommand.Parameters.AddWithValue("@RegionCode", stackOpeningEntity.RegionCode);
+                    sqlCommand.Parameters.AddWithValue("@Tycode", stackOpeningEntity.Tycode);
                     sqlCommand.Parameters.AddWithValue("@Flag1", "R");
                     sqlCommand.Parameters.AddWithValue("@Flag2", "0");
                     sqlCommand.Parameters.AddWithValue("@Tycode",stackOpeningEntity.Tycode);
