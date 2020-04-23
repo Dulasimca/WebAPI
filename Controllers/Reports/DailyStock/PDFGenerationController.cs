@@ -86,8 +86,8 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
             List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
             sqlParameters1.Add(new KeyValuePair<string, string>("@FromDate", downloadEntity.FromDate));
             sqlParameters1.Add(new KeyValuePair<string, string>("@ToDate", downloadEntity.ToDate));
-            sqlParameters1.Add(new KeyValuePair<string, string>("@RCode", downloadEntity.GCode));
-            sqlParameters1.Add(new KeyValuePair<string, string>("@GCode", downloadEntity.RCode));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@RCode", downloadEntity.RCode));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@GCode", downloadEntity.GCode));
             DataSet ds = new DataSet();
             var commandText = (downloadEntity.Type == "1" ? "GetDocumentDownloadLog" : "GetDownloadedReceiptDetails");
             ds = manageSQLConnection.GetDataSetValues(commandText, sqlParameters1);
