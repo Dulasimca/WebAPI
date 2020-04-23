@@ -80,16 +80,16 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
         }
 
         [HttpGet("{id}")]
-        public string Get(DownloadEntity downloadEntity)
+        public string Get(string FromDate, string ToDate, string RCode, string GCode, string Type)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
-            sqlParameters1.Add(new KeyValuePair<string, string>("@FromDate", downloadEntity.FromDate));
-            sqlParameters1.Add(new KeyValuePair<string, string>("@ToDate", downloadEntity.ToDate));
-            sqlParameters1.Add(new KeyValuePair<string, string>("@RCode", downloadEntity.RCode));
-            sqlParameters1.Add(new KeyValuePair<string, string>("@GCode", downloadEntity.GCode));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@FromDate", FromDate));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@ToDate", ToDate));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@RCode", RCode));
+            sqlParameters1.Add(new KeyValuePair<string, string>("@GCode", GCode));
             DataSet ds = new DataSet();
-            var commandText = (downloadEntity.Type == "1" ? "GetDocumentDownloadLog" : "GetDownloadedReceiptDetails");
+            var commandText = (Type == "1" ? "GetDocumentDownloadLog" : "GetDownloadedReceiptDetails");
             ds = manageSQLConnection.GetDataSetValues(commandText, sqlParameters1);
             return JsonConvert.SerializeObject(ds);
 
