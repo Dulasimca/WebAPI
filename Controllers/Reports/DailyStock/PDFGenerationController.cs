@@ -91,7 +91,7 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
             DataSet ds = new DataSet();
             var commandText = (Type == "1" ? "GetDocumentDownloadLog" : "GetDownloadedReceiptDetails");
             ds = manageSQLConnection.GetDataSetValues(commandText, sqlParameters1);
-            return JsonConvert.SerializeObject(ds);
+            return JsonConvert.SerializeObject(ds.Tables[0]);
 
         }
 
