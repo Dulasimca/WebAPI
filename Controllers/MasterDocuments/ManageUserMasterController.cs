@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace TNCSCAPI.Controllers.MasterDocuments
 {
@@ -8,6 +10,17 @@ namespace TNCSCAPI.Controllers.MasterDocuments
     [ApiController]
     public class ManageUserMasterController : ControllerBase
     {
+        [HttpGet("{id}")]
+        public string Get(string UserName)
+        {
+            DataSet ds = new DataSet();
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+            sqlParameters.Add(new KeyValuePair<string, string>("@UserName", UserName));
+            ds = manageSQLConnection.GetDataSetValues("GetUserMaster", sqlParameters);
+            return JsonConvert.SerializeObject(ds.Tables[0]);
+        }
+
         [HttpPost("{id}")]
         public bool Post(UserMasterEntity MasterEntity)
         {
