@@ -25,7 +25,7 @@ namespace TNCSCAPI
                 sqlCommand = new SqlCommand();
                 try
                 {
-                    if (issueList.SINo.Length > 5)
+                    if (issueList.DocType == 2)
                     {
                         isNewDoc = false;
                     }

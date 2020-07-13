@@ -97,7 +97,7 @@ namespace TNCSCAPI.Models.Documents
         public string UserID { get; set; }
 
         public int Type { get; set; }
-
+        public int DocType { get; set; }
         public List<DocumentStockIssuesItemEntity> IssueItemList { get; set; }
         public List<DocumentStockIssueDetailsEntity> SIDetailsList { get; set; }
 

@@ -39,7 +39,7 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
                     InsertParameter.Add(new KeyValuePair<string, string>("@DocNumber", stockReceipt.SRNo));
                     InsertParameter.Add(new KeyValuePair<string, string>("@UserName", stockReceipt.UserID));
                     InsertParameter.Add(new KeyValuePair<string, string>("@DocType", "1"));
-                    manageSQLConnection.InsertData("GetDocumentDownloadUser", InsertParameter);
+                    manageSQLConnection.InsertData("InsertDocumentDownloadLog", InsertParameter);
                 }
                 return result;
             }
@@ -51,7 +51,7 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
                 InsertParameter.Add(new KeyValuePair<string, string>("@DocNumber", stockReceipt.SRNo));
                 InsertParameter.Add(new KeyValuePair<string, string>("@UserName", stockReceipt.UserID));
                 InsertParameter.Add(new KeyValuePair<string, string>("@DocType", "2"));
-                manageSQLConnection.InsertData("GetDocumentDownloadUser", InsertParameter);
+                manageSQLConnection.InsertData("InsertDocumentDownloadLog", InsertParameter);
                 //
                 return new Tuple<bool, string>(false, "Please contact HO");
             }

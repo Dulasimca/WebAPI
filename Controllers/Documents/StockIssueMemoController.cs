@@ -38,7 +38,7 @@ namespace TNCSCAPI.Controllers.Documents
                 ManageReport manageReport = new ManageReport();
                 if (manageReport.CheckDataAvailable(result))
                 {
-                    if (documentStockIssuesEntity.SINo.Trim() != "0" && documentStockIssuesEntity.SINo.Trim() != "-")
+                    if (documentStockIssuesEntity.DocType == 2) //(documentStockIssuesEntity.SINo.Trim() != "0" && documentStockIssuesEntity.SINo.Trim() != "-")
                     {
                         List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
                         sqlParameters1.Add(new KeyValuePair<string, string>("@Type", "2"));
@@ -72,13 +72,13 @@ namespace TNCSCAPI.Controllers.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@GCode", GCode));
                 ds = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsByDate", sqlParameters);
             }
-            else if(Type == 2)
+            else if (Type == 2)
             {
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@SINo", value));
                 ds = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsBySINo", sqlParameters);
-            } 
-            else  
+            }
+            else
             {
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@GCode", value));
