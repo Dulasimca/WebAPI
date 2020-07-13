@@ -24,6 +24,8 @@ namespace TNCSCAPI.Controllers.MasterDocuments
                 parameterList.Add(new KeyValuePair<string, string>("@GODOWNCODE", depositorEntity.GCode));
                 parameterList.Add(new KeyValuePair<string, string>("@DeleteFlag", depositorEntity.DeleteFlag));
                 parameterList.Add(new KeyValuePair<string, string>("@ActiveFlag", depositorEntity.ActiveFlag));
+                parameterList.Add(new KeyValuePair<string, string>("@LedgerId", depositorEntity.LedgerId));
+                parameterList.Add(new KeyValuePair<string, string>("@Gst", depositorEntity.GstNo));
                 return manageSQLConnection.InsertData("InsertDepositorsMaster", parameterList);
             }
             finally
@@ -52,5 +54,7 @@ namespace TNCSCAPI.Controllers.MasterDocuments
         public string GCode { get; set; }
         public string DeleteFlag { get; set; }
         public string ActiveFlag { get; set; }
+        public string LedgerId { get; set; }
+        public string GstNo { get; set; }
     }
 }
