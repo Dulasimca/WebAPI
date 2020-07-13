@@ -19,7 +19,7 @@ namespace TNCSCAPI.Controllers.Documents
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
                 sqlParameters.Add(new KeyValuePair<string, string>("@SIDate", documentNoEntity.SIDate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@IssuingCode", documentNoEntity.IssuingCode));
-                ds = manageSQLConnection.GetDataSetValues("GetStackBalance", sqlParameters);
+                ds = manageSQLConnection.GetDataSetValues("GenerateSINO", sqlParameters);
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
