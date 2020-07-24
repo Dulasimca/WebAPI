@@ -50,8 +50,20 @@ namespace TNCSCAPI.Controllers.Documents
                         }
                         // CheckDocumentEdit
                     }
+                    else
+                    {
+                        // check document available
+                        List<KeyValuePair<string, string>> sqlParameterscheckdate = new List<KeyValuePair<string, string>>();
+                        sqlParameterscheckdate.Add(new KeyValuePair<string, string>("@SINo", documentStockIssuesEntity.SINo));
+                        var result1 = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsBySINo", sqlParameterscheckdate);
+                        if (manageReport.CheckDataAvailable(result1))
+                        {
+                            return new Tuple<bool, string, string>(false, "This document number "+ documentStockIssuesEntity.SINo + " is already exists, Please refresh the page.", "");
+                        }
+                    }
                     StockIssueMemo stockIssueMemo = new StockIssueMemo();
                     return stockIssueMemo.InsertStockIssueData(documentStockIssuesEntity);
+
                 }
                 else
                 {
