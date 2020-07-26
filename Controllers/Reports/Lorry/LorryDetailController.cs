@@ -21,6 +21,8 @@ namespace TNCSCAPI.Controllers.Reports.Lorry
             if(lorryDetail.DType == "G")
             {
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", lorryDetail.RCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", lorryDetail.GCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@fromdate", lorryDetail.ToDate));
                 sqlParameters.Add(new KeyValuePair<string, string>("@type", lorryDetail.DType));
                 ds = manageSQLConnection.GetDataSetValues("GetDSlORRYNOGATEPASS", sqlParameters);
