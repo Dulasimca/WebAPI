@@ -42,6 +42,9 @@ namespace TNCSCAPI.Controllers.GST.Master
                 sqlParameters.Add(new KeyValuePair<string, string>("@Favour", partyLedger.Favour));
                 sqlParameters.Add(new KeyValuePair<string, string>("@RCode", partyLedger.RCode));
                 sqlParameters.Add(new KeyValuePair<string, string>("@AADSType", partyLedger.AADSType));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Pincode", partyLedger.Pincode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Address1", partyLedger.Address1));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Address2", partyLedger.Address2));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Flag", partyLedger.Flag));
             }
             return manageSQL.InsertData("InsertPartyLedgerdetails", sqlParameters);
@@ -96,6 +99,9 @@ public class PartyLedgerEntryEntity
         public string Tin { get; set; }
         public string Flag { get; set; }
         public string AADSType { get; set; }
-        
+        public string Pincode { get; set; }
+        public string Address1 { get; set; }
+        public string Address2 { get; set; }
+
     }
 }
