@@ -13,18 +13,38 @@ namespace TNCSCAPI.Controllers.Reports.Lorry
     [ApiController]
     public class LorryDetailController : ControllerBase
     {
-        [HttpGet("{id}")]
-        public string Get(string FDate, string ToDate, string LorryNo, string DType)
+        [HttpPost("{id}")]
+        public string Post(LorryDetailEntity lorryDetail)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-            List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-            sqlParameters.Add(new KeyValuePair<string, string>("@lorno", LorryNo));
-            sqlParameters.Add(new KeyValuePair<string, string>("@fromdate", FDate));
-            sqlParameters.Add(new KeyValuePair<string, string>("@todate", ToDate));
-            sqlParameters.Add(new KeyValuePair<string, string>("@type", DType));
-            ds = manageSQLConnection.GetDataSetValues("GetDSlORRYNO", sqlParameters);
+            if(lorryDetail.DType == "G")
+            {
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@RCode", lorryDetail.RCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", lorryDetail.GCode));
+                sqlParameters.Add(new KeyValuePair<string, string>("@fromdate", lorryDetail.ToDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@type", lorryDetail.DType));
+                ds = manageSQLConnection.GetDataSetValues("GetDSlORRYNOGATEPASS", sqlParameters);
+            } else
+            {
+                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                sqlParameters.Add(new KeyValuePair<string, string>("@lorno", lorryDetail.LorryNo));
+                sqlParameters.Add(new KeyValuePair<string, string>("@fromdate", lorryDetail.FDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@todate", lorryDetail.ToDate));
+                sqlParameters.Add(new KeyValuePair<string, string>("@type", lorryDetail.DType));
+                ds = manageSQLConnection.GetDataSetValues("GetDSlORRYNO", sqlParameters);
+            }  
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
+    }
+    public class LorryDetailEntity
+    {
+        public string GCode { get; set; }
+        public string LorryNo { get; set; }
+        public string DType { get; set; }
+        public string FDate { get; set; }
+        public string ToDate { get; set; }
+        public string RCode { get; set; }
     }
 }
