@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-<<<<<<< HEAD
-=======
-using System.Data.SqlClient;
->>>>>>> a94bd6a072f2b6e125126dec07fb88152b333089
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
