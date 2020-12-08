@@ -7,7 +7,7 @@ namespace TNCSCAPI.Models.Documents
 {
     public class QuotationEntity
     {
-            public int ProductID { get; set; }
+            public List<int> ProductID { get; set; }
             public string GCode { get; set; }
             public string RCode { get; set; }
             public string Remarks { get; set; }
