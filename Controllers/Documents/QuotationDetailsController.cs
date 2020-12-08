@@ -71,7 +71,7 @@ namespace TNCSCAPI.Controllers.Documents
                     objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
-                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
+                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage) ;  
                 }
                 catch (Exception ex)
                 {
