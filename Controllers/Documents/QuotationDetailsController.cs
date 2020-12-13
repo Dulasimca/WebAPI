@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using TNCSCAPI.Mail;
 using TNCSCAPI.Models;
 using TNCSCAPI.Models.Documents;
@@ -49,13 +48,13 @@ namespace TNCSCAPI.Controllers.Documents
                     sqlCommand.Parameters.AddWithValue("@Remarks", entity.Remarks);
                     sqlCommand.Parameters.AddWithValue("@GCode", entity.GCode);
                     sqlCommand.Parameters.AddWithValue("@RCode", entity.RCode);
+                    sqlCommand.ExecuteNonQuery();
+
                     sqlCommand.Parameters.Add("@Q_ID", SqlDbType.Int, 8);
                     sqlCommand.Parameters["@Q_ID"].Direction = ParameterDirection.Output;
-                    sqlCommand.ExecuteNonQuery();
 
                     QId = Convert.ToString(sqlCommand.Parameters["@Q_ID"].Value);
 
-                   
                     foreach (var item in entity.ProductID)
                     {
                         sqlCommand.Parameters.Clear();

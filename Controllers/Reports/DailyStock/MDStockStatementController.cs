@@ -14,7 +14,7 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
     public class MDStockStatementController : ControllerBase
     {
         [HttpPost("{id}")]
-        public string Post(StockEntity  stockEntity)
+        public string Post([FromBody] StockEntity  stockEntity)
         {
             DataSet ds = new DataSet();
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();

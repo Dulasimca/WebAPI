@@ -41,7 +41,8 @@ namespace TNCSCAPI.ManageAllReports.Purchase
                 WriteRoNoPurchase(streamWriter, entity);
                 List<RoNoPurchaseEntity> RoNoPurchase = new List<RoNoPurchaseEntity>();
                 RoNoPurchase = report.ConvertDataTableToList<RoNoPurchaseEntity>(entity.dataSet.Tables[0]);
-
+                WriteGodownWiseRoNoPurchase(streamWriter, entity, RoNoPurchase);
+                WriteCommodityWiseRoNoPurchase(streamWriter, entity, RoNoPurchase);
                 streamWriter.Flush();
 
             }
