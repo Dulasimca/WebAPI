@@ -30,9 +30,6 @@ namespace TNCSCAPI.Controllers.Documents
                         sqlConnection.Open();
                     }
                     objTrans = sqlConnection.BeginTransaction();
-                    sqlCommand.Parameters.Clear();
-                    sqlCommand.Dispose();
-
                     sqlCommand = new SqlCommand();
                     sqlCommand.Transaction = objTrans;
                     sqlCommand.Connection = sqlConnection;
@@ -43,10 +40,9 @@ namespace TNCSCAPI.Controllers.Documents
                     sqlCommand.Parameters.AddWithValue("@Remarks", entity.Remarks);
                     sqlCommand.Parameters.AddWithValue("@GCode", entity.GCode);
                     sqlCommand.Parameters.AddWithValue("@RCode", entity.RCode);
-                    sqlCommand.ExecuteNonQuery();
-
                     sqlCommand.Parameters.Add("@Q_ID", SqlDbType.Int, 8);
                     sqlCommand.Parameters["@Q_ID"].Direction = ParameterDirection.Output;
+                    sqlCommand.ExecuteNonQuery();
 
                     QId = Convert.ToString(sqlCommand.Parameters["@Q_ID"].Value);
 
