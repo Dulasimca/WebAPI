@@ -13,5 +13,6 @@ namespace TNCSCAPI.Models.Documents
             public string Remarks { get; set; }
             public string EmailID { get; set; }
             public string PhoneNo { get; set; }
+            public string Products { get; set; }
     }
 }

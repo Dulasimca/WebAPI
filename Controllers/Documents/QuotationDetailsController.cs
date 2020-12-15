@@ -2,6 +2,11 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using TNCSCAPI.Mail;
+using TNCSCAPI.Models;
 using TNCSCAPI.Models.Documents;
 
 namespace TNCSCAPI.Controllers.Documents
@@ -63,7 +68,45 @@ namespace TNCSCAPI.Controllers.Documents
                     objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
-                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
+
+                    ///MailSending
+                    ///sqlCommand = new SqlCommand();
+                    sqlCommand.Transaction = objTrans;
+                    sqlCommand.Connection = sqlConnection;
+                    sqlCommand.CommandText = "GetMailDetails";
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.ExecuteNonQuery();
+                    SendMail sendMail = new SendMail();
+                    BodyMessageEntity bodyMessageEntity = new BodyMessageEntity
+                    {
+                        Mailid = entity.EmailID,
+                        PhoneNumber = entity.PhoneNo,
+                        Products = entity.Products,
+                        Remarks = entity.Remarks
+                    };
+                    using (SqlDataReader oReader = sqlCommand.ExecuteReader())
+                    {
+                        while (oReader.Read())
+                        {
+                            MailEntity mailEntity = new MailEntity
+                            {
+                                FromMailid = oReader["FromMailId"].ToString(),  //
+                                ToMailid = oReader["ToId"].ToString(),
+                                FromPassword = oReader["FromPassword"].ToString(),
+                                ToCC = oReader["ToCC"].ToString(),
+                                SMTP = oReader["Host"].ToString(),
+                                Port = Convert.ToInt16(oReader["Port"]),
+                                Subject = oReader["MailSubject"].ToString(),
+                                BodyMessage = sendMail.BodyMessage(bodyMessageEntity)
+                            };
+                            sendMail.MailSending(mailEntity);
+                        }
+
+                    }
+                    objTrans.Commit();
+                    sqlCommand.Parameters.Clear();
+                    sqlCommand.Dispose();
+                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);                    
                 }
                 catch (Exception ex)
                 {
