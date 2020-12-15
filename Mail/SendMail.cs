@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 using TNCSCAPI.Models;
 
 namespace TNCSCAPI.Mail
@@ -62,19 +59,23 @@ namespace TNCSCAPI.Mail
                 string htmlTrEnd = "</tr>";
                 string htmlTdStart = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding: 5px;\">";
                 string htmlTdEnd = "</td>";
+                messageBody += "Please provide the quotation for below mentioned products. <br><br>";
                 messageBody += htmlTableStart;
                 messageBody += htmlHeaderRowStart;
-                messageBody += "Please provide the quotation for below mentioned products.";
-                messageBody += htmlTdStart + "Email id" + bodyMessageEntity.Mailid;
-                messageBody += htmlTdStart + "Phone Number" + bodyMessageEntity.PhoneNumber;
-                messageBody += htmlTdStart + "Products" + bodyMessageEntity.Products;
-                messageBody += htmlTdStart + "Remarks" + bodyMessageEntity.Remarks;
+                messageBody += htmlTdStart + "Email id" + htmlTrEnd;
+                messageBody += htmlTdStart + "Phone Number" + htmlTrEnd;
+                messageBody += htmlTdStart + "Products" + htmlTrEnd;
+                messageBody += htmlTdStart + "Remarks" + htmlTrEnd;
                 messageBody += htmlHeaderRowEnd;
                 //Loop all the rows from grid vew and added to html td  
                 messageBody = messageBody + htmlTrStart + htmlTdStart;
-                messageBody = messageBody + "Thanks & Regads" + htmlTdStart;
-                messageBody = messageBody + htmlTdStart + " SI Support Team" + htmlTdStart + htmlTrEnd;
-                messageBody = messageBody + htmlTableEnd;
+                messageBody += bodyMessageEntity.Mailid + htmlTdEnd;
+                messageBody += htmlTdStart + bodyMessageEntity.PhoneNumber + htmlTdEnd;
+                messageBody += htmlTdStart + bodyMessageEntity.Products + htmlTdEnd;
+                messageBody += htmlTdStart + bodyMessageEntity.Remarks + htmlTdEnd;
+                messageBody += htmlTrEnd + htmlTableEnd + "<br><br>";
+                messageBody += "Thanks & Regads <br>";
+                messageBody += " SI Support Team";
                 return messageBody;
             }
             catch (Exception ex)
