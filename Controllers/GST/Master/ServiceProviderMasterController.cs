@@ -18,6 +18,7 @@ namespace TNCSCAPI.Controllers.GST.Master
         public string Get()
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+          
             DataSet ds = new DataSet();
             try
             {

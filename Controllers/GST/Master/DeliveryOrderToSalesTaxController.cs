@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using TNCSCAPI.ManageSQL;
+using TNCSCAPI.Models.DoToSales;
+
 
 namespace TNCSCAPI.Controllers.GST.Master
 {
@@ -27,14 +30,13 @@ namespace TNCSCAPI.Controllers.GST.Master
             ds = manageSQLConnection.GetDataSetValues("GetDoGSTSales", sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
-    }
-    public class DOSalesTaxEntity
+
+    [HttpPost("{id}")]
+    public Tuple<bool, string> Post([FromBody]List<DOSalesTaxEntity> entity)
     {
-        public string Month { get; set; }
-        public string Year { get; set; }
-        public string fromDate { get; set; }
-        public string toDate { get; set; }
-        public string RCode { get; set; }
-        public string GCode { get; set; }
+        ManageDOToSalesTax manageSQL = new ManageDOToSalesTax();
+        return manageSQL.InsertDoToSalesTax(entity);
     }
+   }
+
 }
