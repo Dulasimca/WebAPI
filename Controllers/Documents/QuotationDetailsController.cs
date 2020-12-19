@@ -90,7 +90,7 @@ namespace TNCSCAPI.Controllers.Documents
                         {
                             MailEntity mailEntity = new MailEntity
                             {
-                                FromMailid = oReader["FromMailId"].ToString(),  //
+                                FromMailid = oReader["FromMailId"].ToString(),
                                 ToMailid = oReader["ToId"].ToString(),
                                 FromPassword = oReader["FromPassword"].ToString(),
                                 ToCC = oReader["ToCC"].ToString(),
