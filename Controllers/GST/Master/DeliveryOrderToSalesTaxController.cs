@@ -17,7 +17,7 @@ namespace TNCSCAPI.Controllers.GST.Master
     public class DeliveryOrderToSalesTaxController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string fromDate, string toDate , string GCode)
+        public string Get(string fromDate, string toDate , string GCode, int type)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
@@ -26,8 +26,15 @@ namespace TNCSCAPI.Controllers.GST.Master
             //sqlParameters.Add(new KeyValuePair<string, string>("@year", Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@fromDate", fromDate.ToString()));
             sqlParameters.Add(new KeyValuePair<string, string>("@todate", toDate.ToString()));
-            sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", GCode));
-            ds = manageSQLConnection.GetDataSetValues("GetDoGSTSales", sqlParameters);
+            if (type == 1)
+            {
+                ds = manageSQLConnection.GetDataSetValues("GetDODetailsOfGSTSalesTax", sqlParameters);
+            }
+            else
+            {
+                sqlParameters.Add(new KeyValuePair<string, string>("@IssuerCode", GCode));
+                ds = manageSQLConnection.GetDataSetValues("GetDoGSTSales", sqlParameters);
+            }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
 
