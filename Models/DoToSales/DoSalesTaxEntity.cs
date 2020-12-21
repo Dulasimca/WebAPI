@@ -33,6 +33,7 @@ namespace TNCSCAPI.Models.DoToSales
         public string IssuerCode { get; set; }
         public float Rate { get; set; }
         public float Amount { get; set; }
+        public string AccYear { get; set; }
         public float DITotal { get; set; }
     }
 }
