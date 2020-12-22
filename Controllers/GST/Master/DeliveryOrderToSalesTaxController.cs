@@ -26,10 +26,10 @@ namespace TNCSCAPI.Controllers.GST.Master
             //sqlParameters.Add(new KeyValuePair<string, string>("@year", Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@fromDate", fromDate.ToString()));
             sqlParameters.Add(new KeyValuePair<string, string>("@todate", toDate.ToString()));
-            sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", BillNo));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Type", SPType.ToString()));
             if (type == 1)
             {
+                sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", BillNo));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Type", SPType.ToString()));
                 ds = manageSQLConnection.GetDataSetValues("GetDODetailsOfGSTSalesTax", sqlParameters);
             }
             else
