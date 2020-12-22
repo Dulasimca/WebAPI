@@ -39,7 +39,7 @@ namespace TNCSCAPI.ManageSQL
                 new DataColumn("Total", typeof(float)), //TotalAmount
                 new DataColumn("RCode", typeof(string)),//Regioncode
                 new DataColumn("GCode", typeof(string)),//IssuerCode
-                new DataColumn("AccYear", typeof(string)),//Year
+                new DataColumn("AccYear", typeof(string)),//AccYear
                 new DataColumn("CreatedBy", typeof(string)),
                 new DataColumn("CreatedDate", typeof(string)),//current date
                 new DataColumn("Scheme", typeof(string)),
@@ -58,7 +58,7 @@ namespace TNCSCAPI.ManageSQL
                     dt.Rows.Add(0, item.Month, item.Year, item.PartyId, item.Itemcode, item.GSTNumber, 
                         item.Dono, item.DoDate, creditSales, "CGST", item.Wtype, item.NetWeight,
                         item.SalesRate, item.SalesTOTAL, item.TaxPercentage, item.CGST, item.SGST, null, item.Hsncode, 
-                        item.GSTTOTAL, item.TotalAmount, item.Regioncode, item.IssuerCode, item.Year,
+                        item.GSTTOTAL, item.TotalAmount, item.Regioncode, item.IssuerCode, item.AccYear,
                         item.CreatedBy, item.CurrentDate, item.Scheme, true, item.Rate, item.DITotal,  true,
                          1, null
                         );
