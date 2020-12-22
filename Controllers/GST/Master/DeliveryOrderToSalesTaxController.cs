@@ -17,7 +17,7 @@ namespace TNCSCAPI.Controllers.GST.Master
     public class DeliveryOrderToSalesTaxController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string fromDate, string toDate , string GCode, int type, int SPType, string BillNo)
+        public string Get(string fromDate, string toDate, string GCode, int type, int SPType, string BillNo)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
@@ -26,10 +26,10 @@ namespace TNCSCAPI.Controllers.GST.Master
             //sqlParameters.Add(new KeyValuePair<string, string>("@year", Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@fromDate", fromDate.ToString()));
             sqlParameters.Add(new KeyValuePair<string, string>("@todate", toDate.ToString()));
-            sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", BillNo));
-            sqlParameters.Add(new KeyValuePair<string, string>("@Type", SPType.ToString()));
             if (type == 1)
             {
+                sqlParameters.Add(new KeyValuePair<string, string>("@BillNo", BillNo));
+                sqlParameters.Add(new KeyValuePair<string, string>("@Type", SPType.ToString()));
                 ds = manageSQLConnection.GetDataSetValues("GetDODetailsOfGSTSalesTax", sqlParameters);
             }
             else
@@ -40,12 +40,12 @@ namespace TNCSCAPI.Controllers.GST.Master
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
 
-    [HttpPost("{id}")]
-    public Tuple<bool, string> Post([FromBody]List<DOSalesTaxEntity> entity)
-    {
-        ManageDOToSalesTax manageSQL = new ManageDOToSalesTax();
-        return manageSQL.InsertDoToSalesTax(entity);
+        [HttpPost("{id}")]
+        public Tuple<bool, string> Post([FromBody]List<DOSalesTaxEntity> entity)
+        {
+            ManageDOToSalesTax manageSQL = new ManageDOToSalesTax();
+            return manageSQL.InsertDoToSalesTax(entity);
+        }
     }
-   }
 
 }
