@@ -62,14 +62,18 @@ namespace TNCSCAPI.Mail
                 messageBody += "Please provide the quotation for below mentioned products. <br><br>";
                 messageBody += htmlTableStart;
                 messageBody += htmlHeaderRowStart;
-                messageBody += htmlTdStart + "Email id" + htmlTrEnd;
-                messageBody += htmlTdStart + "Phone Number" + htmlTrEnd;
-                messageBody += htmlTdStart + "Products" + htmlTrEnd;
-                messageBody += htmlTdStart + "Remarks" + htmlTrEnd;
+                messageBody += htmlTdStart + "Region" + htmlTdEnd;
+                messageBody += htmlTdStart + "Godown" + htmlTdEnd;
+                messageBody += htmlTdStart + "Email id" + htmlTdEnd;
+                messageBody += htmlTdStart + "Phone Number" + htmlTdEnd;
+                messageBody += htmlTdStart + "Products" + htmlTdEnd;
+                messageBody += htmlTdStart + "Remarks" + htmlTdEnd;
                 messageBody += htmlHeaderRowEnd;
                 //Loop all the rows from grid vew and added to html td  
-                messageBody = messageBody + htmlTrStart + htmlTdStart;
-                messageBody += bodyMessageEntity.Mailid + htmlTdEnd;
+                messageBody = messageBody + htmlTrStart ;
+                messageBody += htmlTdStart + bodyMessageEntity.RName + htmlTdEnd;
+                messageBody += htmlTdStart + bodyMessageEntity.GName + htmlTdEnd;
+                messageBody += htmlTdStart+ bodyMessageEntity.Mailid + htmlTdEnd;
                 messageBody += htmlTdStart + bodyMessageEntity.PhoneNumber + htmlTdEnd;
                 messageBody += htmlTdStart + bodyMessageEntity.Products + htmlTdEnd;
                 messageBody += htmlTdStart + bodyMessageEntity.Remarks + htmlTdEnd;

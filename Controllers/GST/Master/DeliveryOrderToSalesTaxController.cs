@@ -17,7 +17,7 @@ namespace TNCSCAPI.Controllers.GST.Master
     public class DeliveryOrderToSalesTaxController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string fromDate, string toDate , string GCode, int type, int SPType, string BillNo)
+        public string Get(string fromDate, string toDate, string GCode, int type, int SPType, string BillNo)
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
@@ -40,12 +40,12 @@ namespace TNCSCAPI.Controllers.GST.Master
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
 
-    [HttpPost("{id}")]
-    public Tuple<bool, string> Post([FromBody]List<DOSalesTaxEntity> entity)
-    {
-        ManageDOToSalesTax manageSQL = new ManageDOToSalesTax();
-        return manageSQL.InsertDoToSalesTax(entity);
+        [HttpPost("{id}")]
+        public Tuple<bool, string> Post([FromBody]List<DOSalesTaxEntity> entity)
+        {
+            ManageDOToSalesTax manageSQL = new ManageDOToSalesTax();
+            return manageSQL.InsertDoToSalesTax(entity);
+        }
     }
-   }
 
 }

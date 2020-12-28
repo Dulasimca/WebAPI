@@ -2,9 +2,7 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using TNCSCAPI.Mail;
 using TNCSCAPI.Models;
 using TNCSCAPI.Models.Documents;
@@ -82,7 +80,9 @@ namespace TNCSCAPI.Controllers.Documents
                         Mailid = entity.EmailID,
                         PhoneNumber = entity.PhoneNo,
                         Products = entity.Products,
-                        Remarks = entity.Remarks
+                        Remarks = entity.Remarks,
+                        RName = entity.RNname,
+                        GName = entity.GName
                     };
                     using (SqlDataReader oReader = sqlCommand.ExecuteReader())
                     {
@@ -99,14 +99,14 @@ namespace TNCSCAPI.Controllers.Documents
                                 Subject = oReader["MailSubject"].ToString(),
                                 BodyMessage = sendMail.BodyMessage(bodyMessageEntity)
                             };
-                            sendMail.MailSending(mailEntity);
+                            Task.Run(() => sendMail.MailSending(mailEntity));
                         }
 
                     }
                     objTrans.Commit();
                     sqlCommand.Parameters.Clear();
                     sqlCommand.Dispose();
-                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);                    
+                    return new Tuple<bool, string>(true, GlobalVariable.SavedMessage);
                 }
                 catch (Exception ex)
                 {
