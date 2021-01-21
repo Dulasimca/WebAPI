@@ -40,7 +40,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
             }
 
             [HttpGet("{id}")]
-            public string Get(string RCode, string GCode, string Month, string Year, string AccountingYear)
+            public string Get(string RCode, string GCode, string Month, string Year, string AccountingYear, string TaxPer = null)
             {
                 DataSet ds = new DataSet();
                 ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
@@ -51,7 +51,8 @@ namespace TNCSCAPI.Controllers.GST.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@Month", Month));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Year", Year));
                 sqlParameters.Add(new KeyValuePair<string, string>("@AccountingYear", AccountingYear));
-                ds = manageSQLConnection.GetDataSetValues("GetServiceProviderdetails", sqlParameters);
+                sqlParameters.Add(new KeyValuePair<string, string>("@TaxPer", TaxPer));
+            ds = manageSQLConnection.GetDataSetValues("GetServiceProviderdetails", sqlParameters);
                 return JsonConvert.SerializeObject(ds.Tables[0]);
             }
 
