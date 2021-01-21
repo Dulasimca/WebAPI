@@ -35,6 +35,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Hsncode", salesTax.Hsncode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Quantity", salesTax.Quantity));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rate", salesTax.Rate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RevRate", salesTax.RevRate));
             sqlParameters.Add(new KeyValuePair<string, string>("@Amount", salesTax.Amount));
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxPercentage", salesTax.TaxPercentage));
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxAmount", salesTax.TaxAmount));
@@ -82,6 +83,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string Hsncode { get; set; }
         public string Quantity { get; set; }
         public string Rate { get; set; }
+        public string RevRate { get; set; }
         public string Amount { get; set; }
         public string TaxPercentage { get; set; }
         public string TaxAmount { get; set; }
