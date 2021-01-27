@@ -32,10 +32,12 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@AADS", salesTax.AADS));
             sqlParameters.Add(new KeyValuePair<string, string>("@SGST", salesTax.SGST));
             sqlParameters.Add(new KeyValuePair<string, string>("@CGST", salesTax.CGST));
+            sqlParameters.Add(new KeyValuePair<string, string>("@IGST", salesTax.IGST));
             sqlParameters.Add(new KeyValuePair<string, string>("@Hsncode", salesTax.Hsncode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Quantity", salesTax.Quantity));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rate", salesTax.Rate));
             sqlParameters.Add(new KeyValuePair<string, string>("@RevRate", salesTax.RevRate));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RevAmount", salesTax.RevAmount));
             sqlParameters.Add(new KeyValuePair<string, string>("@Amount", salesTax.Amount));
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxPercentage", salesTax.TaxPercentage));
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxAmount", salesTax.TaxAmount));
@@ -98,5 +100,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string GSTType { get; set; }
         public string Scheme { get; set; }
         public string AADS { get; set; }
+        public string IGST { get; set; }
+        public string RevAmount { get; set; }
     }
 }
