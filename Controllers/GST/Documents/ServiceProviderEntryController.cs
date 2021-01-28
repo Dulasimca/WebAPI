@@ -28,6 +28,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
                 sqlParameters.Add(new KeyValuePair<string, string>("@TaxType", serviceProvider.TaxType));
                 sqlParameters.Add(new KeyValuePair<string, string>("@SGST", serviceProvider.SGST));
                 sqlParameters.Add(new KeyValuePair<string, string>("@CGST", serviceProvider.CGST));
+                sqlParameters.Add(new KeyValuePair<string, string>("@IGST", serviceProvider.IGST));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Amount", serviceProvider.Amount));
                 sqlParameters.Add(new KeyValuePair<string, string>("@TaxPercentage", serviceProvider.TaxPercentage));
                 sqlParameters.Add(new KeyValuePair<string, string>("@TaxAmount", serviceProvider.TaxAmount));
@@ -71,6 +72,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
             public string TaxType { get; set; }
             public string CGST { get; set; }
             public string SGST { get; set; }
+            public string IGST { get; set; }
             public string Amount { get; set; }
             public string TaxPercentage { get; set; }
             public string TaxAmount { get; set; }
