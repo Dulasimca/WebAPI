@@ -59,7 +59,9 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Month", Month));
             sqlParameters.Add(new KeyValuePair<string, string>("@Year", Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@AccountingYear", AccountingYear));
-            sqlParameters.Add(new KeyValuePair<string, string>("@GType", GSTType));
+            if (GSTType != "3") {
+                sqlParameters.Add(new KeyValuePair<string, string>("@GType", GSTType));
+            }
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxPer", TaxPer));
             ds = manageSQLConnection.GetDataSetValues(commandText, sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);

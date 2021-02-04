@@ -36,8 +36,8 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Hsncode", salesTax.Hsncode));
             sqlParameters.Add(new KeyValuePair<string, string>("@Quantity", salesTax.Quantity));
             sqlParameters.Add(new KeyValuePair<string, string>("@Rate", salesTax.Rate));
-            sqlParameters.Add(new KeyValuePair<string, string>("@RevRate", salesTax.RevRate));
-            sqlParameters.Add(new KeyValuePair<string, string>("@RevAmount", salesTax.RevAmount));
+            sqlParameters.Add(new KeyValuePair<string, string>("@DORate", salesTax.DORATE));
+            sqlParameters.Add(new KeyValuePair<string, string>("@DOTOTAL", salesTax.DOTOTAL));
             sqlParameters.Add(new KeyValuePair<string, string>("@Amount", salesTax.Amount));
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxPercentage", salesTax.TaxPercentage));
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxAmount", salesTax.TaxAmount));
@@ -62,7 +62,11 @@ namespace TNCSCAPI.Controllers.GST.Documents
             sqlParameters.Add(new KeyValuePair<string, string>("@Month", Month));
             sqlParameters.Add(new KeyValuePair<string, string>("@Year", Year));
             sqlParameters.Add(new KeyValuePair<string, string>("@AccountingYear", AccountingYear));
-            sqlParameters.Add(new KeyValuePair<string, string>("@GType", GSTType));
+            if (GSTType != "3")
+            {
+                sqlParameters.Add(new KeyValuePair<string, string>("@GType", GSTType));
+            }
+                
             sqlParameters.Add(new KeyValuePair<string, string>("@TaxPer", TaxPer));
             ds = manageSQLConnection.GetDataSetValues(commandText, sqlParameters);
             return JsonConvert.SerializeObject(ds.Tables[0]);
@@ -86,7 +90,7 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string Hsncode { get; set; }
         public string Quantity { get; set; }
         public string Rate { get; set; }
-        public string RevRate { get; set; }
+        public string DORATE { get; set; }
         public string Amount { get; set; }
         public string TaxPercentage { get; set; }
         public string TaxAmount { get; set; }
@@ -101,6 +105,6 @@ namespace TNCSCAPI.Controllers.GST.Documents
         public string Scheme { get; set; }
         public string AADS { get; set; }
         public string IGST { get; set; }
-        public string RevAmount { get; set; }
+        public string DOTOTAL { get; set; }
     }
 }
