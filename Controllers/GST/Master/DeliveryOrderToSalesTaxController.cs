@@ -17,13 +17,14 @@ namespace TNCSCAPI.Controllers.GST.Master
     public class DeliveryOrderToSalesTaxController : ControllerBase
     {
         [HttpGet("{id}")]
-        public string Get(string fromDate, string toDate, string GCode, int type, int SPType, string BillNo)
+        public string Get(string Rcode, string fromDate, string toDate, string GCode, int type, int SPType, string BillNo )
         {
             ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
             DataSet ds = new DataSet();
             List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
             //sqlParameters.Add(new KeyValuePair<string, string>("@month", Month));
             //sqlParameters.Add(new KeyValuePair<string, string>("@year", Year));
+            sqlParameters.Add(new KeyValuePair<string, string>("@RCode", Rcode.ToString()));
             sqlParameters.Add(new KeyValuePair<string, string>("@fromDate", fromDate.ToString()));
             sqlParameters.Add(new KeyValuePair<string, string>("@todate", toDate.ToString()));
             if (type == 1)
