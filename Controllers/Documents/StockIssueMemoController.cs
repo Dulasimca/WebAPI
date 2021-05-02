@@ -16,59 +16,70 @@ namespace TNCSCAPI.Controllers.Documents
         [HttpPost("{id}")]
         public Tuple<bool, string, string> Post(DocumentStockIssuesEntity documentStockIssuesEntity = null)
         {
-            if (documentStockIssuesEntity.Type == 2)
+            ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
+            ManageReport manageReport = new ManageReport();
+            //Check the document Approval
+            List<KeyValuePair<string, string>> sqlParametersDocApproval = new List<KeyValuePair<string, string>>();
+            sqlParametersDocApproval.Add(new KeyValuePair<string, string>("@DocDate", documentStockIssuesEntity.SIDate));
+            sqlParametersDocApproval.Add(new KeyValuePair<string, string>("@GCode", documentStockIssuesEntity.IssuingCode));
+            var docResult = manageSQLConnection.GetDataSetValues("GetApprovalStatusForDocument", sqlParametersDocApproval);
+            if (manageReport.CheckDocApproval(docResult))
             {
-                ManageDocumentIssues documentIssues = new ManageDocumentIssues();
-                documentIssues.GenerateIssues(documentStockIssuesEntity);
-                if (documentStockIssuesEntity.Loadingslip == "N" || string.IsNullOrEmpty(documentStockIssuesEntity.Loadingslip))
+                if (documentStockIssuesEntity.Type == 2)
                 {
-                    ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                    sqlParameters.Add(new KeyValuePair<string, string>("@SINo", documentStockIssuesEntity.SINo));
-                    manageSQLConnection.UpdateValues("UpdateStockIssuesLoadingslip", sqlParameters);
-                }
-                return new Tuple<bool, string, string>(true, "Print Generated Successfully", documentStockIssuesEntity.SINo);
-            }
-            else
-            {
-                ManageSQLConnection manageSQLConnection = new ManageSQLConnection();
-                List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
-                sqlParameters.Add(new KeyValuePair<string, string>("@GCode", documentStockIssuesEntity.IssuingCode));
-                var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
-                ManageReport manageReport = new ManageReport();
-                if (manageReport.CheckDataAvailable(result))
-                {
-                    if (documentStockIssuesEntity.DocType == 2) //(documentStockIssuesEntity.SINo.Trim() != "0" && documentStockIssuesEntity.SINo.Trim() != "-")
+                    ManageDocumentIssues documentIssues = new ManageDocumentIssues();
+                    documentIssues.GenerateIssues(documentStockIssuesEntity);
+                    if (documentStockIssuesEntity.Loadingslip == "N" || string.IsNullOrEmpty(documentStockIssuesEntity.Loadingslip))
                     {
-                        List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
-                        sqlParameters1.Add(new KeyValuePair<string, string>("@Type", "2"));
-                        sqlParameters1.Add(new KeyValuePair<string, string>("@DocNumber", documentStockIssuesEntity.SINo.Trim()));
-                        var result1 = manageSQLConnection.GetDataSetValues("CheckDocumentEdit", sqlParameters1);
-                        if (!manageReport.CheckDataAvailable(result1))
-                        {
-                            return new Tuple<bool, string, string>(false, GlobalVariable.DocumentEditPermission, "");
-                        }
-                        // CheckDocumentEdit
+                        List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                        sqlParameters.Add(new KeyValuePair<string, string>("@SINo", documentStockIssuesEntity.SINo));
+                        manageSQLConnection.UpdateValues("UpdateStockIssuesLoadingslip", sqlParameters);
                     }
-                    else
-                    {
-                        // check document available
-                        List<KeyValuePair<string, string>> sqlParameterscheckdate = new List<KeyValuePair<string, string>>();
-                        sqlParameterscheckdate.Add(new KeyValuePair<string, string>("@SINo", documentStockIssuesEntity.SINo));
-                        var result1 = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsBySINo", sqlParameterscheckdate);
-                        if (manageReport.CheckDataAvailable(result1))
-                        {
-                            return new Tuple<bool, string, string>(false, "This document number "+ documentStockIssuesEntity.SINo + " is already exists, Please refresh the page.", "");
-                        }
-                    }
-                    StockIssueMemo stockIssueMemo = new StockIssueMemo();
-                    return stockIssueMemo.InsertStockIssueData(documentStockIssuesEntity);
-
+                    return new Tuple<bool, string, string>(true, "Print Generated Successfully", documentStockIssuesEntity.SINo);
                 }
                 else
                 {
-                    return new Tuple<bool, string, string>(false, "Permission not Granted", "");
+                    List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                    sqlParameters.Add(new KeyValuePair<string, string>("@GCode", documentStockIssuesEntity.IssuingCode));
+                    var result = manageSQLConnection.GetDataSetValues("AllowDocumentEntry", sqlParameters);
+                    if (manageReport.CheckDataAvailable(result))
+                    {
+                        if (documentStockIssuesEntity.DocType == 2) //(documentStockIssuesEntity.SINo.Trim() != "0" && documentStockIssuesEntity.SINo.Trim() != "-")
+                        {
+                            List<KeyValuePair<string, string>> sqlParameters1 = new List<KeyValuePair<string, string>>();
+                            sqlParameters1.Add(new KeyValuePair<string, string>("@Type", "2"));
+                            sqlParameters1.Add(new KeyValuePair<string, string>("@DocNumber", documentStockIssuesEntity.SINo.Trim()));
+                            var result1 = manageSQLConnection.GetDataSetValues("CheckDocumentEdit", sqlParameters1);
+                            if (!manageReport.CheckDataAvailable(result1))
+                            {
+                                return new Tuple<bool, string, string>(false, GlobalVariable.DocumentEditPermission, "");
+                            }
+                            // CheckDocumentEdit
+                        }
+                        else
+                        {
+                            // check document available
+                            List<KeyValuePair<string, string>> sqlParameterscheckdate = new List<KeyValuePair<string, string>>();
+                            sqlParameterscheckdate.Add(new KeyValuePair<string, string>("@SINo", documentStockIssuesEntity.SINo));
+                            var result1 = manageSQLConnection.GetDataSetValues("GetStockIssueDetailsBySINo", sqlParameterscheckdate);
+                            if (manageReport.CheckDataAvailable(result1))
+                            {
+                                return new Tuple<bool, string, string>(false, "This document number " + documentStockIssuesEntity.SINo + " is already exists, Please refresh the page.", "");
+                            }
+                        }
+                        StockIssueMemo stockIssueMemo = new StockIssueMemo();
+                        return stockIssueMemo.InsertStockIssueData(documentStockIssuesEntity);
+
+                    }
+                    else
+                    {
+                        return new Tuple<bool, string, string>(false, "Permission not Granted", "");
+                    }
                 }
+            }
+            else
+            {
+                return new Tuple<bool, string, string>(false, "Please Approve CB, Receipt, Issues and Truck memo for yesterday documents. If you wants to do without approval Please get permission from HO (MD).", "");
             }
         }
 

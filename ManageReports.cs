@@ -508,6 +508,35 @@ namespace TNCSCAPI
             }
         }
 
+        public bool CheckDocApproval(DataSet ds)
+        {
+            bool isApproved = false;
+
+            if (ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                   // isApproved = true;
+                    if (ds.Tables.Count > 1)
+                    {
+                        if (ds.Tables[1].Rows.Count > 0)
+                        {
+                            isApproved = true;
+                        }
+                        else
+                        {
+                            isApproved = false;
+                        }
+                    }
+
+                }
+                else
+                {
+                    isApproved = true;
+                }
+            }
+             return isApproved;
+        }
 
         /// <summary>
         /// Check the Data availability
@@ -567,7 +596,7 @@ namespace TNCSCAPI
         public string GetDays(string FromDate, string ToDate)
         {
             try
-            {                
+            {
                 TimeSpan different = Convert.ToDateTime(ToDate) - Convert.ToDateTime(FromDate);
                 return (different.Days + 1).ToString();
             }
