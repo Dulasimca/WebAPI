@@ -84,11 +84,11 @@ namespace TNCSCAPI.ManageAllReports.Document
             streamWriter.WriteLine("|                                                                                                             |");
             if (gatePassCommon.Type == 2)
             {
-                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                Abstract Duplicate Print       |");
+                streamWriter.WriteLine("|                                      STOCK ISSUE - GATE PASS                 Abstract Duplicate Print       |");
             }
             else
             {
-                streamWriter.WriteLine("|                                      STOCK ISSUE - ISSUE MEMO                Abstract Print                 |");
+                streamWriter.WriteLine("|                                      STOCK ISSUE - GATE PASS                 Abstract Print                 |");
             }
             streamWriter.WriteLine("|-------------------------------------------------------------------------------------------------------------|");
             streamWriter.Write("|   GATE PASS NUMBER : ");

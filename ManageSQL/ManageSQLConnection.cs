@@ -499,5 +499,40 @@ namespace TNCSCAPI
             }
         }
 
+        // TNDAILY
+ 
+        /// <summary>
+        /// Gets values from 
+        /// </summary>
+        /// <param name="procedureName"></param>
+        /// <returns></returns>
+        public DataSet GetDataForTNDaily(string procedureName)
+        {
+            sqlConnection = new SqlConnection(GlobalVariable.ConnectionStringTnDaily);
+            DataSet ds = new DataSet();
+            sqlCommand = new SqlCommand();
+            try
+            {
+                if (sqlConnection.State == 0)
+                {
+                    sqlConnection.Open();
+                }
+                sqlCommand.Connection = sqlConnection;
+                sqlCommand.CommandText = procedureName;
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                dataAdapter = new SqlDataAdapter(sqlCommand);
+                dataAdapter.Fill(ds);
+                return ds;
+            }
+            finally
+            {
+                sqlConnection.Close();
+                sqlCommand.Dispose();
+                ds.Dispose();
+                dataAdapter = null;
+            }
+
+        }
+
     }
 }

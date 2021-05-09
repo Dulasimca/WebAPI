@@ -7,12 +7,14 @@
         public const string ReportPath = "C://LocalRepository//TestingSite//TNCSCUI-Website//assets//";
         public const string ImagePath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//NotificationPopup//";
         public const string SignaturePath = "C://LocalRepository//TNCSCUI//dist//GoodsStock//assets//InchargeSignature//";
+        public const string ConnectionStringTnDaily = "data source=localhost;initial catalog=tndaily;user id = sqladmin; password =sql@svc&ac!72;";
 
         //Live connection
         //public const string ConnectionString = "data source=localhost;initial catalog=TNCSCSCM;user id =sqladmin; password =sql@svc&ac!34;";
         //public const string ReportPath = "C://Repos//LiveCode//TNCSCWebSite//assets//";
         //public const string ImagePath = "C://Repos//LiveCode//TNCSCWebSite//assets//NotificationPopup//";
         //public const string SignaturePath = "C://Repos//LiveCode//TNCSCWebSite//assets//InchargeSignature//";
+        //public const string ConnectionStringTnDaily = "data source=localhost;initial catalog=tndaily;user id = sqladmin; password =sql@svc&ac!34;";
 
         public const string StockDORegisterFileName = "DOREG";
         public const string StockTruckMemoRegisterFileName = "TMREG";

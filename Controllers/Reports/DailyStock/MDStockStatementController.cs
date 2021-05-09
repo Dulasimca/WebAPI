@@ -21,10 +21,11 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
             if (stockEntity.DocType == 1)// issues
             {
                 List<KeyValuePair<string, string>> sqlParameters = new List<KeyValuePair<string, string>>();
+                var procedure = (stockEntity.Type == 1) ? "GetMasterDataForMDStatement" : "GetMasterDataForMDStatementAllRegion";
                 sqlParameters.Add(new KeyValuePair<string, string>("@Date", stockEntity.Date));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Month", stockEntity.Month));
                 sqlParameters.Add(new KeyValuePair<string, string>("@Year", stockEntity.Year));
-                ds = manageSQLConnection.GetDataSetValues("GetMasterDataForMDStatement", sqlParameters);
+                ds = manageSQLConnection.GetDataSetValues(procedure, sqlParameters);
             }
             return JsonConvert.SerializeObject(ds.Tables[0]);
         }
@@ -33,6 +34,7 @@ namespace TNCSCAPI.Controllers.Reports.DailyStock
     public class StockEntity
     {
         public int DocType { get; set; }
+        public int Type { get; set; }
         public string Month { get; set; }
         public string Year { get; set; }
         public string UserName { get; set; }

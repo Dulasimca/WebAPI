@@ -262,7 +262,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
             FRK_Blended_Rice = default(decimal);
 
         }
-
+        public string GCode { get; set; }
+        public string RCode { get; set; }
         public string RNAME { get; set; }
         public string TNCSName { get; set; }
         public decimal TNCSCapacity { get; set; }

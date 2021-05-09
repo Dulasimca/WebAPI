@@ -32,6 +32,8 @@ namespace TNCSCAPI.ManageAllReports.StockStatement
                 var newData = dailyStockDetails.Where(a => a.GodownCode == item.GodownCode).ToList();
                 DataRow[] godownApproval = dataSetApproval.Tables[0].Select("GCode='"+ item.GodownCode + "'");
                 DataRow[] regionApproval = dataSetApproval.Tables[1].Select("GCode='"+ item.GodownCode + "'");
+                stockCB.GCode = item.GodownCode;
+                stockCB.RCode = item.RegionCode;
                 stockCB.RNAME = newData[0].RName;
                 stockCB.TNCSName = newData[0].GName;
                 stockCB.TNCSCapacity = newData[0].TNCSCapacity;
